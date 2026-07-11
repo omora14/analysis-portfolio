@@ -3,8 +3,6 @@ title: "Owen Morales"
 subtitle: "Data Science Portfolio"
 ---
 
-I build data workflows, analytics tools, and full-stack products — from R and Python analysis to React and cloud systems.
-
 ## What's here
 
 A selection of data analysis and visualization projects. Browse **Projects** or use the sidebar to explore by theme.
