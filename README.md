@@ -1,18 +1,27 @@
-# BYUI DS Portfolio Template
-## Building a Quarto Portfolo
+# Owen Morales — Data Science Portfolio
 
-A template for a portfolio developed with Quarto and hosted on GitHub.
+Quarto website portfolio for [Owen Morales](https://github.com/omora14).
 
-This is all configured so you only need to edit the source files in Quarto (.qmd). The website is generated and hosted automatically by GitHub.
+## Contents
 
-## Using this template
+- **Home** — brief about + featured projects
+- **Resume** — `resume.pdf`
+- **Projects** — data analysis and visualization work
 
-1. Click on green button "Use this Tempalte" -> "Create a new Repo"
+## Local preview
 
-1. Choose a name for your repository
+```bash
+quarto preview
+```
 
-1. Important: check 'Include all branches' when creating the repository (because we will need the gh-pages branch to host the website).
+Or render the site into `docs/`:
 
-1. Once your repo is created, remember to update the links to your GitHub repo in _quarto.yml, replacing every instance 'your_name'.
+```bash
+quarto render
+```
 
-1. The first time you publish to your repo use this command line string `quarto publish gh-pages` in the vs code terminal.
+## Publish
+
+```bash
+quarto publish gh-pages
+```

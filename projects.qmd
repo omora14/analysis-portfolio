@@ -1,0 +1,40 @@
+---
+title: "Projects"
+subtitle: "Data analysis & visualization"
+---
+
+Selected analyses grouped by theme. Open any project below, or use the sidebar while browsing.
+
+### Visualization
+- [Data Visualization Critique](projects/critique/visualization-critique.qmd)
+- [Visualizing Large Distributions](projects/distributions/large-distributions.qmd)
+- [Fruit Consumption vs GDP](projects/presentation/fruit-gdp.qmd)
+- [Visualization Redesign](projects/presentation/visualization-redesign.qmd)
+
+### Exploratory Analysis
+- [Gun Deaths Analysis](projects/exploratory/gun-deaths.qmd)
+- [Gun Deaths: Seasonal Patterns](projects/presentation/gun-deaths-seasonal.qmd)
+- [Flight Delays by Origin](projects/exploratory/flight-delays.qmd)
+- [Aircraft Age and Flight Delays](projects/flights/aircraft-age-delays.qmd)
+- [Utah Baseball Programs](projects/flights/utah-baseball.qmd)
+
+### Data Wrangling
+- [Stock Market Predictions](projects/wrangling/stock-predictions.qmd)
+- [Country Heights](projects/wrangling/country-heights.qmd)
+- [Combining Height Datasets](projects/wrangling/combining-heights.qmd)
+- [Sales Data Cleaning](projects/markets/sales-cleaning.qmd)
+- [Stock Portfolio Comparison](projects/markets/stock-portfolio.qmd)
+- [Chipotle Order Analysis](projects/nested/chipotle-orders.qmd)
+- [Parsing Nested Visit Data](projects/parsing/nested-visits.qmd)
+
+### Spatial & Maps
+- [US Lower 48 Map](projects/maps/us-lower-48.qmd)
+- [Idaho Dams and Water Systems](projects/maps/idaho-dams.qmd)
+- [Building Footprints by State](projects/maps/building-footprints.qmd)
+- [Costa Rica Species Map](projects/leaflet/costa-rica-species.qmd)
+- [Open Data Source Evaluation](projects/leaflet/open-data-sources.qmd)
+
+### Text Analysis
+- [Scripture Text Patterns](projects/text/scripture-patterns.qmd)
+- [Named Mentions in Text](projects/text/named-mentions.qmd)
+- [Nested Text Analysis](projects/nested/nested-text.qmd)

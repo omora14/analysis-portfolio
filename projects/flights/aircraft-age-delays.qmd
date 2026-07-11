@@ -1,0 +1,79 @@
+---
+title: "Aircraft Age and Flight Delays"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(nycflights13)
+
+flightData <- flights %>%
+  left_join(planes, by = "tailnum", suffix = c("_flight", "_plane")) %>%
+  mutate(age = year_flight - year_plane) %>%
+  mutate(age_group = case_when(
+    age >= 0  & age <= 10 ~ "0-10",
+    age >= 11 & age <= 20 ~ "11-20",
+    age >= 21 & age <= 30 ~ "21-30",
+    age > 30              ~ ">30",
+    TRUE                  ~ NA_character_)) %>%
+  mutate(age_group = factor(age_group, levels = c("0-10", "11-20", "21-30", ">30")))
+
+```
+
+## Departure Delays by Age Group
+
+Plane age basically has no effect on departure delays. The median delay is right around zero for every single age group, and the overall spread of the data looks exactly the same across the board. The only thing that stands out is that the oldest planes (>30 years) have a slightly higher density of extreme outliers (delays over 100 minutes), but this is a very small fraction of the data and doesn't affect the overall distribution. So in general I'd say that plane age does not appear to be a meaningful factor in departure delays based on this data.
+
+```{r}
+
+ggplot(flightData %>% filter(!is.na(age_group), !is.na(dep_delay)), 
+       aes(x = age_group, y = dep_delay, fill = age_group)) +
+  geom_boxplot(outlier.alpha = 0.1) +
+  coord_cartesian(ylim = c(-20, 100)) + # zooming in to ignore extreme outliers
+  labs(title = "Distribution of Departure Delays by Plane Age", x = "Plane Age Group by Years", y = "Departure Delay by Minutes") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+## Plane Age by Carrier
+
+Legacy airlines like American, Delta, and United have the oldest planes and the widest variety of ages in their fleet. On the flip side, airlines like Hawaiian, Alaska, and Frontier rely on very young and consistent fleets
+
+```{r}
+
+flightDataNamed <- flightData %>%
+  left_join(airlines, by = "carrier")
+
+ggplot(flightDataNamed %>% filter(!is.na(age)), 
+       aes(x = reorder(name, age, FUN = median, na.rm = TRUE), y = age)) +
+  geom_boxplot(fill = "steelblue") +
+  coord_flip() + # airline names are readable
+  labs(title = "Distribution of Plane Age by Airline", x = "Airline", y = "Plane Age by Years") +
+  theme_minimal()
+
+```
+
+## A Third Variable Related to Age
+
+The oldest planes over 30 years old are definitely kept on much shorter, regional routes. Surprisingly tho the 21 to 30 year old planes actually have the highest median flight distance, while the newest planes cover a pretty standard mix of short and long distances
+
+```{r}
+
+ggplot(flightData %>% filter(!is.na(age_group)), 
+       aes(x = age_group, y = distance, fill = age_group)) +
+  geom_boxplot() +
+  labs(title = "Flight Distance vs. Plane Age", x = "Plane Age Group by Years", y = "Flight Distance by Miles") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+I'd like to shoutout Google AI (Gemini I guess is what powers that search), for helping me with the with the syntax of the case_when, the syntax was not working for me and had to ask for its help

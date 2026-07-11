@@ -1,0 +1,97 @@
+---
+title: "Stock Portfolio Comparison"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## Pull
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyquant)
+library(tidyverse)
+library(lubridate)
+library(scales)
+library(ggrepel)
+
+myPicks <- c("NVDA", "MSFT", "AAPL")
+friendPicks <- c("KO", "DIS", "JPM")
+allStocks <- c(myPicks, friendPicks)
+
+stockData <- tq_get(allStocks, from = "2026-01-01", to = today(), get = "stock.prices")
+
+```
+
+## Calcs
+
+```{r}
+
+portfolioData <- stockData %>%
+  group_by(symbol) %>%
+  tq_transmute(select = adjusted, mutate_fun = periodReturn, period = "daily", col_rename = "daily_return") %>%
+  mutate(player = ifelse(symbol %in% myPicks, "Me", "Friend"))
+
+portfolioPerformance <- portfolioData %>%
+  group_by(player, date) %>%
+  summarize(avg_daily_return = mean(daily_return), .groups = "drop") %>%
+  group_by(player) %>%
+  mutate(cumulative_return = cumprod(1 + avg_daily_return) - 1)
+
+```
+
+## Graphs
+
+```{r}
+
+lastPoints <- portfolioPerformance %>%
+  group_by(player) %>%
+  filter(date == max(date))
+
+ggplot(portfolioPerformance, aes(x = date, y = cumulative_return, color = player)) +
+  geom_hline(yintercept = 0, color = "black", linetype = "dashed", alpha = 0.3) +
+  geom_line(linewidth = 1.2) +
+  geom_label_repel(data = lastPoints, aes(label = player), nudge_x = 1, segment.color = 'transparent') +
+  scale_y_continuous(labels = scales::percent) +
+  theme_tq() +
+  theme(legend.position = "none") +
+  labs(title = "Portfolio Competition: Cumulative Returns", subtitle = "Comparing performance trends over time", y = "Total Return", x = NULL,
+  )
+
+```
+
+```{r}
+
+stockPerformance <- portfolioData %>% 
+  group_by(symbol, player) %>% 
+  mutate(cumulative_return = cumprod(1 + daily_return) - 1)
+
+finalStockPerformance <- stockPerformance %>% 
+  filter(date == max(date)) %>% 
+  mutate(label = paste0(symbol, " (", player, ")"))
+
+ggplot(finalStockPerformance, aes(x = reorder(symbol, cumulative_return), y = cumulative_return, fill = player)) + 
+  geom_col(width = 0.6) + 
+  geom_text(aes(label = scales::percent(cumulative_return, accuracy = 0.1)), 
+  hjust = ifelse(finalStockPerformance$cumulative_return > 0, -0.1, 1.1), 
+ zsize = 3.5) + 
+  coord_flip() + 
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_brewer(palette = "Set1") + 
+  theme_tq() + 
+  labs(title = "Stock Contribution Breakdown", subtitle = "Individual stock performance sorted by impact", x = "Stock Ticker", y = "Final Cumulative Return", fill = "Held By"
+)
+
+```
+
+## Summary
+
+Looking at the performance chart I made it was definitely a rollercoaster for my "portfolio." I had a pretty rough start and dipped down around April, but then I managed a huge comeback that put me in the lead by the time June rolled around, the bar chart helps explain exactly why that happened. Even though my friend picked KO, which ended up being the single best performing stock of the bunch we picked, my portfolio was more consistent. I had strong growth from AAPL and NVDA that really carried the team a LOT, and that was enough to balance out the losses from MSFT and help me finish on top overall, thought it wasn't the best one
+
+#### AI Usage
+
+I did use it to ask about the 'tidyquant' functions and a few other that I didn't know such as 'paste0()' or 'cumprod()'. I didn't use it beyond that, though previous graphs I've done were pretty handy. Here's the [link](https://gemini.google.com/share/7870c39dd6ff) for reference

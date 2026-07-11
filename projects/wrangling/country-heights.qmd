@@ -1,0 +1,70 @@
+---
+title: "Country Heights"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## 1
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(knitr)
+library(readxl)
+
+url <- "https://byuistats.github.io/M335/data/heights/Height.xlsx"
+tempFile <- tempfile(fileext = ".xlsx")
+
+# wb means to download it as a binary file
+download.file(url, destfile = tempFile, mode = "wb")
+heightData <- read_excel(tempFile, skip = 1) # There was a manual header so by doing "skip = 1" we are skipping the first row of the data
+
+```
+
+## 2
+
+```{r}
+
+tidyHeights <- heightData %>%
+  pivot_longer(cols = -c(`Code`, `Continent, Region, Country`), names_to = "year", values_to = "heightCm") %>%
+  mutate(year = as.numeric(year), heightCm = as.numeric(heightCm)) %>%
+  filter(!is.na(heightCm))
+
+view(tidyHeights)
+glimpse(tidyHeights)
+
+```
+
+## 3
+
+```{r}
+
+tidyHeights %>%
+  mutate(decade = floor(year / 10) * 10, heightIn = heightCm / 2.54, # I used floor to turn years like 1823 into 1820
+  countryGroup = ifelse(grepl("Germany", `Continent, Region, Country`), "Germany", "Other Countries")) %>% 
+  # https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep
+  # There are some cases where the name of Germany is different, with grepl we can check if the name of the country contains       "Germany" and if it does we will put it in the "Germany" group, otherwise it will be in the "Other Countries" group
+  arrange(countryGroup) %>%
+  
+  ggplot(aes(x = decade, y = heightIn, color = countryGroup, alpha = countryGroup, size = countryGroup)) +
+  # I decided to use geom_jitter instead of geom_point so points in the same decade don't completely hide each other, looks nicer
+  geom_jitter(width = 1.5, height = 0) +
+  
+  scale_color_manual(values = c("Germany" = "red", "Other Countries" = "gray")) +
+  scale_alpha_manual(values = c("Germany" = 0.9, "Other Countries" = 0.2)) +
+  scale_size_manual(values = c("Germany" = 2.5, "Other Countries" = 1.5)) +
+  
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 18), legend.position = "bottom", panel.grid.minor = element_blank()) +
+  labs(title = "Heights Over Time", subtitle = "Comparing trends across all available regions by decade", x = "Decade", y = "Average Height (Inches)",)
+
+```
+
+## 4
+
+If someone asked me if humans are getting taller over the years (and based on this dataset), I'd say my data definitely backs that up,looking at the chart I made, you can see a clear upward trend across the decades. The grey dots represent all the different countries, and while there's always going to be a spread in heights at any given time, the whole group of dots moves higher as the decades go by. To make it easier to see a specific example, I highlighted Germany in red. You can watch those red dots climb steadily from around 66 inches back in the early 1800s to over 70 inches by the end of the timeline, so, the story the data tells is pretty clear, average heights have definitely been going up.

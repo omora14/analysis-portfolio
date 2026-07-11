@@ -1,0 +1,63 @@
+---
+title: "Flight Delays by Origin"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(nycflights13)
+
+```
+
+## Questions
+
+#### Which origin airport is best to minimize my chances of a late arrival when I am using Delta Airlines?
+
+```{r}
+
+deltaFlights <- flights %>%
+  filter(carrier == "DL", !is.na(arr_delay))
+
+ggplot(deltaFlights, aes(x = origin, y = arr_delay, color = origin)) +
+  geom_jitter(alpha = 0.1, width = 0.2) + 
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Arrival Delays for Delta Airlines by Origin", subtitle = "Individual flights shown to highlight variability", x = "Origin Airport", y = "Arrival Delay (minutes)") +
+  theme_minimal()
+
+```
+
+Based on the data, LGA (LaGuardia) is the best origin for Delta passengers. Though all three airports show a high density of flights arriving early (below the 0-minute line), LGA has a tighter distribution of delays and a lower average arrival delay ($3.47$ minutes) compared to JFK ($5.55$ minutes) and EWR ($12.1$ minutes). If you want to avoid significant "outlier" delays, LGA provides the most consistent performance for Delta. I dind't normalized the data, due to insufficient data.
+
+#### Which destination airport is the worst airport for arrival delays? You decide on the metric for “worst.”
+
+For this graph/analysis, I have defined "worst" as the highest average arrival delay (since it sucks being late), considering only airports that received at least 100 flights to ensure the sample size is meaningful and keep it normalized. This avoids skewing results with a single, highly delayed flight to a rare destination.
+
+```{r}
+
+worstDests <- flights %>%
+  filter(!is.na(arr_delay)) %>%
+  group_by(dest) %>%
+  summarize( avg_delay = mean(arr_delay), flight_count = n()) %>%
+  filter(flight_count >= 100) %>%
+  arrange(desc(avg_delay)) %>%
+  head(10)
+
+ggplot(worstDests, aes(x = reorder(dest, avg_delay), y = avg_delay, fill = avg_delay)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_gradient(low = "orange", high = "darkred") +
+  labs(title = "Top 10 Worst Destination Airports", subtitle = "By Average Arrival Delay (Min. 100 flights)", x = "Destination Airport Code", y = "Average Arrival Delay (minutes)") +
+  theme_minimal()
+
+```
+
+The worst destination airport for arrival delays is CAE (Columbia Metropolitan Airport) in South Carolina, with an average arrival delay of approximately 25.9 minutes. It is closely followed by TUL (Tulsa) and OKC (Oklahoma City). This suggests that flights heading to these specific regional hubs from NYC are significantly more likely to face arrival bottlenecks or scheduling issues compared to major hubs like ATL or LAX.

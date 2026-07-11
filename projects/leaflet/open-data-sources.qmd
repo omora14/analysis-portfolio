@@ -1,0 +1,105 @@
+---
+title: "Open Data Source Evaluation"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## Potential Data Sources
+
+Here are 4 potential free data sources I explored for this project, along with an assessment of their general quality:
+
+1.  **[Data.gov](https://data.gov/)**: The official US government open data portal. 
+    * **Quality**: Highly authoritative but heavily variable in structure. Datasets often require extensive cleaning and formatting, and metadata can sometimes be sparse.
+2.  **[Kaggle Datasets](https://www.kaggle.com/datasets)**: A community-driven platform for data science.
+    * **Quality**: Highly variable. Some datasets are pristine and meticulously documented by organizations, while others are uploaded by users with no data dictionary, missing values, and unverified sources. 
+3.  **[World Bank Open Data](https://data.worldbank.org/)**: Global economic, demographic, and health data.
+    * **Quality**: Excellent. The data is rigorously standardized and heavily documented, though you will often encounter missing values for certain developing nations or specific years.
+4.  **[TidyTuesday Project](https://github.com/rfordatascience/tidytuesday)**: A weekly social data project in R.
+    * **Quality**: Very good. The data is pre-curated to be interesting and accessible, but it is deliberately left slightly "messy" so users can practice their data wrangling skills.
+    
+## Palmer Penguins
+
+This project focuses on the **Palmer Penguins dataset** (read directly from a raw GitHub URL). 
+
+**Original Question Idea:** *How do the physical characteristics of penguins differ across species and locations in the Palmer Archipelago?*
+
+
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+
+url <- "https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv"
+penguins_raw <- read_csv(url)
+
+penguins_clean <- penguins_raw %>%
+  filter(!is.na(species), !is.na(island)) %>%
+  mutate(across(where(is.character), as.factor))
+
+glimpse(penguins_clean)
+
+```
+
+## Quality Check #1
+
+Counting NAs for numeric columns
+
+```{r message=FALSE, warning=FALSE}
+
+penguins_clean %>%
+  select(where(is.numeric)) %>%
+  gather(key = "variable", value = "value") %>%
+  mutate(is_missing = is.na(value)) %>%
+  group_by(variable) %>%
+  summarize(missing_count = sum(is_missing)) %>%
+  ggplot(aes(x = reorder(variable, missing_count), y = missing_count)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  labs(title = "Data Quality: Missing Values per Variable", x = "Variable", y = "Number of Missing Values") +
+  theme_minimal()
+
+```
+
+Observation: We have a small handful of missing values for physical measurements (like flipper length and bill depth) but it is a very small percentage of the total dataset. Sex is missing more frequently, which we will need to keep in mind
+
+## Quality Check #2
+
+Distribution of body mass to ensure no extremes
+
+```{r message=FALSE, warning=FALSE}
+
+ggplot(penguins_clean, aes(x = body_mass_g)) +
+  geom_histogram(fill = "coral", color = "black", bins = 30) +
+  labs(title = "Data Quality: Distribution of Body Mass", x = "Body Mass (grams)", y = "Count") +
+  theme_minimal()
+
+```
+
+Observation: The distribution of body mass appears to be reasonably normal with no extreme outliers. The majority of penguins fall within a typical range, which suggests that the data is consistent and does not contain erroneous entries for this variable.
+
+## Limitations
+
+While this dataset is high quality it has limitations in addressing my original question like
+
+Geographic Scope: It only covers three islands in the Palmer Archipelago. We cannot extrapolate these findings to penguin populations in Antarctica at large or in other regions of the world.
+
+Temporal Scope: The data was collected between 2007 and 2009. It does not allow us to see long-term trends, such as how climate change might be affecting body mass over decades, but that's ok by me
+
+## Follow on
+
+Based on this initial look I had here are a few alternate questions to guide future analysis:
+
+Predictive: Can we build a reliable classification model to predict a penguin's species based solely on its flipper length and bill depth?
+
+Ecological: Is there a correlation between the year of observation and average body mass, potentially hinting at environmental changes during those three years?
+
+Dimorphism: How pronounced is sexual dimorphism (size differences between males and females) across the three different species?
+
+###### AI USAGE
+
+Shotout to the coding assistan within R (copilot I believe) for helping me with the wording of the analysis.

@@ -1,0 +1,68 @@
+---
+title: "Scripture Text Patterns"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## 1
+
+```{r message=FALSE, warning=FALSE}
+
+library(stringr)
+library(readr)
+library(ggplot2)
+library(tidyverse)
+
+scriptures <- read_csv("https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv") |>
+    mutate(word_count = str_count(scripture_text, "\\S+"))
+
+view(scriptures)
+
+```
+
+## 2
+
+```{r message=FALSE, warning=FALSE}
+
+scriptures |>
+  filter(volume_title %in% c("New Testament", "Book of Mormon")) |>
+  group_by(volume_title) |>
+  summarize(avg_verse_lenght = mean(word_count, na.rm = T))
+
+```
+
+## 3
+
+```{r message=FALSE, warning=FALSE}
+
+scriptures |>
+  filter(volume_title %in% c("New Testament", "Book of Mormon")) |>
+  mutate(jesus_found = str_count(scripture_text, "Jesus")) |>
+  group_by(volume_title) |>
+  summarize(total_jesus = sum(jesus_found))
+
+```
+
+## 4
+
+```{r message=FALSE, warning=FALSE}
+
+bom_order <- c("1 Nephi", "2 Nephi", "Jacob", "Enos", "Jarom", "Omni", 
+               "Words of Mormon", "Mosiah", "Alma", "Helaman", "3 Nephi", 
+               "4 Nephi", "Mormon", "Ether", "Moroni")
+
+scriptures |>
+  filter(volume_title == "Book of Mormon") |>
+  mutate(book_title = factor(book_title, levels = bom_order)) |>
+  ggplot(aes(x = book_title, y = word_count)) +
+  geom_violin(fill = "steelblue", alpha = 0.6) +
+  coord_flip() +
+  labs(title = "Word Count per Verse", subtitle = "Book of Mormon (Chronological Order)", x = "Book", y = "Words per Verse") +
+  theme_minimal()
+
+```

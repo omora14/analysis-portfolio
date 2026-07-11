@@ -1,0 +1,11 @@
+---
+title: "Analysis Project 3"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+

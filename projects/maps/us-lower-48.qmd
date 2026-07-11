@@ -1,0 +1,76 @@
+---
+title: "US Lower 48 Map"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## Prep
+
+```{r message=FALSE, warning=FALSE}
+
+library(sf)
+library(tidyverse)
+library(USAboundaries)
+library(USAboundariesData)
+library(ggrepel)
+
+lower48 <- state.name[!state.name %in% c("Alaska", "Hawaii")]
+
+statesMap <- us_states() %>%
+  filter(name %in% lower48)
+
+idahoCounties <- us_counties(states = "Idaho")
+
+# top 3 cities by population for each of the lower 48 states
+topCities <- us_cities() %>%
+  filter(state_name %in% lower48) %>%
+  group_by(state_name) %>%
+  arrange(desc(population)) %>%
+  slice_head(n = 3) %>%
+  mutate(rank = row_number()) %>%
+  ungroup()
+
+topCities <- topCities %>%
+  mutate(
+    lon = st_coordinates(geometry)[,1],
+    lat = st_coordinates(geometry)[,2]
+  )
+
+```
+
+## Plot
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+#| warning: false
+#| message: false
+
+mapPlot <- ggplot() +
+  geom_sf(data = statesMap, fill = NA, color = "gray30") +
+  geom_sf(data = idahoCounties, fill = NA, color = "gray50") +
+  geom_sf(data = topCities, aes(size = population / 1000, color = factor(rank))) +
+  geom_label_repel(
+    data = filter(topCities, rank == 1),
+    aes(x = lon, y = lat, label = city),
+    color = "darkblue",
+    size = 2.5,          
+    box.padding = 0.5,   
+    fill = "white",
+    segment.color = "darkblue") +
+  scale_color_manual(values = c("1" = "darkblue", "2" = "royalblue", "3" = "lightblue")) +
+  guides(color = "none", size = guide_legend(override.aes = list(color = "darkblue"))) +
+  labs(size = "Population\n(1,000)", x = NULL, y = NULL) +
+  theme_bw()
+
+mapPlot
+
+ggsave("us_top_cities_map.png", plot = mapPlot, width = 15, height = 10)
+
+```
+

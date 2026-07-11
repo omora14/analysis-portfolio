@@ -1,0 +1,71 @@
+---
+title: "Visualizing Large Distributions"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+Kuwait is heavily filtered out of historical gapminder plots because it acts as an extreme outlier in the 1950s, 1960s, and 1970s. During this period, Kuwait's booming oil production combined with a very small population resulted in an extraordinarily high GDP per capita (exceeding $100,000). If you include Kuwait, the y-axis stretches so far upward that the rest of the world's countries are compressed into a tiny cluster at the bottom, making it impossible to see the meaningful trends and growth happening globally.
+
+
+```{r}
+
+library(tidyverse)
+library(gapminder)
+
+```
+
+```{r}
+#| fig-width: 15
+#| fig-height: 5
+#| column: page
+
+gapFiltered <- gapminder %>%
+  filter(country != "Kuwait") %>%
+  # Convert population to numeric first to prevent integer overflow when summing later
+  mutate(pop_100k = as.numeric(pop) / 100000)
+
+ggplot(gapFiltered, aes(x = lifeExp, y = gdpPercap, color = continent, size = pop_100k)) +
+  geom_point(alpha = 0.7) +
+  facet_grid(. ~ year) +
+  scale_y_continuous(trans = "sqrt", breaks = c(10000, 20000, 30000, 40000, 50000)) +
+  scale_size_continuous(breaks = c(2500, 5000, 7500, 10000, 12500)) +
+  labs(x = "Life Expectancy", y = "GDP per Capita", size = "Population (100k)", color = "continent") +
+  theme_bw() +
+  theme(strip.background = element_rect(fill = "gray95"), panel.grid.minor = element_blank())
+
+```
+
+```{r}
+#| fig-width: 15
+#| fig-height: 5
+#| column: page
+
+gapSummary <- gapFiltered %>%
+  group_by(continent, year) %>%
+  summarize(
+    # I used tge weighted mean for accurate aggregate GDP per capita
+    gdpPercap = weighted.mean(gdpPercap, w = pop), 
+    pop_100k = sum(pop_100k),
+    .groups = "drop"
+  )
+
+  ggplot() +
+  geom_line(data = gapFiltered, aes(x = year, y = gdpPercap, color = continent, group = country)) +
+  geom_point(data = gapFiltered, aes(x = year, y = gdpPercap, color = continent), size = 1) +
+  
+  geom_line(data = gapSummary, aes(x = year, y = gdpPercap), color = "black", linewidth = 1) +
+  geom_point(data = gapSummary, aes(x = year, y = gdpPercap, size = pop_100k), color = "black") +
+  
+  facet_grid(. ~ continent) +
+  scale_x_continuous(breaks = seq(1950, 2000, by = 10)) +
+  labs(x = "Year",y = "GDP per Capita", size = "Population (100k)", color = "continent") +
+  theme_bw() +
+  theme(strip.background = element_rect(fill = "gray95"), panel.grid.minor = element_blank()
+  )
+
+```

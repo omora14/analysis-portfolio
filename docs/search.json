@@ -1,367 +1,1025 @@
 [
   {
-    "objectID": "story_telling.html",
-    "href": "story_telling.html",
-    "title": "about me",
+    "objectID": "projects/nested/nested-text.html",
+    "href": "projects/nested/nested-text.html",
+    "title": "Nested Text Analysis",
     "section": "",
-    "text": "MarkDown Basics",
+    "text": "Code\nlibrary(tidyverse)\n\nscriptures &lt;- read_csv(\"https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv\")\nsavior &lt;- read_rds(\"https://byuistats.github.io/M335/data/BoM_SaviorNames.rds\")\n\nsavior_regex &lt;- savior |&gt;\n  arrange(desc(nchar)) |&gt;\n  pull(name) |&gt;\n  unique() |&gt;\n  str_c(collapse = \"|\")\n\nsavior_regex &lt;- paste0(\"\\\\b(\", savior_regex, \")\\\\b\")\n\n# chronological order\nbom_levels &lt;- scriptures |&gt;\n  filter(volume_title == \"Book of Mormon\") |&gt;\n  pull(book_title) |&gt;\n  unique()\n\nbook_distances &lt;- scriptures |&gt;\n  filter(volume_title == \"Book of Mormon\") |&gt;\n  mutate(book_title = factor(book_title, levels = bom_levels)) |&gt;   # don't sort alphabetically later\n  group_by(book_title) |&gt;\n  summarize(book_text = str_c(scripture_text, collapse = \" \"), .groups = \"drop\") |&gt;\n  mutate(\n    words_between = map(book_text, \\(text) {\n      split_text &lt;- str_split(text, pattern = savior_regex) |&gt; unlist()\n      \n      # drop the first and last chunks \n      if(length(split_text) &gt; 2) {\n        chunks_between &lt;- split_text[-c(1, length(split_text))]\n        str_count(chunks_between, \"\\\\S+\")\n      } else {\n        numeric(0)\n      }\n    })\n  ) |&gt;\n  \n  # unnest in each row\n  unnest(words_between)",
     "crumbs": [
-      "Story Telling"
+      "Projects",
+      "Text Analysis",
+      "Nested Text Analysis"
     ]
   },
   {
-    "objectID": "story_telling.html#title-2-header",
-    "href": "story_telling.html#title-2-header",
-    "title": "about me",
+    "objectID": "projects/nested/nested-text.html#setup",
+    "href": "projects/nested/nested-text.html#setup",
+    "title": "Nested Text Analysis",
     "section": "",
-    "text": "MarkDown Basics",
+    "text": "Code\nlibrary(tidyverse)\n\nscriptures &lt;- read_csv(\"https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv\")\nsavior &lt;- read_rds(\"https://byuistats.github.io/M335/data/BoM_SaviorNames.rds\")\n\nsavior_regex &lt;- savior |&gt;\n  arrange(desc(nchar)) |&gt;\n  pull(name) |&gt;\n  unique() |&gt;\n  str_c(collapse = \"|\")\n\nsavior_regex &lt;- paste0(\"\\\\b(\", savior_regex, \")\\\\b\")\n\n# chronological order\nbom_levels &lt;- scriptures |&gt;\n  filter(volume_title == \"Book of Mormon\") |&gt;\n  pull(book_title) |&gt;\n  unique()\n\nbook_distances &lt;- scriptures |&gt;\n  filter(volume_title == \"Book of Mormon\") |&gt;\n  mutate(book_title = factor(book_title, levels = bom_levels)) |&gt;   # don't sort alphabetically later\n  group_by(book_title) |&gt;\n  summarize(book_text = str_c(scripture_text, collapse = \" \"), .groups = \"drop\") |&gt;\n  mutate(\n    words_between = map(book_text, \\(text) {\n      split_text &lt;- str_split(text, pattern = savior_regex) |&gt; unlist()\n      \n      # drop the first and last chunks \n      if(length(split_text) &gt; 2) {\n        chunks_between &lt;- split_text[-c(1, length(split_text))]\n        str_count(chunks_between, \"\\\\S+\")\n      } else {\n        numeric(0)\n      }\n    })\n  ) |&gt;\n  \n  # unnest in each row\n  unnest(words_between)",
     "crumbs": [
-      "Story Telling"
+      "Projects",
+      "Text Analysis",
+      "Nested Text Analysis"
     ]
   },
   {
-    "objectID": "Story_Telling/project2.html",
-    "href": "Story_Telling/project2.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/nested/nested-text.html#plot",
+    "href": "projects/nested/nested-text.html#plot",
+    "title": "Nested Text Analysis",
+    "section": "Plot",
+    "text": "Plot\n\n\nCode\nggplot(book_distances, aes(x = words_between, y = fct_rev(book_title))) +\n  geom_boxplot(fill = \"#2c3e50\", color = \"#333333\", outlier.alpha = 0.4, outlier.size = 1.5) +\n  theme_minimal() +\n  # zoom to 0-300 to cut out the massive outliers\n  coord_cartesian(xlim = c(0, 300)) +\n  labs(title = \"Distance Between Savior Names by Book in the Book of Mormon\", subtitle = \"Boxplots representing the distribution of words between mentions\", x = \"Number of Words Between References\", y = NULL)",
     "crumbs": [
-      "Story Telling",
-      "Project 2"
+      "Projects",
+      "Text Analysis",
+      "Nested Text Analysis"
     ]
   },
   {
-    "objectID": "resume.html",
-    "href": "resume.html",
-    "title": "Isaac Newtons’s CV",
-    "section": "",
-    "text": "Physicist, Mathematician, Cambridge professor.\n\nisaac@applesdofall.org | My wikipedia page\n\n\n\nStanding on the shoulders of giants\n\n\nLaws of motion, gravitation, minting coins, disliking Robert Hooke\n\n\n\nCooling, power series, optics, alchemy, planetary motions, apples.\n\n\n\n\n1654-1660 The King’s School, Grantham.\nJune 1661 - now Trinity College, Cambridge\n\nSizar\n\n1667 - death Trinity College, Cambridge\n\nFellow\n\n\n\n\n2012 President, Royal Society, London, UK\nAssociate, French Academy of Science, Paris, France\n\n\n\n\n\n\n1669 Newton Sir I, De analysi per æquationes numero terminorum infinitas.\n1669 Lectiones opticæ.\netc. etc. etc.\n\n\n\n2012 Infinitesimal calculus for solutions to physics problems, SMBC patent 001\n\n\n\n\n1600 Royal Mint, London\n\nWarden\nMinted coins\n\n1600 Lucasian professor of Mathematics, Cambridge University"
-  },
-  {
-    "objectID": "resume.html#currently",
-    "href": "resume.html#currently",
-    "title": "Isaac Newtons’s CV",
-    "section": "",
-    "text": "Standing on the shoulders of giants\n\n\nLaws of motion, gravitation, minting coins, disliking Robert Hooke\n\n\n\nCooling, power series, optics, alchemy, planetary motions, apples."
-  },
-  {
-    "objectID": "resume.html#education",
-    "href": "resume.html#education",
-    "title": "Isaac Newtons’s CV",
-    "section": "",
-    "text": "1654-1660 The King’s School, Grantham.\nJune 1661 - now Trinity College, Cambridge\n\nSizar\n\n1667 - death Trinity College, Cambridge\n\nFellow"
-  },
-  {
-    "objectID": "resume.html#awards",
-    "href": "resume.html#awards",
-    "title": "Isaac Newtons’s CV",
-    "section": "",
-    "text": "2012 President, Royal Society, London, UK\nAssociate, French Academy of Science, Paris, France"
-  },
-  {
-    "objectID": "resume.html#publications",
-    "href": "resume.html#publications",
-    "title": "Isaac Newtons’s CV",
-    "section": "",
-    "text": "1669 Newton Sir I, De analysi per æquationes numero terminorum infinitas.\n1669 Lectiones opticæ.\netc. etc. etc.\n\n\n\n2012 Infinitesimal calculus for solutions to physics problems, SMBC patent 001"
-  },
-  {
-    "objectID": "resume.html#occupation",
-    "href": "resume.html#occupation",
-    "title": "Isaac Newtons’s CV",
-    "section": "",
-    "text": "1600 Royal Mint, London\n\nWarden\nMinted coins\n\n1600 Lucasian professor of Mathematics, Cambridge University"
-  },
-  {
-    "objectID": "Machine_Learning/project3.html",
-    "href": "Machine_Learning/project3.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/nested/nested-text.html#summary",
+    "href": "projects/nested/nested-text.html#summary",
+    "title": "Nested Text Analysis",
+    "section": "Summary",
+    "text": "Summary\nThe boxplot definitely back up Susan Easton Black’s quote, showing that the median distance between mentions of the Savior stays consistently low—around 25 to 50 words—across almost every single book. You can clearly see how the narrative style affects the spacing, books heavy on history or conflict like Helaman have wider boxes, while Alma is absolutely packed with outliers stretching all the way to the 300-word limit. On the flip side, books like Moroni and Mormon have super tight distributions, meaning the references to Christ are packed very closely together. Overall, despite the long tails from some of the story heavy sections, the graph proves His name is constantly woven throughout the entire text.\n\nAI USAGE\nHelped me to used fct_rev(book_title) on the y-axis of the plot. By default, ggplot builds the y-axis from the bottom up, which would put 1 Nephi at the bottom. Reversing it ensures 1 Nephi is at the top, making it read naturally from top to bottom. Copilot helped me write the analysis too.",
     "crumbs": [
-      "Machine Learning",
-      "Project 3"
+      "Projects",
+      "Text Analysis",
+      "Nested Text Analysis"
     ]
   },
   {
-    "objectID": "Machine_Learning/project1.html",
-    "href": "Machine_Learning/project1.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "projects/parsing/nested-visits.html",
+    "href": "projects/parsing/nested-visits.html",
+    "title": "Parsing Nested Visit Data",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Code\nlibrary(tidyverse)\n\nget_visits_tibble &lt;- function(pop_string) {\n  clean_string &lt;- str_remove_all(pop_string, '[{}\"\"“”]')\n  day_pairs &lt;- str_split(clean_string, \",\")[[1]]\n  result_tibble &lt;- tibble(raw = day_pairs) |&gt; \n  separate(raw, into = c(\"day\", \"visits\"), sep = \":\", convert = TRUE)\n  \n  return(result_tibble)\n}\n\n\n\n\nCode\nget_busiest_day &lt;- function(pop_string) {\n  visits_df &lt;- get_visits_tibble(pop_string)\n  max_visits &lt;- max(visits_df$visits)\n    busiest_days &lt;- visits_df |&gt; \n    filter(visits == max_visits) |&gt; \n    pull(day) |&gt; \n    paste(collapse = \", \")\n  \n  return(busiest_days)\n}\n\n\n\n\nCode\nstring1 &lt;- '{\"Monday\":94,\"Tuesday\":76,\"Wednesday\":89,\"Thursday\":106,\"Friday\":130,\"Saturday\":128,\"Sunday\":58}'\n\nprint(\"Test Case 1 Tibble:\")\n\n\n[1] \"Test Case 1 Tibble:\"\n\n\nCode\nget_visits_tibble(string1)\n\n\n# A tibble: 7 × 2\n  day       visits\n  &lt;chr&gt;      &lt;int&gt;\n1 Monday        94\n2 Tuesday       76\n3 Wednesday     89\n4 Thursday     106\n5 Friday       130\n6 Saturday     128\n7 Sunday        58\n\n\nCode\n# Friday at 130\n\nprint(\"Test Case 1 Busiest Day:\")\n\n\n[1] \"Test Case 1 Busiest Day:\"\n\n\nCode\nget_busiest_day(string1)\n\n\n[1] \"Friday\"\n\n\nCode\n#\"Friday\"\n\nstring2 &lt;- '{\"Monday\":18,\"Tuesday\":16,\"Wednesday\":14,\"Thursday\":27,\"Friday\":26,\"Saturday\":36,\"Sunday\":20}'\n\nprint(\"Test Case 2 Tibble:\")\n\n\n[1] \"Test Case 2 Tibble:\"\n\n\nCode\nget_visits_tibble(string2)\n\n\n# A tibble: 7 × 2\n  day       visits\n  &lt;chr&gt;      &lt;int&gt;\n1 Monday        18\n2 Tuesday       16\n3 Wednesday     14\n4 Thursday      27\n5 Friday        26\n6 Saturday      36\n7 Sunday        20\n\n\nCode\n# Saturday at 36\n\nprint(\"Test Case 2 Busiest Day:\")\n\n\n[1] \"Test Case 2 Busiest Day:\"\n\n\nCode\nget_busiest_day(string2)\n\n\n[1] \"Saturday\"\n\n\nCode\n#\"Saturday\"\n\nstring3 &lt;- '{\"Monday\":0,\"Tuesday\":0,\"Wednesday\":1,\"Thursday\":0,\"Friday\":0,\"Saturday\":1,\"Sunday\":0}'\n\nprint(\"Test Case 3 Tibble:\")\n\n\n[1] \"Test Case 3 Tibble:\"\n\n\nCode\nget_visits_tibble(string3)\n\n\n# A tibble: 7 × 2\n  day       visits\n  &lt;chr&gt;      &lt;int&gt;\n1 Monday         0\n2 Tuesday        0\n3 Wednesday      1\n4 Thursday       0\n5 Friday         0\n6 Saturday       1\n7 Sunday         0\n\n\nCode\n# Wednesday and Saturday tied at 1\n\nprint(\"Test Case 3 Busiest Day:\")\n\n\n[1] \"Test Case 3 Busiest Day:\"\n\n\nCode\nget_busiest_day(string3)\n\n\n[1] \"Wednesday, Saturday\"\n\n\nCode\n#\"Wednesday, Saturday\"\n\n\n\n\n\n Back to top",
     "crumbs": [
-      "Machine Learning",
-      "Project 1"
+      "Projects",
+      "Data Wrangling",
+      "Parsing Nested Visit Data"
     ]
   },
   {
-    "objectID": "full_stack.html",
-    "href": "full_stack.html",
-    "title": "about me",
+    "objectID": "projects/text/scripture-patterns.html",
+    "href": "projects/text/scripture-patterns.html",
+    "title": "Scripture Text Patterns",
     "section": "",
-    "text": "MarkDown Basics",
+    "text": "Code\nlibrary(stringr)\nlibrary(readr)\nlibrary(ggplot2)\nlibrary(tidyverse)\n\nscriptures &lt;- read_csv(\"https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv\") |&gt;\n    mutate(word_count = str_count(scripture_text, \"\\\\S+\"))\n\nview(scriptures)",
     "crumbs": [
-      "Full Stack"
+      "Projects",
+      "Text Analysis",
+      "Scripture Text Patterns"
     ]
   },
   {
-    "objectID": "full_stack.html#title-2-header",
-    "href": "full_stack.html#title-2-header",
-    "title": "about me",
+    "objectID": "projects/text/scripture-patterns.html#section",
+    "href": "projects/text/scripture-patterns.html#section",
+    "title": "Scripture Text Patterns",
     "section": "",
-    "text": "MarkDown Basics",
+    "text": "Code\nlibrary(stringr)\nlibrary(readr)\nlibrary(ggplot2)\nlibrary(tidyverse)\n\nscriptures &lt;- read_csv(\"https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv\") |&gt;\n    mutate(word_count = str_count(scripture_text, \"\\\\S+\"))\n\nview(scriptures)",
     "crumbs": [
-      "Full Stack"
+      "Projects",
+      "Text Analysis",
+      "Scripture Text Patterns"
     ]
   },
   {
-    "objectID": "Full_Stack/project1.html",
-    "href": "Full_Stack/project1.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/text/scripture-patterns.html#section-1",
+    "href": "projects/text/scripture-patterns.html#section-1",
+    "title": "Scripture Text Patterns",
+    "section": "2",
+    "text": "2\n\n\nCode\nscriptures |&gt;\n  filter(volume_title %in% c(\"New Testament\", \"Book of Mormon\")) |&gt;\n  group_by(volume_title) |&gt;\n  summarize(avg_verse_lenght = mean(word_count, na.rm = T))\n\n\n# A tibble: 2 × 2\n  volume_title   avg_verse_lenght\n  &lt;chr&gt;                     &lt;dbl&gt;\n1 Book of Mormon             40.4\n2 New Testament              22.7",
     "crumbs": [
-      "Full Stack",
-      "Project 1"
+      "Projects",
+      "Text Analysis",
+      "Scripture Text Patterns"
     ]
   },
   {
-    "objectID": "competition.html",
-    "href": "competition.html",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics",
+    "objectID": "projects/text/scripture-patterns.html#section-2",
+    "href": "projects/text/scripture-patterns.html#section-2",
+    "title": "Scripture Text Patterns",
+    "section": "3",
+    "text": "3\n\n\nCode\nscriptures |&gt;\n  filter(volume_title %in% c(\"New Testament\", \"Book of Mormon\")) |&gt;\n  mutate(jesus_found = str_count(scripture_text, \"Jesus\")) |&gt;\n  group_by(volume_title) |&gt;\n  summarize(total_jesus = sum(jesus_found))\n\n\n# A tibble: 2 × 2\n  volume_title   total_jesus\n  &lt;chr&gt;                &lt;int&gt;\n1 Book of Mormon         184\n2 New Testament          983",
     "crumbs": [
-      "Competitions",
-      "Competition"
+      "Projects",
+      "Text Analysis",
+      "Scripture Text Patterns"
     ]
   },
   {
-    "objectID": "competition.html#title-2-header",
-    "href": "competition.html#title-2-header",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics",
+    "objectID": "projects/text/scripture-patterns.html#section-3",
+    "href": "projects/text/scripture-patterns.html#section-3",
+    "title": "Scripture Text Patterns",
+    "section": "4",
+    "text": "4\n\n\nCode\nbom_order &lt;- c(\"1 Nephi\", \"2 Nephi\", \"Jacob\", \"Enos\", \"Jarom\", \"Omni\", \n               \"Words of Mormon\", \"Mosiah\", \"Alma\", \"Helaman\", \"3 Nephi\", \n               \"4 Nephi\", \"Mormon\", \"Ether\", \"Moroni\")\n\nscriptures |&gt;\n  filter(volume_title == \"Book of Mormon\") |&gt;\n  mutate(book_title = factor(book_title, levels = bom_order)) |&gt;\n  ggplot(aes(x = book_title, y = word_count)) +\n  geom_violin(fill = \"steelblue\", alpha = 0.6) +\n  coord_flip() +\n  labs(title = \"Word Count per Verse\", subtitle = \"Book of Mormon (Chronological Order)\", x = \"Book\", y = \"Words per Verse\") +\n  theme_minimal()",
     "crumbs": [
-      "Competitions",
-      "Competition"
+      "Projects",
+      "Text Analysis",
+      "Scripture Text Patterns"
     ]
   },
   {
-    "objectID": "Competition/project2.html",
-    "href": "Competition/project2.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "projects/leaflet/costa-rica-species.html",
+    "href": "projects/leaflet/costa-rica-species.html",
+    "title": "Costa Rica Species Map",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Code\nlibrary(rnaturalearth)\nlibrary(leaflet)\nlibrary(dplyr)\nlibrary(rgbif)",
     "crumbs": [
-      "Competitions",
-      "Project 2"
+      "Projects",
+      "Spatial & Maps",
+      "Costa Rica Species Map"
     ]
   },
   {
-    "objectID": "Cleansing_Projects/project3.html",
-    "href": "Cleansing_Projects/project3.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "projects/leaflet/costa-rica-species.html#libraries",
+    "href": "projects/leaflet/costa-rica-species.html#libraries",
+    "title": "Costa Rica Species Map",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Code\nlibrary(rnaturalearth)\nlibrary(leaflet)\nlibrary(dplyr)\nlibrary(rgbif)",
     "crumbs": [
-      "Data Cleansing",
-      "Project 3"
+      "Projects",
+      "Spatial & Maps",
+      "Costa Rica Species Map"
     ]
   },
   {
-    "objectID": "Cleansing_Projects/project1.html",
-    "href": "Cleansing_Projects/project1.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/leaflet/costa-rica-species.html#pull-data-load-map",
+    "href": "projects/leaflet/costa-rica-species.html#pull-data-load-map",
+    "title": "Costa Rica Species Map",
+    "section": "Pull Data & Load Map",
+    "text": "Pull Data & Load Map\n\n\nCode\ncrProvinces &lt;- ne_states(country = \"Costa Rica\", returnclass = \"sf\")\n\n# live GBIF database for the 2000 most recent coordinates\nslothData &lt;- occ_data(scientificName = \"Bradypus variegatus\", country = \"CR\", hasCoordinate = TRUE, limit = 2000)\n\nmonkeyData &lt;- occ_data(scientificName = \"Cebus imitator\", country = \"CR\", hasCoordinate = TRUE, limit = 2000)",
     "crumbs": [
-      "Data Cleansing",
-      "Project 1"
+      "Projects",
+      "Spatial & Maps",
+      "Costa Rica Species Map"
     ]
   },
   {
-    "objectID": "Cleansing_Exploration/project2.html",
-    "href": "Cleansing_Exploration/project2.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/leaflet/costa-rica-species.html#data-wrangling",
+    "href": "projects/leaflet/costa-rica-species.html#data-wrangling",
+    "title": "Costa Rica Species Map",
+    "section": "Data Wrangling",
+    "text": "Data Wrangling\n\n\nCode\nsloths &lt;- slothData$data %&gt;%\n  select(decimalLongitude, decimalLatitude, eventDate, stateProvince) %&gt;%\n  filter(!is.na(decimalLongitude), !is.na(decimalLatitude))\n\nmonkeys &lt;- monkeyData$data %&gt;%\n  select(decimalLongitude, decimalLatitude, eventDate, stateProvince) %&gt;%\n  filter(!is.na(decimalLongitude), !is.na(decimalLatitude))",
     "crumbs": [
-      "Data Exploration",
-      "Project 2"
+      "Projects",
+      "Spatial & Maps",
+      "Costa Rica Species Map"
     ]
   },
   {
-    "objectID": "cleansing.html",
-    "href": "cleansing.html",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics",
+    "objectID": "projects/leaflet/costa-rica-species.html#graph-w-leaflet",
+    "href": "projects/leaflet/costa-rica-species.html#graph-w-leaflet",
+    "title": "Costa Rica Species Map",
+    "section": "Graph w/ Leaflet",
+    "text": "Graph w/ Leaflet\n\n\nCode\nleaflet() %&gt;%\n  addProviderTiles(providers$Esri.WorldTopoMap) %&gt;%\n  # map\n  addPolygons(data = crProvinces, color = \"#2c3e50\", weight = 2, fillOpacity = 0.1, label = ~name) %&gt;%\n  # sloths\n  addCircleMarkers(data = sloths, lng = ~decimalLongitude, lat = ~decimalLatitude, radius = 4, color = \"#27ae60\", fillOpacity = 0.6, group = \"Sloths\",\n    popup = ~paste0(\n      \"&lt;strong&gt;Sloth Spotted!&lt;/strong&gt;&lt;br&gt;\",\n      \"&lt;strong&gt;Date: &lt;/strong&gt;\", eventDate, \"&lt;br&gt;\",\n      \"&lt;strong&gt;Province: &lt;/strong&gt;\", stateProvince)) %&gt;%\n  # monkeys\n  addCircleMarkers(data = monkeys, lng = ~decimalLongitude, lat = ~decimalLatitude, radius = 4, color = \"#e67e22\", fillOpacity = 0.6, group = \"Capuchin Monkeys\",\n    popup = ~paste0(\n      \"&lt;strong&gt;Monkey Spotted!&lt;/strong&gt;&lt;br&gt;\",\n      \"&lt;strong&gt;Date: &lt;/strong&gt;\", eventDate, \"&lt;br&gt;\",\n      \"&lt;strong&gt;Province: &lt;/strong&gt;\", stateProvince)) %&gt;%\n  # title\n    addControl(html = \"&lt;h3 style='margin:10px; padding:5px; background:white; border-radius:5px;'&gt;Costa Rica Wildlife Sightings&lt;/h3&gt;\", position = \"topright\") %&gt;%\n  # legend\n  addLegend(position = \"bottomright\", colors = c(\"#27ae60\", \"#e67e22\"), labels = c(\"Brown-throated Sloth\", \"Capuchin Monkey\"), title = \"Species\", opacity = 1) %&gt;%\n  # toggles\n  addLayersControl(overlayGroups = c(\"Sloths\", \"Capuchin Monkeys\"), options = layersControlOptions(collapsed = FALSE))",
     "crumbs": [
-      "Data Cleansing"
+      "Projects",
+      "Spatial & Maps",
+      "Costa Rica Species Map"
     ]
   },
   {
-    "objectID": "cleansing.html#title-2-header",
-    "href": "cleansing.html#title-2-header",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics",
+    "objectID": "projects/leaflet/costa-rica-species.html#summary",
+    "href": "projects/leaflet/costa-rica-species.html#summary",
+    "title": "Costa Rica Species Map",
+    "section": "Summary",
+    "text": "Summary\nSince I am from Costa Rica I really wanted to map something related to my home country so I pulled live spatial data from the GBIF database to map 2000 recent sightings each for two famous animals: Brown-throated Sloths and White-faced Capuchin Monkeys. To build the map I just combined a polygon layer for the subtle provincial boundaries with a point layer (the circle markers) for the actual animal sightings. I chose a topographic basemap because it clearly shows the mountain ranges and coastlines, which naturally affect where these animals live. To make the map easy to read and interactive, I color-coded the sloths green and the monkeys orange, and added a layer control box in the top right corner so users can toggle the animals on and off to compare their habitats.\nPlaying with the toggles shows some really interesting ecological patterns. The capuchin monkeys are basically everywhere, they have a super widespread distribution all along both coasts and cluster heavily around major national parks like Manuel Antonio, showing just how adaptable they are. The sloth data on the other hand, tells a different story. You can clearly see a massive concentration of sloths in the northern plains and along the humid Caribbean coast in Limón, but there is a huge empty spot in the northwest province of Guanacaste. Since Guanacaste is famous for its dry tropical forests it perfectly visualizes how sloths much prefer the wetter, more humid rainforests found in the rest of the country, kinda cool!\n\nAI USAGE\nUsed AI to learn the syntax for adding the addLayersControl",
     "crumbs": [
-      "Data Cleansing"
+      "Projects",
+      "Spatial & Maps",
+      "Costa Rica Species Map"
     ]
   },
   {
-    "objectID": "Cleansing_Exploration/project1.html",
-    "href": "Cleansing_Exploration/project1.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "projects/maps/idaho-dams.html",
+    "href": "projects/maps/idaho-dams.html",
+    "title": "Idaho Dams and Water Systems",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Code\nlibrary(sf)\nlibrary(tidyverse)\n\nidahoCrs &lt;- 4267\n\ndams &lt;- st_read(\"Idaho_Dams/Dam_Safety.shp\")\n\n\nError:\n! Cannot open \"Idaho_Dams/Dam_Safety.shp\"; The file doesn't seem to exist.\n\n\nCode\nshp &lt;- st_read(\"shp/County-AK-HI-Moved-USA-Map.shp\")\n\n\nError:\n! Cannot open \"shp/County-AK-HI-Moved-USA-Map.shp\"; The file doesn't seem to exist.\n\n\nCode\nwater &lt;- st_read(\"water/hyd250.shp\")\n\n\nError:\n! Cannot open \"water/hyd250.shp\"; The file doesn't seem to exist.\n\n\nCode\nwells &lt;- st_read(\"Wells/Wells.shp\")\n\n\nError:\n! Cannot open \"Wells/Wells.shp\"; The file doesn't seem to exist.",
     "crumbs": [
-      "Data Exploration",
-      "Project 1"
+      "Projects",
+      "Spatial & Maps",
+      "Idaho Dams and Water Systems"
     ]
   },
   {
-    "objectID": "Cleansing_Exploration/project3.html",
-    "href": "Cleansing_Exploration/project3.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "projects/maps/idaho-dams.html#prep",
+    "href": "projects/maps/idaho-dams.html#prep",
+    "title": "Idaho Dams and Water Systems",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Code\nlibrary(sf)\nlibrary(tidyverse)\n\nidahoCrs &lt;- 4267\n\ndams &lt;- st_read(\"Idaho_Dams/Dam_Safety.shp\")\n\n\nError:\n! Cannot open \"Idaho_Dams/Dam_Safety.shp\"; The file doesn't seem to exist.\n\n\nCode\nshp &lt;- st_read(\"shp/County-AK-HI-Moved-USA-Map.shp\")\n\n\nError:\n! Cannot open \"shp/County-AK-HI-Moved-USA-Map.shp\"; The file doesn't seem to exist.\n\n\nCode\nwater &lt;- st_read(\"water/hyd250.shp\")\n\n\nError:\n! Cannot open \"water/hyd250.shp\"; The file doesn't seem to exist.\n\n\nCode\nwells &lt;- st_read(\"Wells/Wells.shp\")\n\n\nError:\n! Cannot open \"Wells/Wells.shp\"; The file doesn't seem to exist.",
     "crumbs": [
-      "Data Exploration",
-      "Project 3"
+      "Projects",
+      "Spatial & Maps",
+      "Idaho Dams and Water Systems"
     ]
   },
   {
-    "objectID": "Cleansing_Projects/project2.html",
-    "href": "Cleansing_Projects/project2.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/maps/idaho-dams.html#filter",
+    "href": "projects/maps/idaho-dams.html#filter",
+    "title": "Idaho Dams and Water Systems",
+    "section": "Filter",
+    "text": "Filter\n\n\nCode\nidahoShape &lt;- shp %&gt;% \n  filter(StateName == \"Idaho\") %&gt;% \n  st_transform(crs = idahoCrs)\n\n\nError:\n! object 'shp' not found\n\n\nCode\nwellsFiltered &lt;- wells %&gt;% \n  filter(Production &gt; 5000) %&gt;% \n  st_transform(crs = idahoCrs)\n\n\nError:\n! object 'wells' not found\n\n\nCode\ndamsFiltered &lt;- dams %&gt;% \n  filter(SurfaceAre &gt; 50) %&gt;% \n  st_transform(crs = idahoCrs)\n\n\nError:\n! object 'dams' not found\n\n\nCode\nriversFiltered &lt;- water %&gt;% \n  filter(FEAT_NAME %in% c(\"Snake River\", \"Henrys Fork\")) %&gt;% \n  st_transform(crs = idahoCrs)\n\n\nError:\n! object 'water' not found",
     "crumbs": [
-      "Data Cleansing",
-      "Project 2"
+      "Projects",
+      "Spatial & Maps",
+      "Idaho Dams and Water Systems"
     ]
   },
   {
-    "objectID": "Competition/project1.html",
-    "href": "Competition/project1.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/maps/idaho-dams.html#create-map",
+    "href": "projects/maps/idaho-dams.html#create-map",
+    "title": "Idaho Dams and Water Systems",
+    "section": "Create Map",
+    "text": "Create Map\n\n\nCode\nidahoMap &lt;- ggplot() +\n  geom_sf(data = idahoShape, fill = \"gray95\", color = \"gray60\", size = 0.5) +\n  geom_sf(data = riversFiltered, aes(color = FEAT_NAME), size = 1) +\n  geom_sf(data = wellsFiltered, aes(color = \"Wells\"), alpha = 0.7, size = 1.2) +\n  geom_sf(data = damsFiltered, aes(color = \"Dams\"), shape = 17, size = 1.8) +\n  scale_color_manual(\n    name = \"Water Systems\",\n    values = c(\"Henrys Fork\" = \"deepskyblue\", \"Snake River\" = \"mediumblue\", \"Wells\" = \"seagreen\", \"Dams\" = \"firebrick\")) +\n  coord_sf(crs = idahoCrs, datum = NA) +\n  labs(title = \"Idaho Water Systems Overview\", subtitle = \"Featuring Major Rivers, High-Production Wells (&gt;5000 gal), and Large Dams (&gt;50 acres)\", x = \"\", y = \"\") +\n  theme_minimal() +\n  theme(plot.title = element_text(face = \"bold\", size = 14), legend.position = \"bottom\", panel.grid.major = element_blank())\n\n\nError:\n! object 'idahoShape' not found\n\n\nCode\nprint(idahoMap)\n\n\nError:\n! object 'idahoMap' not found",
     "crumbs": [
-      "Competitions",
-      "Project 1"
+      "Projects",
+      "Spatial & Maps",
+      "Idaho Dams and Water Systems"
     ]
   },
   {
-    "objectID": "Competition/project3.html",
-    "href": "Competition/project3.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/maps/idaho-dams.html#save-map",
+    "href": "projects/maps/idaho-dams.html#save-map",
+    "title": "Idaho Dams and Water Systems",
+    "section": "Save Map",
+    "text": "Save Map\n\n\nCode\nggsave(\n  filename = \"idahoWaterSystems.png\", \n  plot = idahoMap, \n  width = 8, \n  height = 10, \n  dpi = 300, \n  bg = \"white\"\n)\n\n\nError:\n! object 'idahoMap' not found",
     "crumbs": [
-      "Competitions",
-      "Project 3"
+      "Projects",
+      "Spatial & Maps",
+      "Idaho Dams and Water Systems"
     ]
   },
   {
-    "objectID": "exploration.html",
-    "href": "exploration.html",
-    "title": "about me",
+    "objectID": "projects/markets/stock-portfolio.html",
+    "href": "projects/markets/stock-portfolio.html",
+    "title": "Stock Portfolio Comparison",
     "section": "",
-    "text": "MarkDown Basics",
+    "text": "Code\nlibrary(tidyquant)\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(scales)\nlibrary(ggrepel)\n\nmyPicks &lt;- c(\"NVDA\", \"MSFT\", \"AAPL\")\nfriendPicks &lt;- c(\"KO\", \"DIS\", \"JPM\")\nallStocks &lt;- c(myPicks, friendPicks)\n\nstockData &lt;- tq_get(allStocks, from = \"2026-01-01\", to = today(), get = \"stock.prices\")",
     "crumbs": [
-      "Data Exploration"
+      "Projects",
+      "Data Wrangling",
+      "Stock Portfolio Comparison"
     ]
   },
   {
-    "objectID": "exploration.html#title-2-header",
-    "href": "exploration.html#title-2-header",
-    "title": "about me",
+    "objectID": "projects/markets/stock-portfolio.html#pull",
+    "href": "projects/markets/stock-portfolio.html#pull",
+    "title": "Stock Portfolio Comparison",
     "section": "",
-    "text": "MarkDown Basics",
+    "text": "Code\nlibrary(tidyquant)\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(scales)\nlibrary(ggrepel)\n\nmyPicks &lt;- c(\"NVDA\", \"MSFT\", \"AAPL\")\nfriendPicks &lt;- c(\"KO\", \"DIS\", \"JPM\")\nallStocks &lt;- c(myPicks, friendPicks)\n\nstockData &lt;- tq_get(allStocks, from = \"2026-01-01\", to = today(), get = \"stock.prices\")",
     "crumbs": [
-      "Data Exploration"
+      "Projects",
+      "Data Wrangling",
+      "Stock Portfolio Comparison"
     ]
   },
   {
-    "objectID": "Full_Stack/project2.html",
-    "href": "Full_Stack/project2.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/markets/stock-portfolio.html#calcs",
+    "href": "projects/markets/stock-portfolio.html#calcs",
+    "title": "Stock Portfolio Comparison",
+    "section": "Calcs",
+    "text": "Calcs\n\n\nCode\nportfolioData &lt;- stockData %&gt;%\n  group_by(symbol) %&gt;%\n  tq_transmute(select = adjusted, mutate_fun = periodReturn, period = \"daily\", col_rename = \"daily_return\") %&gt;%\n  mutate(player = ifelse(symbol %in% myPicks, \"Me\", \"Friend\"))\n\nportfolioPerformance &lt;- portfolioData %&gt;%\n  group_by(player, date) %&gt;%\n  summarize(avg_daily_return = mean(daily_return), .groups = \"drop\") %&gt;%\n  group_by(player) %&gt;%\n  mutate(cumulative_return = cumprod(1 + avg_daily_return) - 1)",
     "crumbs": [
-      "Full Stack",
-      "Project 2"
+      "Projects",
+      "Data Wrangling",
+      "Stock Portfolio Comparison"
+    ]
+  },
+  {
+    "objectID": "projects/markets/stock-portfolio.html#graphs",
+    "href": "projects/markets/stock-portfolio.html#graphs",
+    "title": "Stock Portfolio Comparison",
+    "section": "Graphs",
+    "text": "Graphs\n\n\nCode\nlastPoints &lt;- portfolioPerformance %&gt;%\n  group_by(player) %&gt;%\n  filter(date == max(date))\n\nggplot(portfolioPerformance, aes(x = date, y = cumulative_return, color = player)) +\n  geom_hline(yintercept = 0, color = \"black\", linetype = \"dashed\", alpha = 0.3) +\n  geom_line(linewidth = 1.2) +\n  geom_label_repel(data = lastPoints, aes(label = player), nudge_x = 1, segment.color = 'transparent') +\n  scale_y_continuous(labels = scales::percent) +\n  theme_tq() +\n  theme(legend.position = \"none\") +\n  labs(title = \"Portfolio Competition: Cumulative Returns\", subtitle = \"Comparing performance trends over time\", y = \"Total Return\", x = NULL,\n  )\n\n\n\n\n\n\n\n\n\n\n\nCode\nstockPerformance &lt;- portfolioData %&gt;% \n  group_by(symbol, player) %&gt;% \n  mutate(cumulative_return = cumprod(1 + daily_return) - 1)\n\nfinalStockPerformance &lt;- stockPerformance %&gt;% \n  filter(date == max(date)) %&gt;% \n  mutate(label = paste0(symbol, \" (\", player, \")\"))\n\nggplot(finalStockPerformance, aes(x = reorder(symbol, cumulative_return), y = cumulative_return, fill = player)) + \n  geom_col(width = 0.6) + \n  geom_text(aes(label = scales::percent(cumulative_return, accuracy = 0.1)), \n  hjust = ifelse(finalStockPerformance$cumulative_return &gt; 0, -0.1, 1.1), \n zsize = 3.5) + \n  coord_flip() + \n  scale_y_continuous(labels = scales::percent) + \n  scale_fill_brewer(palette = \"Set1\") + \n  theme_tq() + \n  labs(title = \"Stock Contribution Breakdown\", subtitle = \"Individual stock performance sorted by impact\", x = \"Stock Ticker\", y = \"Final Cumulative Return\", fill = \"Held By\"\n)\n\n\nWarning in geom_text(aes(label = scales::percent(cumulative_return, accuracy =\n0.1)), : Ignoring unknown parameters: `zsize`",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Stock Portfolio Comparison"
+    ]
+  },
+  {
+    "objectID": "projects/markets/stock-portfolio.html#summary",
+    "href": "projects/markets/stock-portfolio.html#summary",
+    "title": "Stock Portfolio Comparison",
+    "section": "Summary",
+    "text": "Summary\nLooking at the performance chart I made it was definitely a rollercoaster for my “portfolio.” I had a pretty rough start and dipped down around April, but then I managed a huge comeback that put me in the lead by the time June rolled around, the bar chart helps explain exactly why that happened. Even though my friend picked KO, which ended up being the single best performing stock of the bunch we picked, my portfolio was more consistent. I had strong growth from AAPL and NVDA that really carried the team a LOT, and that was enough to balance out the losses from MSFT and help me finish on top overall, thought it wasn’t the best one\n\nAI Usage\nI did use it to ask about the ‘tidyquant’ functions and a few other that I didn’t know such as ‘paste0()’ or ‘cumprod()’. I didn’t use it beyond that, though previous graphs I’ve done were pretty handy. Here’s the link for reference",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Stock Portfolio Comparison"
+    ]
+  },
+  {
+    "objectID": "projects/flights/utah-baseball.html",
+    "href": "projects/flights/utah-baseball.html",
+    "title": "Utah Baseball Programs",
+    "section": "",
+    "text": "Code\nlibrary(Lahman)\nlibrary(priceR)\nlibrary(tidyverse)\nlibrary(scales)",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Utah Baseball Programs"
+    ]
+  },
+  {
+    "objectID": "projects/flights/utah-baseball.html#prep",
+    "href": "projects/flights/utah-baseball.html#prep",
+    "title": "Utah Baseball Programs",
+    "section": "Prep",
+    "text": "Prep\n\n\nCode\nutahSchools &lt;- Schools %&gt;%\nfilter(state == \"UT\")\n\nutahPlayers &lt;- CollegePlaying %&gt;%\nselect(playerID, schoolID) %&gt;%\ndistinct() %&gt;%\ninner_join(utahSchools, by = \"schoolID\")\n\nplayerSalaries &lt;- Salaries %&gt;%\ninner_join(People, by = \"playerID\") %&gt;%\ninner_join(utahPlayers, by = \"playerID\") %&gt;%\nselect(nameFirst, nameLast, name_full, yearID, salary)\n\nbaseballBYU &lt;- playerSalaries %&gt;%\nmutate(\n  adjustedSalary = adjust_for_inflation(\n    price = salary, \n    from_date = yearID, \n    country = \"US\", \n    to_date = 2021\n  ),\n    schoolGroup = ifelse(grepl(\"Brigham Young\", name_full), \"BYU\", \"Other Utah Schools\")\n  )\n\n\nGenerating URL to request all 295 results\nRetrieving inflation data for US \nGenerating URL to request all 66 results",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Utah Baseball Programs"
+    ]
+  },
+  {
+    "objectID": "projects/flights/utah-baseball.html#plot",
+    "href": "projects/flights/utah-baseball.html#plot",
+    "title": "Utah Baseball Programs",
+    "section": "Plot",
+    "text": "Plot\n\n\nCode\nggplot(baseballBYU, aes(x = schoolGroup, y = adjustedSalary, fill = schoolGroup)) +\ngeom_boxplot(alpha = 0.5, outlier.shape = NA) +\ngeom_jitter(width = 0.2, alpha = 0.7, color = \"blue\", size = 1.5) +\nscale_y_continuous(labels = label_dollar()) +\ntheme_minimal() +\nlabs(title = \"Professional Baseball Earnings, BYU vs Other Utah Schools\", subtitle = \"Annual salaries adjusted to 2021 USD\", x = element_blank(), y = \"Adjusted Annual Salary (2021 USD)\") +\ntheme(legend.position = \"none\")\n\n\n\n\n\n\n\n\n\nThis plot demonstrates that professional baseball players who attended BYU historically have significantly higher and more varied earning potentials compared to alumni from other Utah schools. The BYU distribution shows a clearly higher median salary and a massive spread, with a strong concentration of players securing multi-million-dollar annual contracts, including several “outliers” exceeding 10 million (adjusted to 2021 USD), the earnings distribution for alumni from other Utah schools is more compressed at the lower end of the pay scale as seen on the graph, which indicates that the vast majority of those players earn well under 1 million annually. While a few isolated outliers from other Utah schools managed to secure contracts in the 4 million to 7 million range, BYU clearly produces a higher volume of top-tier earners in professional baseball",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Utah Baseball Programs"
+    ]
+  },
+  {
+    "objectID": "projects/presentation/visualization-redesign.html",
+    "href": "projects/presentation/visualization-redesign.html",
+    "title": "Visualization Redesign",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(ggplot2)\nlibrary(magick)\n\n\nLinking to ImageMagick 6.9.13.29\nEnabled features: cairo, fontconfig, freetype, heic, lcms, pango, raw, rsvg, webp\nDisabled features: fftw, ghostscript, x11\n\n\nCode\nlibrary(grid)\n\nguns &lt;- read_csv(\"https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv\")\n\n\nNew names:\nRows: 100798 Columns: 11\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(6): month, intent, sex, race, place, education dbl (5): ...1, year, police,\nage, hispanic\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -&gt; `...1`\n\n\n\n\nCode\nuglyBg &lt;- image_read(\"thumbbig-1193310.webp\")\n\n\nError:\n! R: UnableToOpenBlob `thumbbig-1193310.webp': No such file or directory @ error/blob.c/OpenBlob/2967\n\n\nCode\nbgRaster &lt;- rasterGrob(as.raster(uglyBg), width = unit(1, \"npc\"), height = unit(1, \"npc\"))\n\n\nError:\n! object 'uglyBg' not found\n\n\nCode\nuglyPlot &lt;- ggplot(guns, aes(x = race, y = age, color = intent, size = month)) +\n    annotation_custom(bgRaster, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) +\n    geom_line(aes(group = place), color = \"magenta\", linewidth = 2, alpha = 0.5) +\n    geom_jitter(shape = 8, color = \"chartreuse\", size = 10, width = 0.7) +\n  geom_point(color = \"cyan\", alpha = 0.4, size = 5) +\n  labs(title = \"gunzzzz\", subtitle = \"something\",x = \"RACE (but rotated for neck pain)\",y = \"AGE\", color = \"\") +\n  scale_y_reverse() +\n  theme(\n    plot.background = element_rect(fill = \"yellow\", color = \"red\", linewidth = 10),\n    panel.background = element_rect(fill = \"transparent\"),\n    text = element_text(family = \"mono\", color = \"brown\", size = 20, face = \"bold.italic\"),\n    axis.text.x = element_text(angle = 137, vjust = 0.5, color = \"orange\", size = 15),\n    axis.text.y = element_text(angle = 47, color = \"pink\", size = 15),\n    panel.grid.major = element_line(color = \"blue\", linewidth = 3, linetype = \"dotdash\"),\n    panel.grid.minor = element_line(color = \"red\", linewidth = 2, linetype = \"twodash\"),\n    legend.position = \"top\",\n    legend.background = element_rect(fill = \"green\", color = \"purple\", linewidth = 3),\n    legend.text = element_text(angle = 180, color = \"white\", size = 12),\n    legend.key = element_rect(fill = \"orange\")\n  )\n\n\nError:\n! object 'bgRaster' not found\n\n\nCode\nprint(uglyPlot)\n\n\nError:\n! object 'uglyPlot' not found\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Visualization",
+      "Visualization Redesign"
+    ]
+  },
+  {
+    "objectID": "projects/presentation/gun-deaths-seasonal.html",
+    "href": "projects/presentation/gun-deaths-seasonal.html",
+    "title": "Gun Deaths: Seasonal Patterns",
+    "section": "",
+    "text": "I will create a new season variable based on the month column to address the client’s request for seasonal commercials\n\n\nCode\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(forcats)\nlibrary(viridis)\n\n\nLoading required package: viridisLite\n\n\nCode\nguns &lt;- read_csv(\"https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv\")\n\n\nNew names:\nRows: 100798 Columns: 11\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(6): month, intent, sex, race, place, education dbl (5): ...1, year, police,\nage, hispanic\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -&gt; `...1`\n\n\nCode\ngunsClean &lt;- guns %&gt;%\n  filter(!is.na(intent)) %&gt;%\n  mutate(\n    month_num = as.numeric(month),\n    season = case_when(\n      month_num %in% c(12, 1, 2) ~ \"Winter\",\n      month_num %in% c(3, 4, 5) ~ \"Spring\",\n      month_num %in% c(6, 7, 8) ~ \"Summer\",\n      month_num %in% c(9, 10, 11) ~ \"Fall\"\n    ),\n    season = factor(season, levels = c(\"Winter\", \"Spring\", \"Summer\", \"Fall\"))\n  )\n\n\nThe client needs to know which demographic groups to target based on the overall causes of gun deaths.\n\n\nCode\ngunsClean %&gt;%\n  count(intent, race) %&gt;%\n  mutate(intent = fct_reorder(intent, n, .fun = sum)) %&gt;%\n  ggplot(aes(x = intent, y = n, fill = race)) +\n  geom_col(position = position_dodge(width = 0.8), width = 0.7) +\n  coord_flip() +\n  theme_minimal(base_size = 14) +\n  scale_fill_viridis_d(option = \"plasma\") + \n  scale_y_continuous(labels = scales::comma) +\n  theme(panel.grid.major.y = element_blank(), legend.position = \"top\") +\n  labs(title = \"Gun Deaths by Intent and Race (2012-2014)\", x = NULL, # we save space because intent is obvious on the y-axis\n  y = \"Total Deaths\", fill = NULL)\n\n\n\n\n\n\n\n\n\nThis plot illustrates that the vast majority of gun deaths are driven by two primary intents: suicides and homicides. It highlights a stark demographic divide that the client must consider for targeting: suicides are overwhelmingly committed by White individuals, whereas homicides disproportionately affect Black individuals (though we should consider that the white population is bigger than any of the other demographics we have seen). Targeting these specific demographic groups based on the intent of the messaging is crucial for any overall intervention strategy",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Gun Deaths: Seasonal Patterns"
+    ]
+  },
+  {
+    "objectID": "projects/presentation/gun-deaths-seasonal.html#setup",
+    "href": "projects/presentation/gun-deaths-seasonal.html#setup",
+    "title": "Gun Deaths: Seasonal Patterns",
+    "section": "",
+    "text": "I will create a new season variable based on the month column to address the client’s request for seasonal commercials\n\n\nCode\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(forcats)\nlibrary(viridis)\n\n\nLoading required package: viridisLite\n\n\nCode\nguns &lt;- read_csv(\"https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv\")\n\n\nNew names:\nRows: 100798 Columns: 11\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(6): month, intent, sex, race, place, education dbl (5): ...1, year, police,\nage, hispanic\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -&gt; `...1`\n\n\nCode\ngunsClean &lt;- guns %&gt;%\n  filter(!is.na(intent)) %&gt;%\n  mutate(\n    month_num = as.numeric(month),\n    season = case_when(\n      month_num %in% c(12, 1, 2) ~ \"Winter\",\n      month_num %in% c(3, 4, 5) ~ \"Spring\",\n      month_num %in% c(6, 7, 8) ~ \"Summer\",\n      month_num %in% c(9, 10, 11) ~ \"Fall\"\n    ),\n    season = factor(season, levels = c(\"Winter\", \"Spring\", \"Summer\", \"Fall\"))\n  )\n\n\nThe client needs to know which demographic groups to target based on the overall causes of gun deaths.\n\n\nCode\ngunsClean %&gt;%\n  count(intent, race) %&gt;%\n  mutate(intent = fct_reorder(intent, n, .fun = sum)) %&gt;%\n  ggplot(aes(x = intent, y = n, fill = race)) +\n  geom_col(position = position_dodge(width = 0.8), width = 0.7) +\n  coord_flip() +\n  theme_minimal(base_size = 14) +\n  scale_fill_viridis_d(option = \"plasma\") + \n  scale_y_continuous(labels = scales::comma) +\n  theme(panel.grid.major.y = element_blank(), legend.position = \"top\") +\n  labs(title = \"Gun Deaths by Intent and Race (2012-2014)\", x = NULL, # we save space because intent is obvious on the y-axis\n  y = \"Total Deaths\", fill = NULL)\n\n\n\n\n\n\n\n\n\nThis plot illustrates that the vast majority of gun deaths are driven by two primary intents: suicides and homicides. It highlights a stark demographic divide that the client must consider for targeting: suicides are overwhelmingly committed by White individuals, whereas homicides disproportionately affect Black individuals (though we should consider that the white population is bigger than any of the other demographics we have seen). Targeting these specific demographic groups based on the intent of the messaging is crucial for any overall intervention strategy",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Gun Deaths: Seasonal Patterns"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/country-heights.html",
+    "href": "projects/wrangling/country-heights.html",
+    "title": "Country Heights",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(readxl)\n\nurl &lt;- \"https://byuistats.github.io/M335/data/heights/Height.xlsx\"\ntempFile &lt;- tempfile(fileext = \".xlsx\")\n\n# wb means to download it as a binary file\ndownload.file(url, destfile = tempFile, mode = \"wb\")\nheightData &lt;- read_excel(tempFile, skip = 1) # There was a manual header so by doing \"skip = 1\" we are skipping the first row of the data",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Country Heights"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/country-heights.html#section",
+    "href": "projects/wrangling/country-heights.html#section",
+    "title": "Country Heights",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(knitr)\nlibrary(readxl)\n\nurl &lt;- \"https://byuistats.github.io/M335/data/heights/Height.xlsx\"\ntempFile &lt;- tempfile(fileext = \".xlsx\")\n\n# wb means to download it as a binary file\ndownload.file(url, destfile = tempFile, mode = \"wb\")\nheightData &lt;- read_excel(tempFile, skip = 1) # There was a manual header so by doing \"skip = 1\" we are skipping the first row of the data",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Country Heights"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/country-heights.html#section-1",
+    "href": "projects/wrangling/country-heights.html#section-1",
+    "title": "Country Heights",
+    "section": "2",
+    "text": "2\n\n\nCode\ntidyHeights &lt;- heightData %&gt;%\n  pivot_longer(cols = -c(`Code`, `Continent, Region, Country`), names_to = \"year\", values_to = \"heightCm\") %&gt;%\n  mutate(year = as.numeric(year), heightCm = as.numeric(heightCm)) %&gt;%\n  filter(!is.na(heightCm))\n\nview(tidyHeights)\nglimpse(tidyHeights)\n\n\nRows: 1,340\nColumns: 4\n$ Code                         &lt;dbl&gt; 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 4…\n$ `Continent, Region, Country` &lt;chr&gt; \"Austria\", \"Austria\", \"Austria\", \"Austria…\n$ year                         &lt;dbl&gt; 1820, 1830, 1840, 1850, 1860, 1870, 1880,…\n$ heightCm                     &lt;dbl&gt; 163.70, 163.40, 164.80, 165.80, 166.40, 1…",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Country Heights"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/country-heights.html#section-2",
+    "href": "projects/wrangling/country-heights.html#section-2",
+    "title": "Country Heights",
+    "section": "3",
+    "text": "3\n\n\nCode\ntidyHeights %&gt;%\n  mutate(decade = floor(year / 10) * 10, heightIn = heightCm / 2.54, # I used floor to turn years like 1823 into 1820\n  countryGroup = ifelse(grepl(\"Germany\", `Continent, Region, Country`), \"Germany\", \"Other Countries\")) %&gt;% \n  # https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/grep\n  # There are some cases where the name of Germany is different, with grepl we can check if the name of the country contains       \"Germany\" and if it does we will put it in the \"Germany\" group, otherwise it will be in the \"Other Countries\" group\n  arrange(countryGroup) %&gt;%\n  \n  ggplot(aes(x = decade, y = heightIn, color = countryGroup, alpha = countryGroup, size = countryGroup)) +\n  # I decided to use geom_jitter instead of geom_point so points in the same decade don't completely hide each other, looks nicer\n  geom_jitter(width = 1.5, height = 0) +\n  \n  scale_color_manual(values = c(\"Germany\" = \"red\", \"Other Countries\" = \"gray\")) +\n  scale_alpha_manual(values = c(\"Germany\" = 0.9, \"Other Countries\" = 0.2)) +\n  scale_size_manual(values = c(\"Germany\" = 2.5, \"Other Countries\" = 1.5)) +\n  \n  theme_minimal() +\n  theme(plot.title = element_text(face = \"bold\", size = 18), legend.position = \"bottom\", panel.grid.minor = element_blank()) +\n  labs(title = \"Heights Over Time\", subtitle = \"Comparing trends across all available regions by decade\", x = \"Decade\", y = \"Average Height (Inches)\",)",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Country Heights"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/country-heights.html#section-3",
+    "href": "projects/wrangling/country-heights.html#section-3",
+    "title": "Country Heights",
+    "section": "4",
+    "text": "4\nIf someone asked me if humans are getting taller over the years (and based on this dataset), I’d say my data definitely backs that up,looking at the chart I made, you can see a clear upward trend across the decades. The grey dots represent all the different countries, and while there’s always going to be a spread in heights at any given time, the whole group of dots moves higher as the decades go by. To make it easier to see a specific example, I highlighted Germany in red. You can watch those red dots climb steadily from around 66 inches back in the early 1800s to over 70 inches by the end of the timeline, so, the story the data tells is pretty clear, average heights have definitely been going up.",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Country Heights"
+    ]
+  },
+  {
+    "objectID": "projects/exploratory/flight-delays.html",
+    "href": "projects/exploratory/flight-delays.html",
+    "title": "Flight Delays by Origin",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(nycflights13)",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Flight Delays by Origin"
+    ]
+  },
+  {
+    "objectID": "projects/exploratory/flight-delays.html#questions",
+    "href": "projects/exploratory/flight-delays.html#questions",
+    "title": "Flight Delays by Origin",
+    "section": "Questions",
+    "text": "Questions\n\nWhich origin airport is best to minimize my chances of a late arrival when I am using Delta Airlines?\n\n\nCode\ndeltaFlights &lt;- flights %&gt;%\n  filter(carrier == \"DL\", !is.na(arr_delay))\n\nggplot(deltaFlights, aes(x = origin, y = arr_delay, color = origin)) +\n  geom_jitter(alpha = 0.1, width = 0.2) + \n  geom_hline(yintercept = 0, linetype = \"dashed\", color = \"red\") +\n  labs(title = \"Arrival Delays for Delta Airlines by Origin\", subtitle = \"Individual flights shown to highlight variability\", x = \"Origin Airport\", y = \"Arrival Delay (minutes)\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nBased on the data, LGA (LaGuardia) is the best origin for Delta passengers. Though all three airports show a high density of flights arriving early (below the 0-minute line), LGA has a tighter distribution of delays and a lower average arrival delay (\\(3.47\\) minutes) compared to JFK (\\(5.55\\) minutes) and EWR (\\(12.1\\) minutes). If you want to avoid significant “outlier” delays, LGA provides the most consistent performance for Delta. I dind’t normalized the data, due to insufficient data.\n\n\nWhich destination airport is the worst airport for arrival delays? You decide on the metric for “worst.”\nFor this graph/analysis, I have defined “worst” as the highest average arrival delay (since it sucks being late), considering only airports that received at least 100 flights to ensure the sample size is meaningful and keep it normalized. This avoids skewing results with a single, highly delayed flight to a rare destination.\n\n\nCode\nworstDests &lt;- flights %&gt;%\n  filter(!is.na(arr_delay)) %&gt;%\n  group_by(dest) %&gt;%\n  summarize( avg_delay = mean(arr_delay), flight_count = n()) %&gt;%\n  filter(flight_count &gt;= 100) %&gt;%\n  arrange(desc(avg_delay)) %&gt;%\n  head(10)\n\nggplot(worstDests, aes(x = reorder(dest, avg_delay), y = avg_delay, fill = avg_delay)) +\n  geom_col() +\n  coord_flip() +\n  scale_fill_gradient(low = \"orange\", high = \"darkred\") +\n  labs(title = \"Top 10 Worst Destination Airports\", subtitle = \"By Average Arrival Delay (Min. 100 flights)\", x = \"Destination Airport Code\", y = \"Average Arrival Delay (minutes)\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nThe worst destination airport for arrival delays is CAE (Columbia Metropolitan Airport) in South Carolina, with an average arrival delay of approximately 25.9 minutes. It is closely followed by TUL (Tulsa) and OKC (Oklahoma City). This suggests that flights heading to these specific regional hubs from NYC are significantly more likely to face arrival bottlenecks or scheduling issues compared to major hubs like ATL or LAX.",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Flight Delays by Origin"
+    ]
+  },
+  {
+    "objectID": "projects/distributions/large-distributions.html",
+    "href": "projects/distributions/large-distributions.html",
+    "title": "Visualizing Large Distributions",
+    "section": "",
+    "text": "Kuwait is heavily filtered out of historical gapminder plots because it acts as an extreme outlier in the 1950s, 1960s, and 1970s. During this period, Kuwait’s booming oil production combined with a very small population resulted in an extraordinarily high GDP per capita (exceeding $100,000). If you include Kuwait, the y-axis stretches so far upward that the rest of the world’s countries are compressed into a tiny cluster at the bottom, making it impossible to see the meaningful trends and growth happening globally.\n\n\nCode\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(gapminder)\n\n\n\n\nCode\ngapFiltered &lt;- gapminder %&gt;%\n  filter(country != \"Kuwait\") %&gt;%\n  # Convert population to numeric first to prevent integer overflow when summing later\n  mutate(pop_100k = as.numeric(pop) / 100000)\n\nggplot(gapFiltered, aes(x = lifeExp, y = gdpPercap, color = continent, size = pop_100k)) +\n  geom_point(alpha = 0.7) +\n  facet_grid(. ~ year) +\n  scale_y_continuous(trans = \"sqrt\", breaks = c(10000, 20000, 30000, 40000, 50000)) +\n  scale_size_continuous(breaks = c(2500, 5000, 7500, 10000, 12500)) +\n  labs(x = \"Life Expectancy\", y = \"GDP per Capita\", size = \"Population (100k)\", color = \"continent\") +\n  theme_bw() +\n  theme(strip.background = element_rect(fill = \"gray95\"), panel.grid.minor = element_blank())\n\n\n\n\n\n\n\n\n\n\n\nCode\ngapSummary &lt;- gapFiltered %&gt;%\n  group_by(continent, year) %&gt;%\n  summarize(\n    # I used tge weighted mean for accurate aggregate GDP per capita\n    gdpPercap = weighted.mean(gdpPercap, w = pop), \n    pop_100k = sum(pop_100k),\n    .groups = \"drop\"\n  )\n\n  ggplot() +\n  geom_line(data = gapFiltered, aes(x = year, y = gdpPercap, color = continent, group = country)) +\n  geom_point(data = gapFiltered, aes(x = year, y = gdpPercap, color = continent), size = 1) +\n  \n  geom_line(data = gapSummary, aes(x = year, y = gdpPercap), color = \"black\", linewidth = 1) +\n  geom_point(data = gapSummary, aes(x = year, y = gdpPercap, size = pop_100k), color = \"black\") +\n  \n  facet_grid(. ~ continent) +\n  scale_x_continuous(breaks = seq(1950, 2000, by = 10)) +\n  labs(x = \"Year\",y = \"GDP per Capita\", size = \"Population (100k)\", color = \"continent\") +\n  theme_bw() +\n  theme(strip.background = element_rect(fill = \"gray95\"), panel.grid.minor = element_blank()\n  )\n\n\n\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Visualization",
+      "Visualizing Large Distributions"
+    ]
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Selected analyses grouped by theme. Open any project below, or use the sidebar while browsing.\n\nVisualization\n\nData Visualization Critique\nVisualizing Large Distributions\nFruit Consumption vs GDP\nVisualization Redesign\n\n\n\nExploratory Analysis\n\nGun Deaths Analysis\nGun Deaths: Seasonal Patterns\nFlight Delays by Origin\nAircraft Age and Flight Delays\nUtah Baseball Programs\n\n\n\nData Wrangling\n\nStock Market Predictions\nCountry Heights\nCombining Height Datasets\nSales Data Cleaning\nStock Portfolio Comparison\nChipotle Order Analysis\nParsing Nested Visit Data\n\n\n\nSpatial & Maps\n\nUS Lower 48 Map\nIdaho Dams and Water Systems\nBuilding Footprints by State\nCosta Rica Species Map\nOpen Data Source Evaluation\n\n\n\nText Analysis\n\nScripture Text Patterns\nNamed Mentions in Text\nNested Text Analysis\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Overview"
     ]
   },
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "about me",
+    "title": "Owen Morales",
     "section": "",
-    "text": "MarkDown Basics"
+    "text": "I build data workflows, analytics tools, and full-stack products — from R and Python analysis to React and cloud systems."
   },
   {
-    "objectID": "index.html#title-2-header",
-    "href": "index.html#title-2-header",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics"
+    "objectID": "index.html#whats-here",
+    "href": "index.html#whats-here",
+    "title": "Owen Morales",
+    "section": "What’s here",
+    "text": "What’s here\nA selection of data analysis and visualization projects. Browse Projects or use the sidebar to explore by theme."
   },
   {
-    "objectID": "Machine_Learning/project2.html",
-    "href": "Machine_Learning/project2.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "index.html#quick-links",
+    "href": "index.html#quick-links",
+    "title": "Owen Morales",
+    "section": "Quick links",
+    "text": "Quick links\n\nView my resume (PDF)\nBrowse projects\nLinkedIn\nGitHub\nEmail"
+  },
+  {
+    "objectID": "index.html#featured-projects",
+    "href": "index.html#featured-projects",
+    "title": "Owen Morales",
+    "section": "Featured projects",
+    "text": "Featured projects\n\n\n\nProject\nFocus\n\n\n\n\nVisualizing Large Distributions\nOutliers & gapminder trends\n\n\nGun Deaths Analysis\nSeasonal patterns in public data\n\n\nFlight Delays by Origin\nNYC flights exploratory analysis\n\n\nStock Market Predictions\nExpert forecast evaluation\n\n\nCountry Heights\nMulti-source data joining\n\n\nCosta Rica Species Map\nInteractive geospatial mapping\n\n\nChipotle Order Analysis\nNested / JSON-style order data"
+  },
+  {
+    "objectID": "projects/critique/visualization-critique.html",
+    "href": "projects/critique/visualization-critique.html",
+    "title": "Data Visualization Critique",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "Critique of 3 articles that use data and visualization to answer a question:",
     "crumbs": [
-      "Machine Learning",
-      "Project 2"
+      "Projects",
+      "Visualization",
+      "Data Visualization Critique"
     ]
   },
   {
-    "objectID": "ml.html",
-    "href": "ml.html",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics",
+    "objectID": "projects/critique/visualization-critique.html#article-1-who-are-the-adults-in-childrens-lives",
+    "href": "projects/critique/visualization-critique.html#article-1-who-are-the-adults-in-childrens-lives",
+    "title": "Data Visualization Critique",
+    "section": "1. Article 1: “Who are the adults in children’s lives?”",
+    "text": "1. Article 1: “Who are the adults in children’s lives?”\n\n\nError in `knitr::include_graphics()`:\n! Cannot find the file(s): \"../../../ds350/w01/assets/article1.png\"\n\n\n\nWhat is unique or good about the visualization?\n\nI like how they’re integrating the legend box, instead of separate legend, whoever the author is decided to cleverly colored the words “women” and “mean” in the subtitle, given each of them a color, that is later represented on this cluster chart, it seems. The data is also being sort sequentially, from the most female dominated to the most male dominated roles, which makes it easy to follow. Something simple but I like that the chart avoids the overused pink for girls and blue for mens, it looks more monochrome and less stereotypical, that’s nice, and putting the percentages right inside the bars so you don’t need a messy bottom axis is cool too.\n\n\n\nWhat could be better?\n\nFor what could be better, its kinda annoying that their missing the data labels for the “mean” on the top four bars. Even if those slices are super small, leaving the numbers out total breaks the pattern and makes you have to do the mental math. Also the source text at the very bottom is cut off halfway through the letters making it look unpolished, and the spacing between the job names on the left and where the bars actually start is a bit to tight, giving it a little more room to breath would make it easier to read I think.",
     "crumbs": [
-      "Machine Learning"
+      "Projects",
+      "Visualization",
+      "Data Visualization Critique"
     ]
   },
   {
-    "objectID": "ml.html#title-2-header",
-    "href": "ml.html#title-2-header",
-    "title": "about me",
-    "section": "",
-    "text": "MarkDown Basics",
+    "objectID": "projects/critique/visualization-critique.html#article-2-how-do-girls-and-boys-compare-in-school",
+    "href": "projects/critique/visualization-critique.html#article-2-how-do-girls-and-boys-compare-in-school",
+    "title": "Data Visualization Critique",
+    "section": "2. Article 2: “How do girls and boys compare in school?”",
+    "text": "2. Article 2: “How do girls and boys compare in school?”\n\n\nError in `knitr::include_graphics()`:\n! Cannot find the file(s): \"../../../ds350/w01/assets/article2.png\"\n\n\n\nWhat is unique or good about the visualization?\n\nI like how simple the colors are, the author is decided to stick to grey tones instead of overused stereotypical colors. The title explains exactly what the chart is about right away so you don’t have to guess. Putting the “both about equal” as the big light bar makes it super easy to see that most kids think things are pretty even. Its also nice that they put a note at the bottom explaining that some kids didn’t answer, so if the math doesn’t totally add up to 100 you know why, that’s cool.\n\n\n\nWhat could be better?\n\nIs kinda annoying that they went back to a separate legend box at the top instead of putting it cleverly in the subtitle. Also, just like the other chart, their missing the data labels for the “Boys” on the “Better grades” and “Teacher favorites” bars. Even if those slices are super small, leaving the numbers out totally breaks the pattern and makes you have to do the mental math. Plus the order of the rows feels totally random, its not sort sequentially by any of the percentages like the last one, giving it a better order would make it easier to read I think.",
     "crumbs": [
-      "Machine Learning"
+      "Projects",
+      "Visualization",
+      "Data Visualization Critique"
     ]
   },
   {
-    "objectID": "Story_Telling/project1.html",
-    "href": "Story_Telling/project1.html",
-    "title": "Client Report - [Insert Project Title]",
-    "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "objectID": "projects/critique/visualization-critique.html#article-3-how-much-is-a-dollar-worth",
+    "href": "projects/critique/visualization-critique.html#article-3-how-much-is-a-dollar-worth",
+    "title": "Data Visualization Critique",
+    "section": "3. Article 3: “How much is a dollar worth?”",
+    "text": "3. Article 3: “How much is a dollar worth?”\n\n\nError in `knitr::include_graphics()`:\n! Cannot find the file(s): \"../../../ds350/w01/assets/article3.png\"\n\n\n\nWhat is unique or good about the visualization?\n\nIt’s really neat how they made the main focus super obvious right off the bat, it’s highlighting the 2025 line in bright red while fading all the older years into the background as grey scribbles is a great way to make sure you see exactly what the author wants you to look at without getting distracted (at least works with me). The thick black line straight across the middle at zero is a smart touch too, it lets you instantly tell if the dollar was dropping or going up. I also appreciate that they put the final number right at the tip of the red line so your not left guessing what exact number it actually landed on, it would be hard with too much lines.\n\n\n\nWhat could be better?\n\nThis thing is kinda a huge mess to look at overall, that’s how I feel. All those grey background lines just look like a giant tangle of spaghetti. If we actually wanted to know what happened in a specific year like 1999, there’s literally no way to track it or figure it out, I was thinking on maybe using plotly, but even then. Also the numbers on the left side are just kinda floating there without a solid vertical line holding them together, which looks a bit weird. And while its cool they show the months at the bottom, the title talks about every year since 1986 but besides 2025, none of the other lines have year labels at all, leaving you totally in the dark about what the rest of the data even represents.\n\n\n\nCode\nplot(1:20)",
     "crumbs": [
-      "Story Telling",
-      "Project 1"
+      "Projects",
+      "Visualization",
+      "Data Visualization Critique"
     ]
   },
   {
-    "objectID": "Story_Telling/project3.html",
-    "href": "Story_Telling/project3.html",
-    "title": "Client Report - [Insert Project Title]",
+    "objectID": "projects/exploratory/gun-deaths.html",
+    "href": "projects/exploratory/gun-deaths.html",
+    "title": "Gun Deaths Analysis",
     "section": "",
-    "text": "Paste in a template\n\n\n\n\n Back to top",
+    "text": "I will create a new season variable based on the month column to address the client’s request for seasonal commercials\n\n\nCode\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nguns &lt;- read_csv(\"https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv\")\n\n\nNew names:\nRows: 100798 Columns: 11\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(6): month, intent, sex, race, place, education dbl (5): ...1, year, police,\nage, hispanic\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -&gt; `...1`\n\n\nCode\ngunsClean &lt;- guns %&gt;%\n  filter(!is.na(intent)) %&gt;%\n  mutate(\n    month_num = as.numeric(month),\n    season = case_when(\n      month_num %in% c(12, 1, 2) ~ \"Winter\",\n      month_num %in% c(3, 4, 5) ~ \"Spring\",\n      month_num %in% c(6, 7, 8) ~ \"Summer\",\n      month_num %in% c(9, 10, 11) ~ \"Fall\"\n    ),\n    season = factor(season, levels = c(\"Winter\", \"Spring\", \"Summer\", \"Fall\"))\n  )\n\n\nThe client needs to know which demographic groups to target based on the overall causes of gun deaths.\n\n\nCode\ngunsClean %&gt;%\n  count(intent, race) %&gt;%\n  ggplot(aes(x = reorder(intent, n), y = n, fill = race)) +\n  geom_col() +\n  coord_flip() +\n  theme_minimal() +\n  scale_y_continuous(labels = scales::comma) +\n  labs(title = \"Total Gun Deaths by Intent and Race (2012-2014)\", x = \"Intent\", y = \"Total Deaths\", fill = \"Race\")\n\n\n\n\n\n\n\n\n\nThis plot illustrates that the vast majority of gun deaths are driven by two primary intents: suicides and homicides. It highlights a stark demographic divide that the client must consider for targeting: suicides are overwhelmingly committed by White individuals, whereas homicides disproportionately affect Black individuals (though we should consider that the white population is bigger than any of the other demographics we have seen). Targeting these specific demographic groups based on the intent of the messaging is crucial for any overall intervention strategy",
     "crumbs": [
-      "Story Telling",
-      "Project 3"
+      "Projects",
+      "Exploratory Analysis",
+      "Gun Deaths Analysis"
+    ]
+  },
+  {
+    "objectID": "projects/exploratory/gun-deaths.html#setup",
+    "href": "projects/exploratory/gun-deaths.html#setup",
+    "title": "Gun Deaths Analysis",
+    "section": "",
+    "text": "I will create a new season variable based on the month column to address the client’s request for seasonal commercials\n\n\nCode\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nguns &lt;- read_csv(\"https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv\")\n\n\nNew names:\nRows: 100798 Columns: 11\n── Column specification\n──────────────────────────────────────────────────────── Delimiter: \",\" chr\n(6): month, intent, sex, race, place, education dbl (5): ...1, year, police,\nage, hispanic\nℹ Use `spec()` to retrieve the full column specification for this data. ℹ\nSpecify the column types or set `show_col_types = FALSE` to quiet this message.\n• `` -&gt; `...1`\n\n\nCode\ngunsClean &lt;- guns %&gt;%\n  filter(!is.na(intent)) %&gt;%\n  mutate(\n    month_num = as.numeric(month),\n    season = case_when(\n      month_num %in% c(12, 1, 2) ~ \"Winter\",\n      month_num %in% c(3, 4, 5) ~ \"Spring\",\n      month_num %in% c(6, 7, 8) ~ \"Summer\",\n      month_num %in% c(9, 10, 11) ~ \"Fall\"\n    ),\n    season = factor(season, levels = c(\"Winter\", \"Spring\", \"Summer\", \"Fall\"))\n  )\n\n\nThe client needs to know which demographic groups to target based on the overall causes of gun deaths.\n\n\nCode\ngunsClean %&gt;%\n  count(intent, race) %&gt;%\n  ggplot(aes(x = reorder(intent, n), y = n, fill = race)) +\n  geom_col() +\n  coord_flip() +\n  theme_minimal() +\n  scale_y_continuous(labels = scales::comma) +\n  labs(title = \"Total Gun Deaths by Intent and Race (2012-2014)\", x = \"Intent\", y = \"Total Deaths\", fill = \"Race\")\n\n\n\n\n\n\n\n\n\nThis plot illustrates that the vast majority of gun deaths are driven by two primary intents: suicides and homicides. It highlights a stark demographic divide that the client must consider for targeting: suicides are overwhelmingly committed by White individuals, whereas homicides disproportionately affect Black individuals (though we should consider that the white population is bigger than any of the other demographics we have seen). Targeting these specific demographic groups based on the intent of the messaging is crucial for any overall intervention strategy",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Gun Deaths Analysis"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/stock-predictions.html",
+    "href": "projects/wrangling/stock-predictions.html",
+    "title": "Stock Market Predictions",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(ggplot2)\nlibrary(dplyr)\nlibrary(readr)\nlibrary(knitr)\n\ndf &lt;- read_rds(\"https://github.com/byuistats/data/raw/refs/heads/master/Dart_Expert_Dow_6month_anova/Dart_Expert_Dow_6month_anova.RDS\")\nview(df)\n\n\n\nCleanup\nThe contestant_period column is not “tidy” we want to create a month_end and a year_end column from the information it contains.\n\n\nCode\n# https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/regex\n\ntidyDf &lt;- df %&gt;%\n  mutate(\n    monthEnd = str_extract(contest_period, \"(?&lt;=-)[A-Za-z]+\"),\n    yearEnd = str_extract(contest_period, \"\\\\d{4}$\")\n  )\n\nhead(tidyDf)\n\n\n# A tibble: 6 × 5\n  contest_period      variable value monthEnd  yearEnd\n  &lt;chr&gt;               &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  \n1 January-June1990    PROS      12.7 June      1990   \n2 February-July1990   PROS      26.4 July      1990   \n3 March-August1990    PROS       2.5 August    1990   \n4 April-September1990 PROS     -20   September 1990   \n5 May-October1990     PROS     -37.8 October   1990   \n6 June-November1990   PROS     -33.3 November  1990   \n\n\n\n\nCode\nwrite_rds(tidyDf, \"tidy_data.rds\")\n\ntestRead &lt;- read_rds(\"tidy_data.rds\")\ntestRead\n\n\n# A tibble: 300 × 5\n   contest_period             variable value monthEnd  yearEnd\n   &lt;chr&gt;                      &lt;chr&gt;    &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;  \n 1 January-June1990           PROS      12.7 June      1990   \n 2 February-July1990          PROS      26.4 July      1990   \n 3 March-August1990           PROS       2.5 August    1990   \n 4 April-September1990        PROS     -20   September 1990   \n 5 May-October1990            PROS     -37.8 October   1990   \n 6 June-November1990          PROS     -33.3 November  1990   \n 7 July-December1990          PROS     -10.2 December  1990   \n 8 August1990-January1991     PROS     -20.3 January   1991   \n 9 September1990-February1991 PROS      38.9 February  1991   \n10 October1990-March1991      PROS      20.2 March     1991   \n# ℹ 290 more rows\n\n\n\n\nCode\n# https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html\n\ndjiaTable &lt;- tidyDf %&gt;%\n  filter(variable == \"DJIA\") %&gt;%\n  select(monthEnd, yearEnd, value) %&gt;%\n  rename(Month = monthEnd) %&gt;%\n  # I was having a NA issue on December, it seems there was some typos on the original dataset so I am just cleaning them here.\n  # Using some ^ and * to say \"if it starts with Feb or Dec, replace it with the full month name\"\n  mutate(Month = str_replace(Month, \"^Feb.*\", \"February\")) %&gt;%\n  mutate(Month = str_replace(Month, \"^Dec.*\", \"December\")) %&gt;%\n  mutate(Month = factor(Month, levels = month.name)) %&gt;%\n  mutate(value = as.character(value)) %&gt;%\n  pivot_wider(names_from = yearEnd, values_from = value, values_fill = \"-\") %&gt;%\n  arrange(Month)\n\nkable(djiaTable)\n\n\n\n\n\nMonth\n1990\n1991\n1992\n1993\n1994\n1995\n1996\n1997\n1998\n\n\n\n\nJanuary\n-\n-0.8\n6.5\n-0.8\n11.2\n1.8\n15\n19.6\n-0.3\n\n\nFebruary\n-\n11\n8.6\n2.5\n5.5\n3.2\n15.6\n20.1\n10.7\n\n\nMarch\n-\n15.8\n7.2\n9\n1.6\n7.3\n18.4\n9.6\n7.6\n\n\nApril\n-\n16.2\n10.6\n5.8\n0.5\n12.8\n14.8\n15.3\n22.5\n\n\nMay\n-\n17.3\n17.6\n6.7\n1.3\n19.5\n9\n13.3\n10.6\n\n\nJune\n2.5\n17.7\n3.6\n7.7\n-6.2\n16\n10.2\n16.2\n15\n\n\nJuly\n11.5\n7.6\n4.2\n3.7\n-5.3\n19.6\n1.3\n20.8\n7.1\n\n\nAugust\n-2.3\n4.4\n-0.3\n7.3\n1.5\n15.3\n0.6\n8.3\n-13.1\n\n\nSeptember\n-9.2\n3.4\n-0.1\n5.2\n4.4\n14\n5.8\n20.2\n-11.8\n\n\nOctober\n-8.5\n4.4\n-5\n5.7\n6.9\n8.2\n7.2\n3\n-\n\n\nNovember\n-12.8\n-3.3\n-2.8\n4.9\n-0.3\n13.1\n15.1\n3.8\n-\n\n\nDecember\n-9.3\n6.6\n0.2\n8\n3.6\n9.3\n15.5\n-0.7\n-\n\n\n\n\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Stock Market Predictions"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/combining-heights.html",
+    "href": "projects/wrangling/combining-heights.html",
+    "title": "Combining Height Datasets",
+    "section": "",
+    "text": "Code\nlibrary(haven)   # reading .dta (stata) and .sav (SPSS) files\nlibrary(foreign) # reading .dbf files\nlibrary(readr)   # reading .csv files\nlibrary(dplyr)   \nlibrary(ggplot2)\n\n# 1. German male conscripts in Bavaria (.dta)\ngermanConscr &lt;- read_dta(\"https://byuistats.github.io/M335/data/heights/germanconscr.dta\")\n\n# 2. Heights of Bavarian male conscripts (.dta)\ngermanPrison &lt;- read_dta(\"https://byuistats.github.io/M335/data/heights/germanprison.dta\")\n\n# 3. Heights of south-east and south-west German soldiers (.zip containing .dbf)\n# Create a temporary file and a temporary directory to handle the zip\ntempZip &lt;- tempfile(fileext = \".zip\")\ntempDir &lt;- tempdir()\n\n# Download the zip file (using mode = \"wb\" for binary files)\ndownload.file(\"https://byuistats.github.io/M335/data/heights/Heights_south-east.zip\", \n              destfile = tempZip, mode = \"wb\")\n\n# Unzip into the temporary directory\nunzip(tempZip, exdir = tempDir)\n\n# Find the .dbf file that was just unzipped and read it\ndbfFile &lt;- list.files(tempDir, pattern = \"\\\\.DBF$|\\\\.dbf$\", full.names = TRUE)\ngermanSoldiers &lt;- read.dbf(dbfFile[1])\n\n# 4. Bureau of Labor Statistics Height Data (.csv)\n# We will load it, filter for males (the column is named 'sex' in this dataset), \n# and add the birth year as 1950.\nblsDataRaw &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/r4ds/main/data/heights.csv\")\n\nblsData &lt;- blsDataRaw %&gt;%\n  filter(sex == \"male\") %&gt;%\n  mutate(birthYear = 1950)\n\n# 5. University of Wisconsin National Survey Data\nwisconsinSurvey &lt;- read_sav(\"https://www.ssc.wisc.edu/nsfh/wave3/NSFH3%20Apr%202005%20release/main05022005.sav\")",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Combining Height Datasets"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/combining-heights.html#section",
+    "href": "projects/wrangling/combining-heights.html#section",
+    "title": "Combining Height Datasets",
+    "section": "",
+    "text": "Code\nlibrary(haven)   # reading .dta (stata) and .sav (SPSS) files\nlibrary(foreign) # reading .dbf files\nlibrary(readr)   # reading .csv files\nlibrary(dplyr)   \nlibrary(ggplot2)\n\n# 1. German male conscripts in Bavaria (.dta)\ngermanConscr &lt;- read_dta(\"https://byuistats.github.io/M335/data/heights/germanconscr.dta\")\n\n# 2. Heights of Bavarian male conscripts (.dta)\ngermanPrison &lt;- read_dta(\"https://byuistats.github.io/M335/data/heights/germanprison.dta\")\n\n# 3. Heights of south-east and south-west German soldiers (.zip containing .dbf)\n# Create a temporary file and a temporary directory to handle the zip\ntempZip &lt;- tempfile(fileext = \".zip\")\ntempDir &lt;- tempdir()\n\n# Download the zip file (using mode = \"wb\" for binary files)\ndownload.file(\"https://byuistats.github.io/M335/data/heights/Heights_south-east.zip\", \n              destfile = tempZip, mode = \"wb\")\n\n# Unzip into the temporary directory\nunzip(tempZip, exdir = tempDir)\n\n# Find the .dbf file that was just unzipped and read it\ndbfFile &lt;- list.files(tempDir, pattern = \"\\\\.DBF$|\\\\.dbf$\", full.names = TRUE)\ngermanSoldiers &lt;- read.dbf(dbfFile[1])\n\n# 4. Bureau of Labor Statistics Height Data (.csv)\n# We will load it, filter for males (the column is named 'sex' in this dataset), \n# and add the birth year as 1950.\nblsDataRaw &lt;- read_csv(\"https://raw.githubusercontent.com/hadley/r4ds/main/data/heights.csv\")\n\nblsData &lt;- blsDataRaw %&gt;%\n  filter(sex == \"male\") %&gt;%\n  mutate(birthYear = 1950)\n\n# 5. University of Wisconsin National Survey Data\nwisconsinSurvey &lt;- read_sav(\"https://www.ssc.wisc.edu/nsfh/wave3/NSFH3%20Apr%202005%20release/main05022005.sav\")",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Combining Height Datasets"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/combining-heights.html#section-1",
+    "href": "projects/wrangling/combining-heights.html#section-1",
+    "title": "Combining Height Datasets",
+    "section": "2",
+    "text": "2\n\n\nCode\n# 1. Bavarian Conscripts\ngermanConscr_clean &lt;- germanConscr %&gt;%\n  mutate(\n    birth_year = bdec, \n    height.cm = height,          \n    height.in = height.cm / 2.54, # cm -&gt; inch\n    study = \"Bavarian Conscripts\") %&gt;%\n  select(birth_year, height.in, height.cm, study)\n\n# 2. Bavarian Prisoners\ngermanPrison_clean &lt;- germanPrison %&gt;%\n  mutate(\n    birth_year = bdec,\n    height.cm = height,         \n    height.in = height.cm / 2.54, # cm -&gt; inch\n    study = \"Bavarian Prisoners\") %&gt;%\n  select(birth_year, height.in, height.cm, study)\n\n# 3. German Soldiers (18th Century)\ngermanSoldiers_clean &lt;- germanSoldiers %&gt;%\n  mutate(\n    birth_year = GEBJ,           # GEBJ = Geburtsjahr (Birth Year)\n    height.cm = CMETER,          \n    height.in = height.cm / 2.54, # cm -&gt; inch\n    study = \"German Soldiers\") %&gt;%\n  select(birth_year, height.in, height.cm, study)\n\n# 4. Wisconsin National Survey\nwisconsinSurvey_clean &lt;- wisconsinSurvey %&gt;%\n  # Filter out the -1 and -2 \"Refused/Don't Know\" responses so they don't skew the math\n  filter(RT216F &gt; 0 & RT216I &gt;= 0) %&gt;%\n  mutate(\n    birth_year = DOBY,           # doby = Date of Birth, Year\n    height.in = (RT216F * 12) + RT216I, # Combine feet and inches into total inches\n    height.cm = height.in * 2.54,       # cm -&gt; inch\n    study = \"Wisconsin Survey\") %&gt;%\n  select(birth_year, height.in, height.cm, study)\n\n# 5. Bureau of Labor Statistics\nblsData_clean &lt;- blsData %&gt;%\n  # We already added birth_year as 1950 in the previous step, but just making sure\n  mutate(\n    birth_year = 1950,\n    height.in = height, \n    height.cm = height.in * 2.54,\n    study = \"BLS Height Data\") %&gt;%\n  select(birth_year, height.in, height.cm, study)\n\n# Check the result\nhead(blsData_clean)\n\n\n# A tibble: 6 × 4\n  birth_year height.in height.cm study          \n       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;          \n1       1950      74.4      189. BLS Height Data\n2       1950      72.7      185. BLS Height Data\n3       1950      72.0      183. BLS Height Data\n4       1950      72.2      183. BLS Height Data\n5       1950      69.5      177. BLS Height Data\n6       1950      68.0      173. BLS Height Data\n\n\nCode\n# all 5 datasets into one master dataset\nallHeights &lt;- bind_rows(blsData_clean, germanConscr_clean, germanPrison_clean, germanSoldiers_clean, wisconsinSurvey_clean)",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Combining Height Datasets"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/combining-heights.html#how-did-i-tidy-it-up",
+    "href": "projects/wrangling/combining-heights.html#how-did-i-tidy-it-up",
+    "title": "Combining Height Datasets",
+    "section": "4 (How did I tidy it up?)",
+    "text": "4 (How did I tidy it up?)\nTo get all these datasets playing nicely together I had to wrangle five totally different file formats (.csv, .dta, .sav, and .dbf) into one clean master dataset. I actually leaned on Gemini to help speed up writing the dplyr logic, which was a huge timesaver! The biggest hurdle was standardizing the units, like the historical German datasets used centimeters, while the modern US ones used inches (or a messy mix of feet and inches). To fix that I just calculated standard height.in and height.cm columns across the board. I also had to make a few hard calls on what data to drop. For the BLS set I filtered out the female participants to keep things apples-to-apples with the male-only German soldier and prisoner records. Finanlly, I scrubbed the Wisconsin survey to drop anyone who answered ‘-1’ or ‘-2’ (‘Refused’ or ‘Don’t Know’), because if I hadn’t caught that, those negative numbers would have completely wrecked the height conversions and skewed the rest of the analysis. After all that, I used bind_rows to stitch everything together into one big tidy dataset.",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Combining Height Datasets"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/combining-heights.html#section-2",
+    "href": "projects/wrangling/combining-heights.html#section-2",
+    "title": "Combining Height Datasets",
+    "section": "5",
+    "text": "5\n\n\nCode\n# chronological order of the studies using factors (c())\nallHeights &lt;- allHeights %&gt;%\n  mutate(study = factor(study, levels = c(\n    \"German Soldiers\",       # 18th Century\n    \"Bavarian Prisoners\",    # 19th Century\n    \"Bavarian Conscripts\",   # 19th Century\n    \"BLS Height Data\",       # Mid-20th Century\n    \"Wisconsin Survey\"       # Late 20th/21st Century\n  )))\n\n# realistic human heights \nallHeights_filtered &lt;- allHeights %&gt;%\n  filter(height.in &gt;= 48 & height.in &lt;= 90)\n\nggplot(allHeights_filtered, aes(x = study, y = height.in, fill = study)) +\n  geom_boxplot(alpha = 0.7, outlier.alpha = 0.3) +\n  theme_minimal() +\n  labs(title = \"Distribution of Heights Across Centuries\",subtitle = \"Comparing 18th/19th century German records to modern US surveys\", x = \"Study (Chronological Order)\", y = \"Height (Inches)\") +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = \"none\" )",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Combining Height Datasets"
+    ]
+  },
+  {
+    "objectID": "projects/wrangling/combining-heights.html#section-3",
+    "href": "projects/wrangling/combining-heights.html#section-3",
+    "title": "Combining Height Datasets",
+    "section": "6",
+    "text": "6\nWhen you look at the plot I just generated, the story it tells seems pretty straightforward at first, but then it throws a massive curveball that seems to contradict everything. If you just look at the progression from the 18th and 19th-century German records to the mid-20th-century BLS data, the median height clearly trends upward, jumping from around 65-67 inches to about 70 inches. But then we hit the Wisconsin Survey data from the late 20th century, and the median suddenly tanks back down to around 66 inches, contradicting the whole “up-and-to-the-right” growth trend. If you were just glancing at the chart, you’d think humans peaked in the 1950s and then started shrinking. But the contradiction makes perfect sense when you look under the hood at the data dictionary. The German military/prison records and the BLS dataset we filtered were strictly male-only samples. The Wisconsin survey, however, didn’t have a gender identifier, meaning it’s a mix of both men and women. Because women have a lower average height, throwing them into the dataset naturally drags the median down and widens the overall spread of the boxplot.\nSo, if someone asserted that “humans are getting taller over time” based strictly on these datasets, I’d tell them they are technically right, but their data hygiene is a little sloppy. You can clearly see the historical growth trend when comparing the historic male-only datasets to the modern male-only BLS dataset as nutrition, medicine, and living conditions improved over the centuries, average heights went up. But you simply can’t use the Wisconsin survey to prove or disprove that specific trend because it’s an apples-to-oranges comparison. Overall, my stance is that while the data absolutely supports the idea that human height increased over the last few hundred years, this whole exercise is a massive warning about why you can’t just blindly bind_rows() on random datasets and trust the visualization without understanding exactly who is in your sample.\n(Shoutout to Gemini for helping me debug the R code, figure out the missing variables, and wrangle these messy datasets into shape to build out this analysis!)",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Combining Height Datasets"
+    ]
+  },
+  {
+    "objectID": "projects/presentation/fruit-gdp.html",
+    "href": "projects/presentation/fruit-gdp.html",
+    "title": "Fruit Consumption vs GDP",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.2.1     ✔ readr     2.2.0\n✔ forcats   1.0.1     ✔ stringr   1.6.0\n✔ ggplot2   4.0.3     ✔ tibble    3.3.1\n✔ lubridate 1.9.5     ✔ tidyr     1.3.2\n✔ purrr     1.2.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\n\nCode\nlibrary(jsonlite) # found this one on the download section od OWID, it's to read the metadata\n\n\n\nAttaching package: 'jsonlite'\n\nThe following object is masked from 'package:purrr':\n\n    flatten\n\n\nCode\nfruit &lt;- read_csv(\"https://ourworldindata.org/grapher/fruit-consumption-vs-gdp-per-capita.csv?v=1&csvType=full&useColumnShortNames=true\")\n\n\nRows: 14431 Columns: 6\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (3): entity, code, owid_region\ndbl (3): year, fruit__00002919__food_available_for_consumption__0645pc__kilo...\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.\n\n\nCode\nview(fruit)\n\n\n\n\nCode\nlibrary(tidyverse)\nlibrary(scales)\n\n\n\nAttaching package: 'scales'\n\n\nThe following object is masked from 'package:purrr':\n\n    discard\n\n\nThe following object is masked from 'package:readr':\n\n    col_factor\n\n\nCode\nlibrary(plotly)\n\n\n\nAttaching package: 'plotly'\n\n\nThe following object is masked from 'package:ggplot2':\n\n    last_plot\n\n\nThe following object is masked from 'package:stats':\n\n    filter\n\n\nThe following object is masked from 'package:graphics':\n\n    layout\n\n\nCode\nfruitdata &lt;- fruit |&gt;\n  rename(\n    fruitconsumption = fruit__00002919__food_available_for_consumption__0645pc__kilograms_per_year_per_capita,\n    gdppercapita = ny_gdp_pcap_pp_kd,\n    owidregion = owid_region) |&gt;\n  filter(year == 2023) |&gt;\n  drop_na(fruitconsumption, gdppercapita, owidregion)\nowid_colors &lt;- c(\n  \"Africa\" = \"#9e66ab\",         # Purple\n  \"Asia\" = \"#2a939b\",           # Teal\n  \"Europe\" = \"#4c70a4\",         # Blue\n  \"North America\" = \"#e26d5c\",  # Red/Orange\n  \"South America\" = \"#b04169\",  # Pink\n  \"Oceania\" = \"#60c0e7\"         # Light Blue\n) # Gemini helped me get these exact colors by analyzing the original OWID plot and extracting the hex codes for each region\n\np &lt;- ggplot(data = fruitdata, mapping = aes(x = gdppercapita, y = fruitconsumption, color = owidregion,\n              # Gemini helped me create this \"text\" aesthetic creates the custom HTML tooltip for plotly\n              text = paste0(\n                \"&lt;b&gt;\", entity, \"&lt;/b&gt;&lt;br&gt;\",\n                \"2023&lt;br&gt;\",\n                \"GDP per capita: $\", format(round(gdppercapita), big.mark = \",\"), \"&lt;br&gt;\",\n                \"Fruit supply: \", round(fruitconsumption, 2), \" kg\"\n              )\n            )) +\ngeom_point(alpha = 0.8, size = 2) +\nscale_color_manual(values = owid_colors) +\nscale_x_log10(\n    labels = label_dollar(accuracy = 1),\n    breaks = c(2000, 5000, 10000, 20000, 50000, 100000),\n    limits = c(1500, 120000)) +\nscale_y_continuous(\n    breaks = seq(0, 350, by = 50),\n    limits = c(0, 380)) +\nlabs(x = \"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)\", y = \"Fruit supply per person (kilograms per year)\", color = NULL) +\ntheme_minimal() +\n  theme(\n    panel.grid.major = element_line(linetype = \"dashed\", color = \"gray\"),\n    panel.grid.minor = element_blank(), # got this code snippet from the professor on his class\n    legend.position = \"right\")\ninteractive_plot &lt;- ggplotly(p, tooltip = \"text\") |&gt;\nlayout(legend = list(title = list(text = \"\")))\n\ninteractive_plot\n\n\n\n\n\n\n\n\nCode\nfruitdata_countries &lt;- fruitdata |&gt;\n  mutate(\n    country_color = if_else(entity %in% c(\"United States\", \"Costa Rica\", \"Japan\", \"Brazil\"), owidregion, \"Other\"),\n    point_alpha = if_else(entity %in% c(\"United States\", \"Costa Rica\", \"Japan\", \"Brazil\"), 1, 0.1)\n  )\n\np2 &lt;- ggplot(data = fruitdata_countries, mapping = aes(x = gdppercapita, y = fruitconsumption, color = country_color, alpha = point_alpha,\n              text = paste0(\n                \"&lt;b&gt;\", entity, \"&lt;/b&gt;&lt;br&gt;\",\n                \"2023&lt;br&gt;\",\n                \"GDP per capita: $\", format(round(gdppercapita), big.mark = \",\"), \"&lt;br&gt;\",\n                \"Fruit supply: \", round(fruitconsumption, 2), \" kg\"\n              )\n            )) +\ngeom_point(size = 2) +\nscale_color_manual(values = c(owid_colors, \"Other\" = \"gray\")) +\nscale_alpha_identity() +\nscale_x_log10(\n    labels = label_dollar(accuracy = 1),\n    breaks = c(2000, 5000, 10000, 20000, 50000, 100000),\n    limits = c(1500, 120000)) +\nscale_y_continuous(\n    breaks = seq(0, 350, by = 50),\n    limits = c(0, 380)) +\nlabs(x = \"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)\", y = \"Fruit supply per person (kilograms per year)\", color = NULL) +\ntheme_minimal() +\n  theme(\n    panel.grid.major = element_line(linetype = \"dashed\", color = \"gray\"),\n    panel.grid.minor = element_blank(),\n    legend.position = \"none\") \n\ninteractive_plot_countries &lt;- ggplotly(p2, tooltip = \"text\")\ninteractive_plot_countries\n\n\n\n\n\n\n\n\nCode\nfruitdata_continent &lt;- fruitdata |&gt;\n  mutate(\n    continent_color = if_else(owidregion == \"North America\", owidregion, \"Other\"),\n    point_alpha = if_else(owidregion == \"North America\", 1, 0.1)\n  )\n\np3 &lt;- ggplot(data = fruitdata_continent, mapping = aes(x = gdppercapita, y = fruitconsumption, color = continent_color, alpha = point_alpha,\n              text = paste0(\n                \"&lt;b&gt;\", entity, \"&lt;/b&gt;&lt;br&gt;\",\n                \"2023&lt;br&gt;\",\n                \"GDP per capita: $\", format(round(gdppercapita), big.mark = \",\"), \"&lt;br&gt;\",\n                \"Fruit supply: \", round(fruitconsumption, 2), \" kg\"\n              )\n            )) +\ngeom_point(size = 2) +\nscale_color_manual(values = c(\"North America\" = \"#e26d5c\", \"Other\" = \"gray\")) +\nscale_alpha_identity() +\nscale_x_log10(\n    labels = label_dollar(accuracy = 1),\n    breaks = c(2000, 5000, 10000, 20000, 50000, 100000),\n    limits = c(1500, 120000)) +\nscale_y_continuous(\n    breaks = seq(0, 350, by = 50),\n    limits = c(0, 380)) +\nlabs(x = \"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)\", y = \"Fruit supply per person (kilograms per year)\", color = NULL) +\ntheme_minimal() +\n  theme(\n    panel.grid.major = element_line(linetype = \"dashed\", color = \"gray\"),\n    panel.grid.minor = element_blank(),\n    legend.position = \"none\")\n\ninteractive_plot_continent &lt;- ggplotly(p3, tooltip = \"text\")\ninteractive_plot_continent\n\n\n\n\n\n\n\nSummary\nIn this analysis, I explored how dynamic highlighting transforms a dense dataset into an interactive narrative tool (in my case using tools like plotly). Rather than overwhelming the audience with a static global view or splitting the data across multiple redundant charts, you can just do interactive visualization that allows the user to see between different analytical perspectives. Manipulating opacity and color mapping across different frames, unselected data points are pushed to the background using gray, also, specific countries or continents are brought to the foreground. This technique maintains the macros level context of the global distribution while smoothly guiding the viewers focus to specific macros level comparisons, proving that effective data visualization is about building a clean user driven story out of raw information\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Visualization",
+      "Fruit Consumption vs GDP"
+    ]
+  },
+  {
+    "objectID": "projects/flights/aircraft-age-delays.html",
+    "href": "projects/flights/aircraft-age-delays.html",
+    "title": "Aircraft Age and Flight Delays",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(nycflights13)\n\nflightData &lt;- flights %&gt;%\n  left_join(planes, by = \"tailnum\", suffix = c(\"_flight\", \"_plane\")) %&gt;%\n  mutate(age = year_flight - year_plane) %&gt;%\n  mutate(age_group = case_when(\n    age &gt;= 0  & age &lt;= 10 ~ \"0-10\",\n    age &gt;= 11 & age &lt;= 20 ~ \"11-20\",\n    age &gt;= 21 & age &lt;= 30 ~ \"21-30\",\n    age &gt; 30              ~ \"&gt;30\",\n    TRUE                  ~ NA_character_)) %&gt;%\n  mutate(age_group = factor(age_group, levels = c(\"0-10\", \"11-20\", \"21-30\", \"&gt;30\")))",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Aircraft Age and Flight Delays"
+    ]
+  },
+  {
+    "objectID": "projects/flights/aircraft-age-delays.html#departure-delays-by-age-group",
+    "href": "projects/flights/aircraft-age-delays.html#departure-delays-by-age-group",
+    "title": "Aircraft Age and Flight Delays",
+    "section": "Departure Delays by Age Group",
+    "text": "Departure Delays by Age Group\nPlane age basically has no effect on departure delays. The median delay is right around zero for every single age group, and the overall spread of the data looks exactly the same across the board. The only thing that stands out is that the oldest planes (&gt;30 years) have a slightly higher density of extreme outliers (delays over 100 minutes), but this is a very small fraction of the data and doesn’t affect the overall distribution. So in general I’d say that plane age does not appear to be a meaningful factor in departure delays based on this data.\n\n\nCode\nggplot(flightData %&gt;% filter(!is.na(age_group), !is.na(dep_delay)), \n       aes(x = age_group, y = dep_delay, fill = age_group)) +\n  geom_boxplot(outlier.alpha = 0.1) +\n  coord_cartesian(ylim = c(-20, 100)) + # zooming in to ignore extreme outliers\n  labs(title = \"Distribution of Departure Delays by Plane Age\", x = \"Plane Age Group by Years\", y = \"Departure Delay by Minutes\") +\n  theme_minimal() +\n  theme(legend.position = \"none\")",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Aircraft Age and Flight Delays"
+    ]
+  },
+  {
+    "objectID": "projects/flights/aircraft-age-delays.html#plane-age-by-carrier",
+    "href": "projects/flights/aircraft-age-delays.html#plane-age-by-carrier",
+    "title": "Aircraft Age and Flight Delays",
+    "section": "Plane Age by Carrier",
+    "text": "Plane Age by Carrier\nLegacy airlines like American, Delta, and United have the oldest planes and the widest variety of ages in their fleet. On the flip side, airlines like Hawaiian, Alaska, and Frontier rely on very young and consistent fleets\n\n\nCode\nflightDataNamed &lt;- flightData %&gt;%\n  left_join(airlines, by = \"carrier\")\n\nggplot(flightDataNamed %&gt;% filter(!is.na(age)), \n       aes(x = reorder(name, age, FUN = median, na.rm = TRUE), y = age)) +\n  geom_boxplot(fill = \"steelblue\") +\n  coord_flip() + # airline names are readable\n  labs(title = \"Distribution of Plane Age by Airline\", x = \"Airline\", y = \"Plane Age by Years\") +\n  theme_minimal()",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Aircraft Age and Flight Delays"
+    ]
+  },
+  {
+    "objectID": "projects/flights/aircraft-age-delays.html#a-third-variable-related-to-age",
+    "href": "projects/flights/aircraft-age-delays.html#a-third-variable-related-to-age",
+    "title": "Aircraft Age and Flight Delays",
+    "section": "A Third Variable Related to Age",
+    "text": "A Third Variable Related to Age\nThe oldest planes over 30 years old are definitely kept on much shorter, regional routes. Surprisingly tho the 21 to 30 year old planes actually have the highest median flight distance, while the newest planes cover a pretty standard mix of short and long distances\n\n\nCode\nggplot(flightData %&gt;% filter(!is.na(age_group)), \n       aes(x = age_group, y = distance, fill = age_group)) +\n  geom_boxplot() +\n  labs(title = \"Flight Distance vs. Plane Age\", x = \"Plane Age Group by Years\", y = \"Flight Distance by Miles\") +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\n\nI’d like to shoutout Google AI (Gemini I guess is what powers that search), for helping me with the with the syntax of the case_when, the syntax was not working for me and had to ask for its help",
+    "crumbs": [
+      "Projects",
+      "Exploratory Analysis",
+      "Aircraft Age and Flight Delays"
+    ]
+  },
+  {
+    "objectID": "projects/markets/sales-cleaning.html",
+    "href": "projects/markets/sales-cleaning.html",
+    "title": "Sales Data Cleaning",
+    "section": "",
+    "text": "Prep & Cleaning\n\n\nCode\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(janitor) # for clean_names()\nlibrary(scales)\n\nurl &lt;- \"https://byuistats.github.io/M335/data/sales.csv\"\nsalesRaw &lt;- read_csv(url) |&gt; clean_names()\n\nsales &lt;- salesRaw |&gt;\n  # UTC to Mountain Time\n  mutate(time = with_tz(time, tzone = \"America/Denver\")) |&gt;\n  mutate(\n    day = floor_date(time, \"day\"),\n    week = floor_date(time, \"week\"),\n    month = floor_date(time, \"month\"),\n    hour = hour(time)\n  ) |&gt;\n  filter(!is.na(name), !is.na(time), amount &gt; 0)\n\n\n\n\nRevenue Over Time\n\n\nCode\nrevenueWeekly &lt;- sales |&gt;\n  group_by(name, week) |&gt;\n  summarize(grossRevenue = sum(amount, na.rm = TRUE), .groups = \"drop\")\n\nggplot(revenueWeekly, aes(x = week, y = grossRevenue, color = name)) +\n  geom_line(linewidth = 1) +\n  geom_point() +\n  scale_y_continuous(labels = label_dollar()) +\n  labs(title = \"Gross Revenue Over Time (Weekly)\", x = \"Week\", y = \"Gross Revenue\", color = \"Company\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\nCustomer Trafic\n\n\nCode\ntrafficWeekly &lt;- sales |&gt;\n  group_by(name, week) |&gt;\n  summarize(transactions = n(), .groups = \"drop\")\n\nggplot(trafficWeekly, aes(x = week, y = transactions, color = name)) +\n  geom_line(linewidth = 1) +\n  geom_point() +\n  labs(title = \"Customer Traffic Over Time (Weekly)\", x = \"Week\", y = \"Number of Transactions\", color = \"Company\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\n\n\nHours of Operation\n\n\nCode\nggplot(sales, aes(x = hour, fill = name)) +\n  geom_bar(color = \"white\") +\n  facet_wrap(~name, scales = \"free_y\") + # y-scale free to see shapes clearly for v differenrces\n  labs(title = \"Customer Traffic by Hour of Day\", subtitle = \"Reveals approximate hours of operation for each company\", x = \"Hour of Day (24hr)\", y = \"Total Transactions\", fill = \"Company\") +\n  theme_minimal() +\n  theme(legend.position = \"none\")\n\n\n\n\n\n\n\n\n\nBased on the three month analysis, HotDiggity performed the best overall though Tacontento is a very strong option too. HotDiggity dominated in customer foot traffic, regularly seeing 500 to 1,000 transactions per week, and maintained one of the highest weekly gross revenues throughout the quarter (consistently hovering between 2,000 and 3,000 dollars). Their hours of operation reveal an amazing lunch rush peaking between 11:00 AM and 2:00 PM, indicating highly efficient mid day operations that drive the bulk of their sales. Companies like LeBelle had a single massive revenue spike in mid July, HotDiggity’s sustained high transaction volume and strong baseline revenue make them the most reliable and consistently performing business in the dataset\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Sales Data Cleaning"
+    ]
+  },
+  {
+    "objectID": "projects/maps/us-lower-48.html",
+    "href": "projects/maps/us-lower-48.html",
+    "title": "US Lower 48 Map",
+    "section": "",
+    "text": "Code\nlibrary(sf)\nlibrary(tidyverse)\nlibrary(USAboundaries)\nlibrary(USAboundariesData)\nlibrary(ggrepel)\n\nlower48 &lt;- state.name[!state.name %in% c(\"Alaska\", \"Hawaii\")]\n\nstatesMap &lt;- us_states() %&gt;%\n  filter(name %in% lower48)\n\nidahoCounties &lt;- us_counties(states = \"Idaho\")\n\n# top 3 cities by population for each of the lower 48 states\ntopCities &lt;- us_cities() %&gt;%\n  filter(state_name %in% lower48) %&gt;%\n  group_by(state_name) %&gt;%\n  arrange(desc(population)) %&gt;%\n  slice_head(n = 3) %&gt;%\n  mutate(rank = row_number()) %&gt;%\n  ungroup()\n\ntopCities &lt;- topCities %&gt;%\n  mutate(\n    lon = st_coordinates(geometry)[,1],\n    lat = st_coordinates(geometry)[,2]\n  )",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "US Lower 48 Map"
+    ]
+  },
+  {
+    "objectID": "projects/maps/us-lower-48.html#prep",
+    "href": "projects/maps/us-lower-48.html#prep",
+    "title": "US Lower 48 Map",
+    "section": "",
+    "text": "Code\nlibrary(sf)\nlibrary(tidyverse)\nlibrary(USAboundaries)\nlibrary(USAboundariesData)\nlibrary(ggrepel)\n\nlower48 &lt;- state.name[!state.name %in% c(\"Alaska\", \"Hawaii\")]\n\nstatesMap &lt;- us_states() %&gt;%\n  filter(name %in% lower48)\n\nidahoCounties &lt;- us_counties(states = \"Idaho\")\n\n# top 3 cities by population for each of the lower 48 states\ntopCities &lt;- us_cities() %&gt;%\n  filter(state_name %in% lower48) %&gt;%\n  group_by(state_name) %&gt;%\n  arrange(desc(population)) %&gt;%\n  slice_head(n = 3) %&gt;%\n  mutate(rank = row_number()) %&gt;%\n  ungroup()\n\ntopCities &lt;- topCities %&gt;%\n  mutate(\n    lon = st_coordinates(geometry)[,1],\n    lat = st_coordinates(geometry)[,2]\n  )",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "US Lower 48 Map"
+    ]
+  },
+  {
+    "objectID": "projects/maps/us-lower-48.html#plot",
+    "href": "projects/maps/us-lower-48.html#plot",
+    "title": "US Lower 48 Map",
+    "section": "Plot",
+    "text": "Plot\n\n\nCode\nmapPlot &lt;- ggplot() +\n  geom_sf(data = statesMap, fill = NA, color = \"gray30\") +\n  geom_sf(data = idahoCounties, fill = NA, color = \"gray50\") +\n  geom_sf(data = topCities, aes(size = population / 1000, color = factor(rank))) +\n  geom_label_repel(\n    data = filter(topCities, rank == 1),\n    aes(x = lon, y = lat, label = city),\n    color = \"darkblue\",\n    size = 2.5,          \n    box.padding = 0.5,   \n    fill = \"white\",\n    segment.color = \"darkblue\") +\n  scale_color_manual(values = c(\"1\" = \"darkblue\", \"2\" = \"royalblue\", \"3\" = \"lightblue\")) +\n  guides(color = \"none\", size = guide_legend(override.aes = list(color = \"darkblue\"))) +\n  labs(size = \"Population\\n(1,000)\", x = NULL, y = NULL) +\n  theme_bw()\n\nmapPlot\n\n\n\n\n\n\n\n\n\nCode\nggsave(\"us_top_cities_map.png\", plot = mapPlot, width = 15, height = 10)",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "US Lower 48 Map"
+    ]
+  },
+  {
+    "objectID": "projects/maps/building-footprints.html",
+    "href": "projects/maps/building-footprints.html",
+    "title": "Building Footprints by State",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(sf)\nlibrary(USAboundaries)\nlibrary(buildings)\nlibrary(geofacet)",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Building Footprints by State"
+    ]
+  },
+  {
+    "objectID": "projects/maps/building-footprints.html#libraries",
+    "href": "projects/maps/building-footprints.html#libraries",
+    "title": "Building Footprints by State",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\nlibrary(sf)\nlibrary(USAboundaries)\nlibrary(buildings)\nlibrary(geofacet)",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Building Footprints by State"
+    ]
+  },
+  {
+    "objectID": "projects/maps/building-footprints.html#data-wrangling",
+    "href": "projects/maps/building-footprints.html#data-wrangling",
+    "title": "Building Footprints by State",
+    "section": "Data Wrangling",
+    "text": "Data Wrangling\n\n\nCode\nstatesSf &lt;- us_states() %&gt;%\n  filter(!(state_abbr %in% c(\"PR\", \"VI\", \"GU\", \"AS\", \"MP\"))) \n\nidahoCountiesSf &lt;- us_counties(states = \"Idaho\")\n\nstatePermits &lt;- permits %&gt;%\n  filter(variable == \"Single Family\") %&gt;%\n  group_by(StateAbbr, year) %&gt;%\n  summarize(totalPermits = sum(value, na.rm = TRUE), .groups = \"drop\")\n\nstateSpatial &lt;- statesSf %&gt;%\n  left_join(statePermits, by = c(\"state_abbr\" = \"StateAbbr\"))\n\nidahoPermits &lt;- permits %&gt;%\n  filter(StateAbbr == \"ID\", variable == \"Single Family\") %&gt;%\n  mutate(\n    stateFipsStr = sprintf(\"%02d\", state),\n    countyFipsStr = sprintf(\"%03d\", county),\n    fipsFull = paste0(stateFipsStr, countyFipsStr)\n  )\n\nidahoCountiesSf &lt;- idahoCountiesSf %&gt;%\n  mutate(fipsFull = paste0(statefp, countyfp))\n\ncountySpatial &lt;- idahoCountiesSf %&gt;%\n  left_join(idahoPermits, by = \"fipsFull\")",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Building Footprints by State"
+    ]
+  },
+  {
+    "objectID": "projects/maps/building-footprints.html#graphs",
+    "href": "projects/maps/building-footprints.html#graphs",
+    "title": "Building Footprints by State",
+    "section": "Graphs",
+    "text": "Graphs\n\n\nCode\nnationalPlot &lt;- ggplot(stateSpatial, aes(x = year, y = totalPermits)) +\n  geom_line(color = \"#2c3e50\", linewidth = 1) +\n  annotate(\"rect\", xmin = 2006, xmax = 2010, ymin = -Inf, ymax = Inf, alpha = 0.2, fill = \"red\") +\n  facet_geo(~ state_abbr, grid = \"us_state_grid2\", scales = \"free_y\") +\n  scale_x_continuous(breaks = c(1980, 1995, 2010), labels = c(\"'80\", \"'95\", \"'10\")) +\n  theme_minimal() +\n  labs(title = \"The Geographic Spread of the Housing Collapse\", x = NULL, y = \"Total Permits\") +\n  theme(\n    axis.text.x = element_text(size = 8, angle = 45, hjust = 1),\n    axis.text.y = element_blank(),\n    axis.ticks.y = element_blank(),\n    panel.grid.minor = element_blank()\n  )\n\nprint(nationalPlot)\n\n\n\n\n\n\n\n\n\n\n\nCode\nidahoPlot &lt;- ggplot(countySpatial, aes(x = year, y = value)) +\n  geom_line(color = \"#18bc9c\", linewidth = 1) +\n  geom_vline(xintercept = 2007, linetype = \"dashed\", color = \"red\", alpha = 0.6) +\n  facet_wrap(~ name, scales = \"free_y\", ncol = 6) +\n  scale_x_continuous(breaks = c(1980, 1995, 2010), labels = c(\"'80\", \"\", \"'10\")) +\n  theme_minimal() +\n  labs(\n    title = \"Single-Family Building Permits Across Idaho Counties\", x = \"Year\", y = \"Permits Issued (Independent Scales)\") +\n  theme(\n    axis.text.x = element_text(size = 9, angle = 45, hjust = 1),\n    axis.text.y = element_blank(), \n    strip.text = element_text(size = 10, face = \"bold\"),\n    panel.grid.minor = element_blank()\n  )\n\nprint(idahoPlot)",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Building Footprints by State"
+    ]
+  },
+  {
+    "objectID": "projects/maps/building-footprints.html#summary",
+    "href": "projects/maps/building-footprints.html#summary",
+    "title": "Building Footprints by State",
+    "section": "Summary",
+    "text": "Summary\nThe data shows exactly how bad the 2007–2010 housing collapse really was. It wasn’t just big cities that got hit; it happened everywhere. If you look at the US map, almost every state saw a massive drop in single-family building permits starting around 2006. We see the exact same thing right here in Idaho. It didn’t matter if it was a fast-growing place like Ada and Canyon counties or smaller, outdoor-focused spots like Valley and Blaine counties building permits just completely fell off a cliff when the crash started. Building permits are a good early warning sign for the economy. These charts show that new housing basically froze everywhere, often way before regular people really felt the effects of the 2008 financial crisis\nTo show these trends honestly, I designed the graphics to focus on the shape of the crash rather than the raw numbers. The biggest challenge with this kind of data is the huge difference in scale. For example, if we put California and North Dakota on the exact same scale, California’s massive numbers would make North Dakota’s line look completely flat and hide their local crash. By letting each state and county have its own vertical scale, it’s way easier to focus on when the boom and bust happened. Also, laying out the national data to look like a US map makes it super easy to spot regional patterns, so anyone can quickly find and understand what happened in their specific area\n\nAI USAGE\nHelped me write the summary (:",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Building Footprints by State"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html",
+    "href": "projects/leaflet/open-data-sources.html",
+    "title": "Open Data Source Evaluation",
+    "section": "",
+    "text": "Here are 4 potential free data sources I explored for this project, along with an assessment of their general quality:\n\nData.gov: The official US government open data portal.\n\nQuality: Highly authoritative but heavily variable in structure. Datasets often require extensive cleaning and formatting, and metadata can sometimes be sparse.\n\nKaggle Datasets: A community-driven platform for data science.\n\nQuality: Highly variable. Some datasets are pristine and meticulously documented by organizations, while others are uploaded by users with no data dictionary, missing values, and unverified sources.\n\nWorld Bank Open Data: Global economic, demographic, and health data.\n\nQuality: Excellent. The data is rigorously standardized and heavily documented, though you will often encounter missing values for certain developing nations or specific years.\n\nTidyTuesday Project: A weekly social data project in R.\n\nQuality: Very good. The data is pre-curated to be interesting and accessible, but it is deliberately left slightly “messy” so users can practice their data wrangling skills.",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html#potential-data-sources",
+    "href": "projects/leaflet/open-data-sources.html#potential-data-sources",
+    "title": "Open Data Source Evaluation",
+    "section": "",
+    "text": "Here are 4 potential free data sources I explored for this project, along with an assessment of their general quality:\n\nData.gov: The official US government open data portal.\n\nQuality: Highly authoritative but heavily variable in structure. Datasets often require extensive cleaning and formatting, and metadata can sometimes be sparse.\n\nKaggle Datasets: A community-driven platform for data science.\n\nQuality: Highly variable. Some datasets are pristine and meticulously documented by organizations, while others are uploaded by users with no data dictionary, missing values, and unverified sources.\n\nWorld Bank Open Data: Global economic, demographic, and health data.\n\nQuality: Excellent. The data is rigorously standardized and heavily documented, though you will often encounter missing values for certain developing nations or specific years.\n\nTidyTuesday Project: A weekly social data project in R.\n\nQuality: Very good. The data is pre-curated to be interesting and accessible, but it is deliberately left slightly “messy” so users can practice their data wrangling skills.",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html#palmer-penguins",
+    "href": "projects/leaflet/open-data-sources.html#palmer-penguins",
+    "title": "Open Data Source Evaluation",
+    "section": "Palmer Penguins",
+    "text": "Palmer Penguins\nThis project focuses on the Palmer Penguins dataset (read directly from a raw GitHub URL).\nOriginal Question Idea: How do the physical characteristics of penguins differ across species and locations in the Palmer Archipelago?\n\n\nCode\nlibrary(tidyverse)\n\nurl &lt;- \"https://raw.githubusercontent.com/allisonhorst/palmerpenguins/main/inst/extdata/penguins.csv\"\npenguins_raw &lt;- read_csv(url)\n\npenguins_clean &lt;- penguins_raw %&gt;%\n  filter(!is.na(species), !is.na(island)) %&gt;%\n  mutate(across(where(is.character), as.factor))\n\nglimpse(penguins_clean)\n\n\nRows: 344\nColumns: 8\n$ species           &lt;fct&gt; Adelie, Adelie, Adelie, Adelie, Adelie, Adelie, Adel…\n$ island            &lt;fct&gt; Torgersen, Torgersen, Torgersen, Torgersen, Torgerse…\n$ bill_length_mm    &lt;dbl&gt; 39.1, 39.5, 40.3, NA, 36.7, 39.3, 38.9, 39.2, 34.1, …\n$ bill_depth_mm     &lt;dbl&gt; 18.7, 17.4, 18.0, NA, 19.3, 20.6, 17.8, 19.6, 18.1, …\n$ flipper_length_mm &lt;dbl&gt; 181, 186, 195, NA, 193, 190, 181, 195, 193, 190, 186…\n$ body_mass_g       &lt;dbl&gt; 3750, 3800, 3250, NA, 3450, 3650, 3625, 4675, 3475, …\n$ sex               &lt;fct&gt; male, female, female, NA, female, male, female, male…\n$ year              &lt;dbl&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007…",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html#quality-check-1",
+    "href": "projects/leaflet/open-data-sources.html#quality-check-1",
+    "title": "Open Data Source Evaluation",
+    "section": "Quality Check #1",
+    "text": "Quality Check #1\nCounting NAs for numeric columns\n\n\nCode\npenguins_clean %&gt;%\n  select(where(is.numeric)) %&gt;%\n  gather(key = \"variable\", value = \"value\") %&gt;%\n  mutate(is_missing = is.na(value)) %&gt;%\n  group_by(variable) %&gt;%\n  summarize(missing_count = sum(is_missing)) %&gt;%\n  ggplot(aes(x = reorder(variable, missing_count), y = missing_count)) +\n  geom_col(fill = \"steelblue\") +\n  coord_flip() +\n  labs(title = \"Data Quality: Missing Values per Variable\", x = \"Variable\", y = \"Number of Missing Values\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nObservation: We have a small handful of missing values for physical measurements (like flipper length and bill depth) but it is a very small percentage of the total dataset. Sex is missing more frequently, which we will need to keep in mind",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html#quality-check-2",
+    "href": "projects/leaflet/open-data-sources.html#quality-check-2",
+    "title": "Open Data Source Evaluation",
+    "section": "Quality Check #2",
+    "text": "Quality Check #2\nDistribution of body mass to ensure no extremes\n\n\nCode\nggplot(penguins_clean, aes(x = body_mass_g)) +\n  geom_histogram(fill = \"coral\", color = \"black\", bins = 30) +\n  labs(title = \"Data Quality: Distribution of Body Mass\", x = \"Body Mass (grams)\", y = \"Count\") +\n  theme_minimal()\n\n\n\n\n\n\n\n\n\nObservation: The distribution of body mass appears to be reasonably normal with no extreme outliers. The majority of penguins fall within a typical range, which suggests that the data is consistent and does not contain erroneous entries for this variable.",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html#limitations",
+    "href": "projects/leaflet/open-data-sources.html#limitations",
+    "title": "Open Data Source Evaluation",
+    "section": "Limitations",
+    "text": "Limitations\nWhile this dataset is high quality it has limitations in addressing my original question like\nGeographic Scope: It only covers three islands in the Palmer Archipelago. We cannot extrapolate these findings to penguin populations in Antarctica at large or in other regions of the world.\nTemporal Scope: The data was collected between 2007 and 2009. It does not allow us to see long-term trends, such as how climate change might be affecting body mass over decades, but that’s ok by me",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/leaflet/open-data-sources.html#follow-on",
+    "href": "projects/leaflet/open-data-sources.html#follow-on",
+    "title": "Open Data Source Evaluation",
+    "section": "Follow on",
+    "text": "Follow on\nBased on this initial look I had here are a few alternate questions to guide future analysis:\nPredictive: Can we build a reliable classification model to predict a penguin’s species based solely on its flipper length and bill depth?\nEcological: Is there a correlation between the year of observation and average body mass, potentially hinting at environmental changes during those three years?\nDimorphism: How pronounced is sexual dimorphism (size differences between males and females) across the three different species?\n\nAI USAGE\nShotout to the coding assistan within R (copilot I believe) for helping me with the wording of the analysis.",
+    "crumbs": [
+      "Projects",
+      "Spatial & Maps",
+      "Open Data Source Evaluation"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html",
+    "href": "projects/text/named-mentions.html",
+    "title": "Named Mentions in Text",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\nscriptures &lt;- read_csv(\"https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv\")\nsavior &lt;-read_rds(\"https://byuistats.github.io/M335/data/BoM_SaviorNames.rds\")",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html#section",
+    "href": "projects/text/named-mentions.html#section",
+    "title": "Named Mentions in Text",
+    "section": "",
+    "text": "Code\nlibrary(tidyverse)\n\nscriptures &lt;- read_csv(\"https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv\")\nsavior &lt;-read_rds(\"https://byuistats.github.io/M335/data/BoM_SaviorNames.rds\")",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html#section-1",
+    "href": "projects/text/named-mentions.html#section-1",
+    "title": "Named Mentions in Text",
+    "section": "2",
+    "text": "2\n\n\nCode\nsavior_regex &lt;- savior |&gt;\n  arrange(desc(nchar)) |&gt;\n  pull(name) |&gt; # to extract just the column name as a vector\n  unique() |&gt;\n  str_c(collapse = \"|\")\n\nsavior_regex &lt;- paste0(\"\\\\b(\", savior_regex, \")\\\\b\")\n\nsavior_regex\n\n\n[1] \"\\\\b(the Father of the heavens and of the earth, and all things that in them are|Creator of all things from the beginning|Jesus Christ, the Son of the living God|the Lord Jesus Christ, their Redeemer|God of Abraham, and Isaac, and Jacob|Eternal Father of heaven and earth|God, the Father of all things|Lord, the Redeemer of all men|Jesus Christ, the Son of God|Our Father who art in heaven|Lord and Savior Jesus Christ|Christ, the Lord Omnipotent|Only Begotten of the Father|Son of the everlasting God|Father of heaven and earth|Jehovah, the Eternal Judge|Son of the Eternal Father|great Mediator of all men|the beginning and the end|Eternal Father of heaven|God, the Eternal Father|The Everlasting Father|master of the vineyard|Lord, the Almighty God|Redeemer of the world|Son of the living God|Mighty One of Israel|Son of righteousness|Lord of the vineyard|Son of our great God|Son of Righteousness|Lord their Redeemer|Mighty One of Jacob|The Prince of Peace|Lord God Omnipotent|Savior Jesus Christ|God of our fathers|Lord God Almighty|Lord thy Redeemer|Lord God of Hosts|Holy One of Jacob|Only Begotten Son|Lord Jesus Christ|Father of heaven|the true Messiah|Christ, the Lord|Lord Omnipotent|Supreme Creator|Alpha and Omega|heavenly Father|God of Abraham|Lord their God|Eternal Father|King of heaven|Christ the Son|God the Father|God of Israel|God of nature|Lord of Hosts|Lord your God|good shepherd|Supreme Being|Most High God|Lord our God|God of Isaac|God of Jacob|Lord his God|Lord thy God|his Holy One|Holy Messiah|Lord Jehovah|Jesus Christ|Almighty God|Christ Jesus|Great Spirit|Well Beloved|Eternal Head|Lamb of God|Eternal God|Lord my God|Beloved Son|Son of God|Mighty God|O Lord God|Holy Child|Wonderful|Counselor|Most High|Lord God|Redeemer|Shepherd|Holy God|Holy One|Almighty|Messiah|Creator|Beloved|Savior|Father|Christ|Jesus|Maker|O God|Being|Lord|Lamb|King|God|One|Son|Man)\\\\b\"",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html#section-2",
+    "href": "projects/text/named-mentions.html#section-2",
+    "title": "Named Mentions in Text",
+    "section": "3",
+    "text": "3\n\n\nCode\nbom_text &lt;- scriptures |&gt;\n  filter(volume_title == \"Book of Mormon\") |&gt;\n  pull(scripture_text) |&gt;\n  str_c(collapse = \" \")\n\n# bom_text # you can uncomment this line if want to see it work\n\n\nYou can’t see it here, if not it would take years to run since it’s the whole BOM",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html#section-3",
+    "href": "projects/text/named-mentions.html#section-3",
+    "title": "Named Mentions in Text",
+    "section": "4",
+    "text": "4\n\n\nCode\nsplit_text &lt;- str_split(bom_text, pattern = savior_regex) |&gt;\n  unlist()\n\nchunks_between &lt;- split_text[-c(1, length(split_text))]\nword_counts &lt;- str_count(chunks_between, \"\\\\S+\")\ndf_word_count &lt;- tibble(words_between = word_counts)\n\ndf_word_count\n\n\n# A tibble: 4,035 × 1\n   words_between\n           &lt;int&gt;\n 1            17\n 2           136\n 3            22\n 4            95\n 5            18\n 6             9\n 7            93\n 8            73\n 9             9\n10             0\n# ℹ 4,025 more rows",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html#section-4",
+    "href": "projects/text/named-mentions.html#section-4",
+    "title": "Named Mentions in Text",
+    "section": "5",
+    "text": "5\n\n\nCode\naverage_count &lt;- mean(df_word_count$words_between)\nprint(average_count)\n\n\n[1] 65.37497\n\n\n\n\nCode\nggplot(df_word_count, aes(x = words_between)) +\n  geom_histogram(binwidth = 10, fill = \"#2c3e50\", color = \"white\") +\n  geom_vline(xintercept = average_count, color = \"#e74c3c\", linetype = \"dashed\", linewidth = 1) +\n  theme_minimal() +\n  coord_cartesian(xlim = c(0, 300)) + # zoom or it looks ugly\n  labs(\n    title = \"Distance Between Savior Names in the Book of Mormon\", subtitle = paste(\"On average, the Savior is mentioned every\", round(average_count, 1), \"words.\"),\n    x = \"Number of Words Between References\",\n    y = \"Frequency (Count)\",\n    caption = \"Red dashed line represents the mean distance. Plot zoomed to show 0-300 words.\")",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/text/named-mentions.html#summary",
+    "href": "projects/text/named-mentions.html#summary",
+    "title": "Named Mentions in Text",
+    "section": "Summary",
+    "text": "Summary\nAs the histogram shows the distribution is heavily skewed to the right. While the mathematical average is roughly 65.4 words between mentions, the massive spike on the far left tells me something else. Most of the time when a name of the Savior is mentioned, another name follows almost immediately, often within 10 to 50 words. The average is pulled higher by a few long narrative or war chapters where specific names aren’t used for a longer period, but it’s cool to read about wars anyways.",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "Named Mentions in Text"
+    ]
+  },
+  {
+    "objectID": "projects/nested/chipotle-orders.html",
+    "href": "projects/nested/chipotle-orders.html",
+    "title": "Chipotle Order Analysis",
+    "section": "",
+    "text": "1\n\n\nCode\nlibrary(tidyverse)\nlibrary(jsonlite)\nlibrary(scales)\n\nurl &lt;- \"https://byuistats.github.io/M335/data/chipotle_reduced.csv\"\nchipotle_raw &lt;- read_csv(url)\n\n# parse the JSON dictionary string into a tibble\nextract_visits &lt;- function(json_str) {\n  if (is.na(json_str) || json_str == \"\") return(tibble(day = character(), visits = numeric()))\n  \n  parsed &lt;- fromJSON(json_str)\n  tibble(\n    day = names(parsed),\n    visits = as.numeric(parsed)\n  )\n}\n\n# each row using map to create a nested list column\nchipotle_nested &lt;- chipotle_raw |&gt;\n  mutate(daily_visits = map(popularity_by_day, extract_visits))\n\n\n\n\n2\n\n\nCode\nchipotle_unnested &lt;- chipotle_nested |&gt;\n  unnest(daily_visits) |&gt;\n  # chronologically \n  mutate(day = factor(day, levels = c(\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\", \"Sunday\")))\n\ntotal_visits_df &lt;- chipotle_unnested |&gt;\n  group_by(day) |&gt;\n  summarize(total_visits = sum(visits, na.rm = TRUE))\n\nggplot(total_visits_df, aes(x = day, y = total_visits)) +\n  geom_col(fill = \"#8C1515\") + \n  theme_minimal() +\n  scale_y_continuous(labels = comma) +\n  labs(title = \"Total Chipotle Visits by Day of the Week\", x = NULL, y = \"Total Number of Visits\") +\n  theme(plot.title = element_text(face = \"bold\", size = 16))\n\n\n\n\n\n\n\n\n\nIn this newly created chipotle_unnested dataset a single observation represents the total number of visits for one specific day of the week at one specific Chipotle location.\n\n\n3\n\n\nCode\nbusiest_day_df &lt;- chipotle_unnested |&gt;\n  group_by(placekey) |&gt;\n  slice_max(order_by = visits, n = 1, with_ties = FALSE) |&gt;\n  ungroup()\n\npeak_store_counts &lt;- busiest_day_df |&gt;\n  count(day, name = \"store_count\") |&gt;\n  # all days are represented even if count is 0\n  complete(day, fill = list(store_count = 0))\n\nggplot(peak_store_counts, aes(x = day, y = store_count)) +\n  geom_col(fill = \"#E7711B\") + \n  theme_minimal() +\n  geom_text(aes(label = store_count), vjust = -0.5, fontface = \"bold\", color = \"gray30\") +\n  labs(title = \"Most Common Busiest Days for Chipotle Locations\", x = NULL, y = \"Number of Restaurants\") +\n  theme(plot.title = element_text(face = \"bold\", size = 16))\n\n\n\n\n\n\n\n\n\nIn the busiest_day_df dataset an observation represents a single Chipotle restaurant and the specific day of the week that it experiences its highest visitor count.\n\n\nRecommendations\nI definitely recommend running this big promotion on a Friday. If leadership is leaning toward a two-day event, a Thursday-Friday combination is absolutely the way to go.\nWhile both visualizations point to the end of the workweek as the peak time, the graph showing the Most Common Busiest Days for Chipotle Locations (the store count) was by far the most influential in making this call. Looking at total visits alone can be a bit deceiving because a handful of massive, high volume flagship stores or locations near big events can heavily skew those aggregate numbers. By looking at the count of individual restaurants instead, we get a much clearer picture of what the typical, average location is actually experiencing. For 965 distinct locations, Friday is their absolute busiest day, and Thursday is a solid runner-up with 704 locations peaking. This metric ensures the promotion actually aligns with the peak operational rush for the vast majority of our teams on the ground, rather than just catering to the chain’s heaviest hitters.\nA couple of other interesting insights stood out in the data, too:\n\nThe “Taco Tuesday” Effect: There is a noticeable, distinct spike in traffic on Tuesdays compared to both Mondays and Wednesdays. It looks like that cultural mindset brings a small but reliable mid-week boost to the stores.\nThe Sunday Slump: Sunday is universally the slowest day across the board—only 25 locations consider it their peak day. While the current goal is to run the promo when it’s busiest, if leadership ever pivots and wants to use a promotion to drive traffic and balance labor on dead days, Sunday would be the obvious target.\n\n\n\nSaved Data\n\n\nCode\nwrite_rds(chipotle_nested, \"chipotle_nested_data.rds\")\n\n\n\nAI USAGE\nShoutout to Copilot to help me with the “recommendations” section to talk clearly and correct my grammar. It was based on my notes and it ONLY helped me to make my thoughts clearly.\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Projects",
+      "Data Wrangling",
+      "Chipotle Order Analysis"
     ]
   }
 ]

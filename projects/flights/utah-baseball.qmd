@@ -1,0 +1,65 @@
+---
+title: "Utah Baseball Programs"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+```{r message=FALSE, warning=FALSE}
+
+library(Lahman)
+library(priceR)
+library(tidyverse)
+library(scales)
+
+```
+
+## Prep
+
+```{r message=FALSE, warning=FALSE}
+
+utahSchools <- Schools %>%
+filter(state == "UT")
+
+utahPlayers <- CollegePlaying %>%
+select(playerID, schoolID) %>%
+distinct() %>%
+inner_join(utahSchools, by = "schoolID")
+
+playerSalaries <- Salaries %>%
+inner_join(People, by = "playerID") %>%
+inner_join(utahPlayers, by = "playerID") %>%
+select(nameFirst, nameLast, name_full, yearID, salary)
+
+baseballBYU <- playerSalaries %>%
+mutate(
+  adjustedSalary = adjust_for_inflation(
+    price = salary, 
+    from_date = yearID, 
+    country = "US", 
+    to_date = 2021
+  ),
+    schoolGroup = ifelse(grepl("Brigham Young", name_full), "BYU", "Other Utah Schools")
+  )
+
+```
+
+## Plot
+
+```{r message=FALSE, warning=FALSE}
+
+ggplot(baseballBYU, aes(x = schoolGroup, y = adjustedSalary, fill = schoolGroup)) +
+geom_boxplot(alpha = 0.5, outlier.shape = NA) +
+geom_jitter(width = 0.2, alpha = 0.7, color = "blue", size = 1.5) +
+scale_y_continuous(labels = label_dollar()) +
+theme_minimal() +
+labs(title = "Professional Baseball Earnings, BYU vs Other Utah Schools", subtitle = "Annual salaries adjusted to 2021 USD", x = element_blank(), y = "Adjusted Annual Salary (2021 USD)") +
+theme(legend.position = "none")
+
+```
+
+This plot demonstrates that professional baseball players who attended BYU historically have significantly higher and more varied earning potentials compared to alumni from other Utah schools. The BYU distribution shows a clearly higher median salary and a massive spread, with a strong concentration of players securing multi-million-dollar annual contracts, including several "outliers" exceeding 10 million (adjusted to 2021 USD), the earnings distribution for alumni from other Utah schools is more compressed at the lower end of the pay scale as seen on the graph, which indicates that the vast majority of those players earn well under 1 million annually. While a few isolated outliers from other Utah schools managed to secure contracts in the 4 million to 7 million range, BYU clearly produces a higher volume of top-tier earners in professional baseball

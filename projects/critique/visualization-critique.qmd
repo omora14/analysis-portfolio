@@ -1,0 +1,66 @@
+---
+title: "Data Visualization Critique"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+
+Critique of 3 articles that use data and visualization to answer a question:
+
+<!-- For each of the 3 articles be sure to include the url to the article, and one paragraph that lists a few good/unique things about the visualization(s) in the article, and a at least 1 thing that could be improved. -->
+
+<!-- At the bottom don't forget to add an R code chunk that contains the following code: plot(1:20). This is to ensure that the rendering is working right and that you can see the graphs you create after the webpage is published. -->
+
+## 1. [Article 1: "Who are the adults in children’s lives?"](https://www.nytimes.com/2026/01/02/learning/whats-going-on-in-this-graph-jan-14-2026.html)
+
+```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap=""}
+knitr::include_graphics("/Users/owenmorales/Desktop/CODING/ds350/w01/assets/article1.png")
+```
+
+##### What is unique or good about the visualization?
+
+- I like how they're integrating the legend box, instead of separate legend, whoever the author is decided to cleverly colored the words "women" and "mean" in the subtitle, given each of them a color, that is later represented on this cluster chart, it seems. The data is also being sort sequentially, from the most female dominated to the most male dominated roles, which makes it easy to follow. Something simple but I like that the chart avoids the overused pink for girls and blue for mens, it looks more monochrome and less stereotypical, that's nice, and putting the percentages right inside the bars so you don't need a messy bottom axis is cool too.
+
+##### What could be better?
+
+- For what could be better, its kinda annoying that their missing the data labels for the "mean" on the top four bars. Even if those slices are super small, leaving the numbers out total breaks the pattern and makes you have to do the mental math. Also the source text at the very bottom is cut off halfway through the letters making it look unpolished, and the spacing between the job names on the left and where the bars actually start is a bit to tight, giving it a little more room to breath would make it easier to read I think.
+
+## 2. [Article 2: "How do girls and boys compare in school?"](https://www.nytimes.com/2025/10/23/learning/whats-going-on-in-this-graph-oct-29-2025.html)
+
+```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap=""}
+knitr::include_graphics("/Users/owenmorales/Desktop/CODING/ds350/w01/assets/article2.png")
+```
+
+##### What is unique or good about the visualization?
+
+ - I like how simple the colors are, the author is decided to stick to grey tones instead of overused stereotypical colors. The title explains exactly what the chart is about right away so you don't have to guess. Putting the "both about equal" as the big light bar makes it super easy to see that most kids think things are pretty even. Its also nice that they put a note at the bottom explaining that some kids didn't answer, so if the math doesn't totally add up to 100 you know why, that's cool.
+ 
+##### What could be better?
+
+- Is kinda annoying that they went back to a separate legend box at the top instead of putting it cleverly in the subtitle. Also, just like the other chart, their missing the data labels for the "Boys" on the "Better grades" and "Teacher favorites" bars. Even if those slices are super small, leaving the numbers out totally breaks the pattern and makes you have to do the mental math. Plus the order of the rows feels totally random, its not sort sequentially by any of the percentages like the last one, giving it a better order would make it easier to read I think.
+
+## 3. [Article 3: "How much is a dollar worth?"](https://www.nytimes.com/2025/09/18/learning/whats-going-on-in-this-graph-oct-1-2025.html)
+
+```{r, echo=FALSE, out.width="75%", fig.align="center", fig.cap=""}
+knitr::include_graphics("/Users/owenmorales/Desktop/CODING/ds350/w01/assets/article3.png")
+```
+
+##### What is unique or good about the visualization?
+
+- It's really neat how they made the main focus super obvious right off the bat, it's highlighting the 2025 line in bright red while fading all the older years into the background as grey scribbles is a great way to make sure you see exactly what the author wants you to look at without getting distracted (at least works with me). The thick black line straight across the middle at zero is a smart touch too, it lets you instantly tell if the dollar was dropping or going up. I also appreciate that they put the final number right at the tip of the red line so your not left guessing what exact number it actually landed on, it would be hard with too much lines.
+
+##### What could be better?
+
+- This thing is kinda a huge mess to look at overall, that's how I feel. All those grey background lines just look like a giant tangle of spaghetti. If we actually wanted to know what happened in a specific year like 1999, there's literally no way to track it or figure it out, I was thinking on maybe using plotly, but even then. Also the numbers on the left side are just kinda floating there without a solid vertical line holding them together, which looks a bit weird. And while its cool they show the months at the bottom, the title talks about every year since 1986 but besides 2025, none of the other lines have year labels at all, leaving you totally in the dark about what the rest of the data even represents.
+
+```{r}
+
+plot(1:20)
+
+```
+

@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Owen Morales">
+
+<title>Fruit Consumption vs GDP – Owen Morales</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ca3a3156dfa06696f18c39bad94c63ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-44ce5e1fdf16f4d88befeca03b83ba44.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-ca3a3156dfa06696f18c39bad94c63ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../../site_libs/plotly-binding-4.12.0/plotly.js"></script>
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="../../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Owen Morales</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resume.pdf"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/critique/visualization-critique.html">Visualization</a></li><li class="breadcrumb-item"><a href="../../projects/presentation/fruit-gdp.html">Fruit Consumption vs GDP</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/critique/visualization-critique.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization Critique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/distributions/large-distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualizing Large Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/presentation/fruit-gdp.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Fruit Consumption vs GDP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/presentation/visualization-redesign.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualization Redesign</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exploratory Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/exploratory/gun-deaths.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gun Deaths Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/presentation/gun-deaths-seasonal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gun Deaths: Seasonal Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/exploratory/flight-delays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Flight Delays by Origin</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/flights/aircraft-age-delays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aircraft Age and Flight Delays</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/flights/utah-baseball.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utah Baseball Programs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Wrangling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/wrangling/stock-predictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stock Market Predictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/wrangling/country-heights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Country Heights</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/wrangling/combining-heights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Combining Height Datasets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/markets/sales-cleaning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sales Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/markets/stock-portfolio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stock Portfolio Comparison</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/nested/chipotle-orders.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chipotle Order Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/parsing/nested-visits.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parsing Nested Visit Data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Spatial &amp; Maps</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/maps/us-lower-48.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">US Lower 48 Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/maps/idaho-dams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Idaho Dams and Water Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/maps/building-footprints.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Footprints by State</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/leaflet/costa-rica-species.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Costa Rica Species Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/leaflet/open-data-sources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open Data Source Evaluation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Text Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/text/scripture-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Scripture Text Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/text/named-mentions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Named Mentions in Text</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/nested/nested-text.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nested Text Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/critique/visualization-critique.html">Visualization</a></li><li class="breadcrumb-item"><a href="../../projects/presentation/fruit-gdp.html">Fruit Consumption vs GDP</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Fruit Consumption vs GDP</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Owen Morales </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.2.1     ✔ readr     2.2.0
+✔ forcats   1.0.1     ✔ stringr   1.6.0
+✔ ggplot2   4.0.3     ✔ tibble    3.3.1
+✔ lubridate 1.9.5     ✔ tidyr     1.3.2
+✔ purrr     1.2.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(jsonlite) <span class="co"># found this one on the download section od OWID, it's to read the metadata</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'jsonlite'
+
+The following object is masked from 'package:purrr':
+
+    flatten</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>fruit <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"https://ourworldindata.org/grapher/fruit-consumption-vs-gdp-per-capita.csv?v=1&amp;csvType=full&amp;useColumnShortNames=true"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 14431 Columns: 6
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr (3): entity, code, owid_region
+dbl (3): year, fruit__00002919__food_available_for_consumption__0645pc__kilo...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">view</span>(fruit)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">library</span>(scales)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'scales'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:purrr':
+
+    discard</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:readr':
+
+    col_factor</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">library</span>(plotly)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'plotly'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:ggplot2':
+
+    last_plot</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:stats':
+
+    filter</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following object is masked from 'package:graphics':
+
+    layout</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>fruitdata <span class="ot">&lt;-</span> fruit <span class="sc">|&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>  <span class="fu">rename</span>(</span>
+<span id="cb17-3"><a href="#cb17-3"></a>    <span class="at">fruitconsumption =</span> fruit__00002919__food_available_for_consumption__0645pc__kilograms_per_year_per_capita,</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    <span class="at">gdppercapita =</span> ny_gdp_pcap_pp_kd,</span>
+<span id="cb17-5"><a href="#cb17-5"></a>    <span class="at">owidregion =</span> owid_region) <span class="sc">|&gt;</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>  <span class="fu">filter</span>(year <span class="sc">==</span> <span class="dv">2023</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>  <span class="fu">drop_na</span>(fruitconsumption, gdppercapita, owidregion)</span>
+<span id="cb17-8"><a href="#cb17-8"></a>owid_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb17-9"><a href="#cb17-9"></a>  <span class="st">"Africa"</span> <span class="ot">=</span> <span class="st">"#9e66ab"</span>,         <span class="co"># Purple</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a>  <span class="st">"Asia"</span> <span class="ot">=</span> <span class="st">"#2a939b"</span>,           <span class="co"># Teal</span></span>
+<span id="cb17-11"><a href="#cb17-11"></a>  <span class="st">"Europe"</span> <span class="ot">=</span> <span class="st">"#4c70a4"</span>,         <span class="co"># Blue</span></span>
+<span id="cb17-12"><a href="#cb17-12"></a>  <span class="st">"North America"</span> <span class="ot">=</span> <span class="st">"#e26d5c"</span>,  <span class="co"># Red/Orange</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a>  <span class="st">"South America"</span> <span class="ot">=</span> <span class="st">"#b04169"</span>,  <span class="co"># Pink</span></span>
+<span id="cb17-14"><a href="#cb17-14"></a>  <span class="st">"Oceania"</span> <span class="ot">=</span> <span class="st">"#60c0e7"</span>         <span class="co"># Light Blue</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>) <span class="co"># Gemini helped me get these exact colors by analyzing the original OWID plot and extracting the hex codes for each region</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a></span>
+<span id="cb17-17"><a href="#cb17-17"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> fruitdata, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdppercapita, <span class="at">y =</span> fruitconsumption, <span class="at">color =</span> owidregion,</span>
+<span id="cb17-18"><a href="#cb17-18"></a>              <span class="co"># Gemini helped me create this "text" aesthetic creates the custom HTML tooltip for plotly</span></span>
+<span id="cb17-19"><a href="#cb17-19"></a>              <span class="at">text =</span> <span class="fu">paste0</span>(</span>
+<span id="cb17-20"><a href="#cb17-20"></a>                <span class="st">"&lt;b&gt;"</span>, entity, <span class="st">"&lt;/b&gt;&lt;br&gt;"</span>,</span>
+<span id="cb17-21"><a href="#cb17-21"></a>                <span class="st">"2023&lt;br&gt;"</span>,</span>
+<span id="cb17-22"><a href="#cb17-22"></a>                <span class="st">"GDP per capita: $"</span>, <span class="fu">format</span>(<span class="fu">round</span>(gdppercapita), <span class="at">big.mark =</span> <span class="st">","</span>), <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb17-23"><a href="#cb17-23"></a>                <span class="st">"Fruit supply: "</span>, <span class="fu">round</span>(fruitconsumption, <span class="dv">2</span>), <span class="st">" kg"</span></span>
+<span id="cb17-24"><a href="#cb17-24"></a>              )</span>
+<span id="cb17-25"><a href="#cb17-25"></a>            )) <span class="sc">+</span></span>
+<span id="cb17-26"><a href="#cb17-26"></a><span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb17-27"><a href="#cb17-27"></a><span class="fu">scale_color_manual</span>(<span class="at">values =</span> owid_colors) <span class="sc">+</span></span>
+<span id="cb17-28"><a href="#cb17-28"></a><span class="fu">scale_x_log10</span>(</span>
+<span id="cb17-29"><a href="#cb17-29"></a>    <span class="at">labels =</span> <span class="fu">label_dollar</span>(<span class="at">accuracy =</span> <span class="dv">1</span>),</span>
+<span id="cb17-30"><a href="#cb17-30"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>, <span class="dv">20000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>),</span>
+<span id="cb17-31"><a href="#cb17-31"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">120000</span>)) <span class="sc">+</span></span>
+<span id="cb17-32"><a href="#cb17-32"></a><span class="fu">scale_y_continuous</span>(</span>
+<span id="cb17-33"><a href="#cb17-33"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">350</span>, <span class="at">by =</span> <span class="dv">50</span>),</span>
+<span id="cb17-34"><a href="#cb17-34"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">380</span>)) <span class="sc">+</span></span>
+<span id="cb17-35"><a href="#cb17-35"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)"</span>, <span class="at">y =</span> <span class="st">"Fruit supply per person (kilograms per year)"</span>, <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb17-36"><a href="#cb17-36"></a><span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb17-37"><a href="#cb17-37"></a>  <span class="fu">theme</span>(</span>
+<span id="cb17-38"><a href="#cb17-38"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray"</span>),</span>
+<span id="cb17-39"><a href="#cb17-39"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(), <span class="co"># got this code snippet from the professor on his class</span></span>
+<span id="cb17-40"><a href="#cb17-40"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>)</span>
+<span id="cb17-41"><a href="#cb17-41"></a>interactive_plot <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(p, <span class="at">tooltip =</span> <span class="st">"text"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb17-42"><a href="#cb17-42"></a><span class="fu">layout</span>(<span class="at">legend =</span> <span class="fu">list</span>(<span class="at">title =</span> <span class="fu">list</span>(<span class="at">text =</span> <span class="st">""</span>)))</span>
+<span id="cb17-43"><a href="#cb17-43"></a></span>
+<span id="cb17-44"><a href="#cb17-44"></a>interactive_plot</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-c8969dd56841dca66a37" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-c8969dd56841dca66a37">{"x":{"data":[{"x":[4.1806798352264076,3.9439029464251423,4.2772075067144382,3.3955372499546677,3.6879969800568735,3.9651292812061669,3.5358511157343941,3.7904461539729315,3.81430747361915,3.1929402624784928,3.8136262635760354,4.2224924266384054,4.0078119362183227,3.4405878371313734,4.2718746302409754,3.4718193809502909,3.8330538401869316,3.5916014639364011,3.4303615760156863,3.7552515388643397,3.4142761803438146,3.2086895267395552,4.0960961822021478,3.2120439437407304,3.2172993166597257,3.7977158033139999,4.4254528967856732,3.9501384948629963,3.1796311747791539,4.005938278543927,3.2277746987306295,3.8945284217505889,3.4861468550192556,3.7436118197790078,3.6339491150836309,4.456902571545224,3.4821509681919491,4.1365739601010123,3.5588037569717157,4.102123551235664,3.4457685036191443,3.5650781644207092,3.717505947436639],"y":[107.13999,82.420000000000002,46.639960000000002,59.850006,93.299999999999997,51.969504999999998,97.109999999999999,41.700000000000003,62.409996,51.469996999999999,39.489623999999999,94.030000000000001,75.620186000000004,10.969999,131.30000000000001,6.0700089999999998,164.99996999999999,103.44001,46.429940000000002,79.209990000000005,15.599959,36.359966,89.940020000000004,36.699992999999999,175.94,22.009989999999998,57.629955000000002,88.989959999999996,16.479997999999998,46.389811999999999,21.440006,68.269999999999996,99.309974999999994,192.13999999999999,19.669996000000001,84.502740000000003,30.749952,26.409996,67.180000000000007,109.37996,207.60999000000001,4.2700009999999997,43.009974999999997],"text":["<b>Algeria<\/b><br>2023<br>GDP per capita: $ 15,159<br>Fruit supply: 107.14 kg","<b>Angola<\/b><br>2023<br>GDP per capita: $  8,788<br>Fruit supply: 82.42 kg","<b>Botswana<\/b><br>2023<br>GDP per capita: $ 18,932<br>Fruit supply: 46.64 kg","<b>Burkina Faso<\/b><br>2023<br>GDP per capita: $  2,486<br>Fruit supply: 59.85 kg","<b>Cameroon<\/b><br>2023<br>GDP per capita: $  4,875<br>Fruit supply: 93.3 kg","<b>Cape Verde<\/b><br>2023<br>GDP per capita: $  9,228<br>Fruit supply: 51.97 kg","<b>Comoros<\/b><br>2023<br>GDP per capita: $  3,434<br>Fruit supply: 97.11 kg","<b>Congo<\/b><br>2023<br>GDP per capita: $  6,172<br>Fruit supply: 41.7 kg","<b>Cote d'Ivoire<\/b><br>2023<br>GDP per capita: $  6,521<br>Fruit supply: 62.41 kg","<b>Democratic Republic of Congo<\/b><br>2023<br>GDP per capita: $  1,559<br>Fruit supply: 51.47 kg","<b>Djibouti<\/b><br>2023<br>GDP per capita: $  6,511<br>Fruit supply: 39.49 kg","<b>Egypt<\/b><br>2023<br>GDP per capita: $ 16,691<br>Fruit supply: 94.03 kg","<b>Eswatini<\/b><br>2023<br>GDP per capita: $ 10,182<br>Fruit supply: 75.62 kg","<b>Ethiopia<\/b><br>2023<br>GDP per capita: $  2,758<br>Fruit supply: 10.97 kg","<b>Gabon<\/b><br>2023<br>GDP per capita: $ 18,701<br>Fruit supply: 131.3 kg","<b>Gambia<\/b><br>2023<br>GDP per capita: $  2,964<br>Fruit supply: 6.07 kg","<b>Ghana<\/b><br>2023<br>GDP per capita: $  6,809<br>Fruit supply: 165 kg","<b>Guinea<\/b><br>2023<br>GDP per capita: $  3,905<br>Fruit supply: 103.44 kg","<b>Guinea-Bissau<\/b><br>2023<br>GDP per capita: $  2,694<br>Fruit supply: 46.43 kg","<b>Kenya<\/b><br>2023<br>GDP per capita: $  5,692<br>Fruit supply: 79.21 kg","<b>Lesotho<\/b><br>2023<br>GDP per capita: $  2,596<br>Fruit supply: 15.6 kg","<b>Liberia<\/b><br>2023<br>GDP per capita: $  1,617<br>Fruit supply: 36.36 kg","<b>Libya<\/b><br>2023<br>GDP per capita: $ 12,477<br>Fruit supply: 89.94 kg","<b>Madagascar<\/b><br>2023<br>GDP per capita: $  1,629<br>Fruit supply: 36.7 kg","<b>Malawi<\/b><br>2023<br>GDP per capita: $  1,649<br>Fruit supply: 175.94 kg","<b>Mauritania<\/b><br>2023<br>GDP per capita: $  6,276<br>Fruit supply: 22.01 kg","<b>Mauritius<\/b><br>2023<br>GDP per capita: $ 26,635<br>Fruit supply: 57.63 kg","<b>Morocco<\/b><br>2023<br>GDP per capita: $  8,915<br>Fruit supply: 88.99 kg","<b>Mozambique<\/b><br>2023<br>GDP per capita: $  1,512<br>Fruit supply: 16.48 kg","<b>Namibia<\/b><br>2023<br>GDP per capita: $ 10,138<br>Fruit supply: 46.39 kg","<b>Niger<\/b><br>2023<br>GDP per capita: $  1,690<br>Fruit supply: 21.44 kg","<b>Nigeria<\/b><br>2023<br>GDP per capita: $  7,844<br>Fruit supply: 68.27 kg","<b>Rwanda<\/b><br>2023<br>GDP per capita: $  3,063<br>Fruit supply: 99.31 kg","<b>Sao Tome and Principe<\/b><br>2023<br>GDP per capita: $  5,541<br>Fruit supply: 192.14 kg","<b>Senegal<\/b><br>2023<br>GDP per capita: $  4,305<br>Fruit supply: 19.67 kg","<b>Seychelles<\/b><br>2023<br>GDP per capita: $ 28,635<br>Fruit supply: 84.5 kg","<b>Sierra Leone<\/b><br>2023<br>GDP per capita: $  3,035<br>Fruit supply: 30.75 kg","<b>South Africa<\/b><br>2023<br>GDP per capita: $ 13,695<br>Fruit supply: 26.41 kg","<b>Tanzania<\/b><br>2023<br>GDP per capita: $  3,621<br>Fruit supply: 67.18 kg","<b>Tunisia<\/b><br>2023<br>GDP per capita: $ 12,651<br>Fruit supply: 109.38 kg","<b>Uganda<\/b><br>2023<br>GDP per capita: $  2,791<br>Fruit supply: 207.61 kg","<b>Zambia<\/b><br>2023<br>GDP per capita: $  3,673<br>Fruit supply: 4.27 kg","<b>Zimbabwe<\/b><br>2023<br>GDP per capita: $  5,218<br>Fruit supply: 43.01 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(158,102,171,1)","opacity":0.80000000000000004,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(158,102,171,1)"}},"hoveron":"points","name":"Africa","legendgroup":"Africa","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3.2975006443152006,4.2878633326957312,4.3285984897788614,4.762077381286308,3.91605358143712,4.1646590146929849,3.8257695225314965,4.355778525902787,3.6365960051716693,4.3539264200914696,4.8091188672265339,3.968564943083106,4.1427014640693782,4.2315923173504197,4.1206503537300394,4.6769417905677946,3.9722655472710859,4.5403699486499303,4.6792225303502297,3.8179469711672689,3.9228373120350164,4.0542402208809438,5.0204242673562263,4.5166367371066309,4.3489479799012916,4.2101275274088721,3.7294999421600927,3.686746214060503,4.5774184576214516,3.7339006776765089,3.9955708352830372,5.0665644049709666,4.8094374485795042,4.7326296945628927,4.1147757313781703,3.6505332587234149,4.3261607352973126,4.5449254873332965,4.2520371501490892,4.8465835754458562,4.0003336705256274,4.1318089873186921],"y":[39.920000000000002,112.20968999999999,91.320009999999996,125.13969,30.350000000000001,30.869765999999998,17.719995000000001,114.35999,16.419976999999999,47.759950000000003,75.069916000000006,65.640000000000001,85.379999999999995,123.37000999999999,47.586269999999999,117.789986,40.849964,63.549970000000002,92.799980000000005,39.549984000000002,132.77982,103.76993,66.159450000000007,59.990012999999998,168.50389999999999,20.839950000000002,40.130000000000003,51.259990000000002,141.18008,24.050000000000001,98.200000000000003,71.219859999999997,105.31999999999999,48.059998,43.030006,29.709978,71.679990000000004,167.77000000000001,51.550020000000004,64.129943999999995,106.83999,99.609999999999999],"text":["<b>Afghanistan<\/b><br>2023<br>GDP per capita: $  1,984<br>Fruit supply: 39.92 kg","<b>Armenia<\/b><br>2023<br>GDP per capita: $ 19,403<br>Fruit supply: 112.21 kg","<b>Azerbaijan<\/b><br>2023<br>GDP per capita: $ 21,311<br>Fruit supply: 91.32 kg","<b>Bahrain<\/b><br>2023<br>GDP per capita: $ 57,820<br>Fruit supply: 125.14 kg","<b>Bangladesh<\/b><br>2023<br>GDP per capita: $  8,242<br>Fruit supply: 30.35 kg","<b>Bhutan<\/b><br>2023<br>GDP per capita: $ 14,610<br>Fruit supply: 30.87 kg","<b>Cambodia<\/b><br>2023<br>GDP per capita: $  6,695<br>Fruit supply: 17.72 kg","<b>China<\/b><br>2023<br>GDP per capita: $ 22,687<br>Fruit supply: 114.36 kg","<b>East Timor<\/b><br>2023<br>GDP per capita: $  4,331<br>Fruit supply: 16.42 kg","<b>Georgia<\/b><br>2023<br>GDP per capita: $ 22,591<br>Fruit supply: 47.76 kg","<b>Hong Kong<\/b><br>2023<br>GDP per capita: $ 64,435<br>Fruit supply: 75.07 kg","<b>India<\/b><br>2023<br>GDP per capita: $  9,302<br>Fruit supply: 65.64 kg","<b>Indonesia<\/b><br>2023<br>GDP per capita: $ 13,890<br>Fruit supply: 85.38 kg","<b>Iran<\/b><br>2023<br>GDP per capita: $ 17,045<br>Fruit supply: 123.37 kg","<b>Iraq<\/b><br>2023<br>GDP per capita: $ 13,202<br>Fruit supply: 47.59 kg","<b>Israel<\/b><br>2023<br>GDP per capita: $ 47,527<br>Fruit supply: 117.79 kg","<b>Jordan<\/b><br>2023<br>GDP per capita: $  9,381<br>Fruit supply: 40.85 kg","<b>Kazakhstan<\/b><br>2023<br>GDP per capita: $ 34,703<br>Fruit supply: 63.55 kg","<b>Kuwait<\/b><br>2023<br>GDP per capita: $ 47,777<br>Fruit supply: 92.8 kg","<b>Kyrgyzstan<\/b><br>2023<br>GDP per capita: $  6,576<br>Fruit supply: 39.55 kg","<b>Laos<\/b><br>2023<br>GDP per capita: $  8,372<br>Fruit supply: 132.78 kg","<b>Lebanon<\/b><br>2023<br>GDP per capita: $ 11,330<br>Fruit supply: 103.77 kg","<b>Macao<\/b><br>2023<br>GDP per capita: $104,815<br>Fruit supply: 66.16 kg","<b>Malaysia<\/b><br>2023<br>GDP per capita: $ 32,858<br>Fruit supply: 59.99 kg","<b>Maldives<\/b><br>2023<br>GDP per capita: $ 22,333<br>Fruit supply: 168.5 kg","<b>Mongolia<\/b><br>2023<br>GDP per capita: $ 16,223<br>Fruit supply: 20.84 kg","<b>Myanmar<\/b><br>2023<br>GDP per capita: $  5,364<br>Fruit supply: 40.13 kg","<b>Nepal<\/b><br>2023<br>GDP per capita: $  4,861<br>Fruit supply: 51.26 kg","<b>Oman<\/b><br>2023<br>GDP per capita: $ 37,794<br>Fruit supply: 141.18 kg","<b>Pakistan<\/b><br>2023<br>GDP per capita: $  5,419<br>Fruit supply: 24.05 kg","<b>Philippines<\/b><br>2023<br>GDP per capita: $  9,899<br>Fruit supply: 98.2 kg","<b>Qatar<\/b><br>2023<br>GDP per capita: $116,564<br>Fruit supply: 71.22 kg","<b>Saudi Arabia<\/b><br>2023<br>GDP per capita: $ 64,482<br>Fruit supply: 105.32 kg","<b>South Korea<\/b><br>2023<br>GDP per capita: $ 54,029<br>Fruit supply: 48.06 kg","<b>Sri Lanka<\/b><br>2023<br>GDP per capita: $ 13,025<br>Fruit supply: 43.03 kg","<b>Tajikistan<\/b><br>2023<br>GDP per capita: $  4,472<br>Fruit supply: 29.71 kg","<b>Thailand<\/b><br>2023<br>GDP per capita: $ 21,191<br>Fruit supply: 71.68 kg","<b>Turkey<\/b><br>2023<br>GDP per capita: $ 35,069<br>Fruit supply: 167.77 kg","<b>Turkmenistan<\/b><br>2023<br>GDP per capita: $ 17,866<br>Fruit supply: 51.55 kg","<b>United Arab Emirates<\/b><br>2023<br>GDP per capita: $ 70,240<br>Fruit supply: 64.13 kg","<b>Uzbekistan<\/b><br>2023<br>GDP per capita: $ 10,008<br>Fruit supply: 106.84 kg","<b>Vietnam<\/b><br>2023<br>GDP per capita: $ 13,546<br>Fruit supply: 99.61 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(42,147,155,1)","opacity":0.80000000000000004,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(42,147,155,1)"}},"hoveron":"points","name":"Asia","legendgroup":"Asia","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.3113518997369509,4.8098040425893691,4.4437703538381879,4.7999977117197865,4.2967748467403117,4.5194843059549159,4.6161624464768973,4.7114168379305452,4.6772273266075208,4.8412294129519893,4.6158303360273374,4.750129321026149,4.7347736191659484,4.799611864270668,4.5646720993650813,4.6056632613638264,4.8332644384782952,5.0713742669598298,4.7232119718573715,4.5714493768918052,4.6642630434603474,null,4.7811691841629855,4.2038614869533504,4.4352631880181459,4.8463304924910995,4.3702413623859782,4.9546546040908188,4.6402106986878957,4.6208463212307906,4.603326878743121,4.6008350751205525,4.4105282227198446,4.5967974076097864,4.6810369442574267,4.6750685425706253,4.7970095611812456,4.915375032753567,4.2018600703080278,4.720925335039456],"y":[185.68000000000001,117.22995,62.400005,79.599990000000005,196.59988000000001,74.429950000000005,104.97992000000001,77.789940000000001,78.859984999999995,106.55011,81.8703,92.170079999999999,105.18998999999999,86.679990000000004,121.56,81.259960000000007,130.14034000000001,106.93001599999999,121.10999,62.470036,58.039920000000002,135.90978999999999,83.489369999999994,124.0819,120.75942999999999,157.89993000000001,97.560000000000002,113.83006,66.879980000000003,136.22005999999999,112.87999000000001,73.099999999999994,147.60991999999999,61.139919999999996,131.06036,113.82999,86.969980000000007,96.339950000000002,51.810009999999998,92.08999],"text":["<b>Albania<\/b><br>2023<br>GDP per capita: $ 20,481<br>Fruit supply: 185.68 kg","<b>Austria<\/b><br>2023<br>GDP per capita: $ 64,536<br>Fruit supply: 117.23 kg","<b>Belarus<\/b><br>2023<br>GDP per capita: $ 27,782<br>Fruit supply: 62.4 kg","<b>Belgium<\/b><br>2023<br>GDP per capita: $ 63,095<br>Fruit supply: 79.6 kg","<b>Bosnia and Herzegovina<\/b><br>2023<br>GDP per capita: $ 19,805<br>Fruit supply: 196.6 kg","<b>Bulgaria<\/b><br>2023<br>GDP per capita: $ 33,074<br>Fruit supply: 74.43 kg","<b>Croatia<\/b><br>2023<br>GDP per capita: $ 41,320<br>Fruit supply: 104.98 kg","<b>Cyprus<\/b><br>2023<br>GDP per capita: $ 51,454<br>Fruit supply: 77.79 kg","<b>Czechia<\/b><br>2023<br>GDP per capita: $ 47,558<br>Fruit supply: 78.86 kg","<b>Denmark<\/b><br>2023<br>GDP per capita: $ 69,379<br>Fruit supply: 106.55 kg","<b>Estonia<\/b><br>2023<br>GDP per capita: $ 41,289<br>Fruit supply: 81.87 kg","<b>Finland<\/b><br>2023<br>GDP per capita: $ 56,251<br>Fruit supply: 92.17 kg","<b>France<\/b><br>2023<br>GDP per capita: $ 54,297<br>Fruit supply: 105.19 kg","<b>Germany<\/b><br>2023<br>GDP per capita: $ 63,039<br>Fruit supply: 86.68 kg","<b>Greece<\/b><br>2023<br>GDP per capita: $ 36,701<br>Fruit supply: 121.56 kg","<b>Hungary<\/b><br>2023<br>GDP per capita: $ 40,333<br>Fruit supply: 81.26 kg","<b>Iceland<\/b><br>2023<br>GDP per capita: $ 68,118<br>Fruit supply: 130.14 kg","<b>Ireland<\/b><br>2023<br>GDP per capita: $117,862<br>Fruit supply: 106.93 kg","<b>Italy<\/b><br>2023<br>GDP per capita: $ 52,870<br>Fruit supply: 121.11 kg","<b>Latvia<\/b><br>2023<br>GDP per capita: $ 37,278<br>Fruit supply: 62.47 kg","<b>Lithuania<\/b><br>2023<br>GDP per capita: $ 46,160<br>Fruit supply: 58.04 kg","<b>Luxembourg<\/b><br>2023<br>GDP per capita: $130,049<br>Fruit supply: 135.91 kg","<b>Malta<\/b><br>2023<br>GDP per capita: $ 60,418<br>Fruit supply: 83.49 kg","<b>Moldova<\/b><br>2023<br>GDP per capita: $ 15,990<br>Fruit supply: 124.08 kg","<b>Montenegro<\/b><br>2023<br>GDP per capita: $ 27,244<br>Fruit supply: 120.76 kg","<b>Netherlands<\/b><br>2023<br>GDP per capita: $ 70,199<br>Fruit supply: 157.9 kg","<b>North Macedonia<\/b><br>2023<br>GDP per capita: $ 23,455<br>Fruit supply: 97.56 kg","<b>Norway<\/b><br>2023<br>GDP per capita: $ 90,085<br>Fruit supply: 113.83 kg","<b>Poland<\/b><br>2023<br>GDP per capita: $ 43,673<br>Fruit supply: 66.88 kg","<b>Portugal<\/b><br>2023<br>GDP per capita: $ 41,768<br>Fruit supply: 136.22 kg","<b>Romania<\/b><br>2023<br>GDP per capita: $ 40,117<br>Fruit supply: 112.88 kg","<b>Russia<\/b><br>2023<br>GDP per capita: $ 39,887<br>Fruit supply: 73.1 kg","<b>Serbia<\/b><br>2023<br>GDP per capita: $ 25,735<br>Fruit supply: 147.61 kg","<b>Slovakia<\/b><br>2023<br>GDP per capita: $ 39,518<br>Fruit supply: 61.14 kg","<b>Slovenia<\/b><br>2023<br>GDP per capita: $ 47,977<br>Fruit supply: 131.06 kg","<b>Spain<\/b><br>2023<br>GDP per capita: $ 47,323<br>Fruit supply: 113.83 kg","<b>Sweden<\/b><br>2023<br>GDP per capita: $ 62,663<br>Fruit supply: 86.97 kg","<b>Switzerland<\/b><br>2023<br>GDP per capita: $ 82,295<br>Fruit supply: 96.34 kg","<b>Ukraine<\/b><br>2023<br>GDP per capita: $ 15,917<br>Fruit supply: 51.81 kg","<b>United Kingdom<\/b><br>2023<br>GDP per capita: $ 52,593<br>Fruit supply: 92.09 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(76,112,164,1)","opacity":0.80000000000000004,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(76,112,164,1)"}},"hoveron":"points","name":"Europe","legendgroup":"Europe","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.4544491670554267,4.5468050115985497,4.3287601477731528,4.0924051228515514,4.7597995481221265,4.4146329448739134,4.367029425094338,4.0578427330497728,4.2328222562165498,4.092894187477329,3.4721632836361254,3.8107619537480804,4.0568596099715792,4.3407860218266441,3.8748602427615131,4.5547670922054317,4.4859566481921762,4.3692853389688713,4.2518387525030743,4.494107320161616,4.8701622251583627],"y":[241.70150000000001,309.86070000000001,103.15745,60.929703000000003,112.22001,77.120056000000005,379.63004000000001,82.779883999999996,160.17085,69.749989999999997,87.349980000000002,57.749980000000001,144.07026999999999,137.38,59.439920000000001,154.28005999999999,198.17251999999999,115.03294,128.15608,73.529610000000005,169.19999999999999],"text":["<b>Antigua and Barbuda<\/b><br>2023<br>GDP per capita: $ 28,474<br>Fruit supply: 241.7 kg","<b>Bahamas<\/b><br>2023<br>GDP per capita: $ 35,221<br>Fruit supply: 309.86 kg","<b>Barbados<\/b><br>2023<br>GDP per capita: $ 21,319<br>Fruit supply: 103.16 kg","<b>Belize<\/b><br>2023<br>GDP per capita: $ 12,371<br>Fruit supply: 60.93 kg","<b>Canada<\/b><br>2023<br>GDP per capita: $ 57,517<br>Fruit supply: 112.22 kg","<b>Costa Rica<\/b><br>2023<br>GDP per capita: $ 25,980<br>Fruit supply: 77.12 kg","<b>Dominican Republic<\/b><br>2023<br>GDP per capita: $ 23,282<br>Fruit supply: 379.63 kg","<b>El Salvador<\/b><br>2023<br>GDP per capita: $ 11,425<br>Fruit supply: 82.78 kg","<b>Grenada<\/b><br>2023<br>GDP per capita: $ 17,093<br>Fruit supply: 160.17 kg","<b>Guatemala<\/b><br>2023<br>GDP per capita: $ 12,385<br>Fruit supply: 69.75 kg","<b>Haiti<\/b><br>2023<br>GDP per capita: $  2,966<br>Fruit supply: 87.35 kg","<b>Honduras<\/b><br>2023<br>GDP per capita: $  6,468<br>Fruit supply: 57.75 kg","<b>Jamaica<\/b><br>2023<br>GDP per capita: $ 11,399<br>Fruit supply: 144.07 kg","<b>Mexico<\/b><br>2023<br>GDP per capita: $ 21,917<br>Fruit supply: 137.38 kg","<b>Nicaragua<\/b><br>2023<br>GDP per capita: $  7,497<br>Fruit supply: 59.44 kg","<b>Panama<\/b><br>2023<br>GDP per capita: $ 35,873<br>Fruit supply: 154.28 kg","<b>Saint Kitts and Nevis<\/b><br>2023<br>GDP per capita: $ 30,617<br>Fruit supply: 198.17 kg","<b>Saint Lucia<\/b><br>2023<br>GDP per capita: $ 23,404<br>Fruit supply: 115.03 kg","<b>Saint Vincent and the Grenadines<\/b><br>2023<br>GDP per capita: $ 17,858<br>Fruit supply: 128.16 kg","<b>Trinidad and Tobago<\/b><br>2023<br>GDP per capita: $ 31,197<br>Fruit supply: 73.53 kg","<b>United States<\/b><br>2023<br>GDP per capita: $ 74,159<br>Fruit supply: 169.2 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(226,109,92,1)","opacity":0.80000000000000004,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(226,109,92,1)"}},"hoveron":"points","name":"North America","legendgroup":"North America","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.7830810700150987,4.1204029763635903,3.4970103170047206,3.8326120262436643,3.581462689066166,4.0924581820652914,4.6946777507592632,3.6238535421859779,3.8682767250683034,3.3691369719748985,3.8469812089409179,3.764355449269543,3.5071407744546161],"y":[86.079980000000006,77.769999999999996,69.694739999999996,25.40757,32.825336,93.722210000000004,107.94006,211.70003,176.51940999999999,32.379840000000002,97.117930000000001,111.736565,138.49481],"text":["<b>Australia<\/b><br>2023<br>GDP per capita: $ 60,685<br>Fruit supply: 86.08 kg","<b>Fiji<\/b><br>2023<br>GDP per capita: $ 13,195<br>Fruit supply: 77.77 kg","<b>Kiribati<\/b><br>2023<br>GDP per capita: $  3,141<br>Fruit supply: 69.69 kg","<b>Marshall Islands<\/b><br>2023<br>GDP per capita: $  6,802<br>Fruit supply: 25.41 kg","<b>Micronesia (country)<\/b><br>2023<br>GDP per capita: $  3,815<br>Fruit supply: 32.83 kg","<b>Nauru<\/b><br>2023<br>GDP per capita: $ 12,373<br>Fruit supply: 93.72 kg","<b>New Zealand<\/b><br>2023<br>GDP per capita: $ 49,508<br>Fruit supply: 107.94 kg","<b>Papua New Guinea<\/b><br>2023<br>GDP per capita: $  4,206<br>Fruit supply: 211.7 kg","<b>Samoa<\/b><br>2023<br>GDP per capita: $  7,384<br>Fruit supply: 176.52 kg","<b>Solomon Islands<\/b><br>2023<br>GDP per capita: $  2,340<br>Fruit supply: 32.38 kg","<b>Tonga<\/b><br>2023<br>GDP per capita: $  7,030<br>Fruit supply: 97.12 kg","<b>Tuvalu<\/b><br>2023<br>GDP per capita: $  5,812<br>Fruit supply: 111.74 kg","<b>Vanuatu<\/b><br>2023<br>GDP per capita: $  3,215<br>Fruit supply: 138.49 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(96,192,231,1)","opacity":0.80000000000000004,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(96,192,231,1)"}},"hoveron":"points","name":"Oceania","legendgroup":"Oceania","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.43505395714475,4.0650624731711771,4.2805740911351178,4.4707584634081252,4.2644163399489559,4.15664057371976,4.6929557875737489,4.1993735762662627,4.1854736482083243,4.2792303088545074,4.4921910203695425],"y":[74.109989999999996,85.149994000000007,106.77,76.809989999999999,153.69998000000001,80.41001,345.89706000000001,78.180000000000007,135.55001999999999,62.979799999999997,98.559910000000002],"text":["<b>Argentina<\/b><br>2023<br>GDP per capita: $ 27,230<br>Fruit supply: 74.11 kg","<b>Bolivia<\/b><br>2023<br>GDP per capita: $ 11,616<br>Fruit supply: 85.15 kg","<b>Brazil<\/b><br>2023<br>GDP per capita: $ 19,080<br>Fruit supply: 106.77 kg","<b>Chile<\/b><br>2023<br>GDP per capita: $ 29,564<br>Fruit supply: 76.81 kg","<b>Colombia<\/b><br>2023<br>GDP per capita: $ 18,383<br>Fruit supply: 153.7 kg","<b>Ecuador<\/b><br>2023<br>GDP per capita: $ 14,343<br>Fruit supply: 80.41 kg","<b>Guyana<\/b><br>2023<br>GDP per capita: $ 49,312<br>Fruit supply: 345.9 kg","<b>Paraguay<\/b><br>2023<br>GDP per capita: $ 15,826<br>Fruit supply: 78.18 kg","<b>Peru<\/b><br>2023<br>GDP per capita: $ 15,328<br>Fruit supply: 135.55 kg","<b>Suriname<\/b><br>2023<br>GDP per capita: $ 19,021<br>Fruit supply: 62.98 kg","<b>Uruguay<\/b><br>2023<br>GDP per capita: $ 31,059<br>Fruit supply: 98.56 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(176,65,105,1)","opacity":0.80000000000000004,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(176,65,105,1)"}},"hoveron":"points","name":"South America","legendgroup":"South America","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":23.305936073059364,"r":7.3059360730593621,"b":37.260273972602747,"l":43.105022831050235},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[3.0809367597060842,5.1743357453972223],"tickmode":"array","ticktext":["$2,000","$5,000","$10,000","$20,000","$50,000","$100,000"],"tickvals":[3.3010299956639813,3.6989700043360187,4,4.3010299956639813,4.6989700043360187,5],"categoryorder":"array","categoryarray":["$2,000","$5,000","$10,000","$20,000","$50,000","$100,000"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(190,190,190,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-19,399],"tickmode":"array","ticktext":["0","50","100","150","200","250","300","350"],"tickvals":[0,50,100,150,200,250,300,350],"categoryorder":"array","categoryarray":["0","50","100","150","200","250","300","350"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(190,190,190,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Fruit supply per person (kilograms per year)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[],"showlegend":true,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"fecb56baed5b":{"x":{},"y":{},"colour":{},"text":{},"type":"scatter"}},"cur_data":"fecb56baed5b","visdat":{"fecb56baed5b":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>fruitdata_countries <span class="ot">&lt;-</span> fruitdata <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb18-3"><a href="#cb18-3"></a>    <span class="at">country_color =</span> <span class="fu">if_else</span>(entity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"United States"</span>, <span class="st">"Costa Rica"</span>, <span class="st">"Japan"</span>, <span class="st">"Brazil"</span>), owidregion, <span class="st">"Other"</span>),</span>
+<span id="cb18-4"><a href="#cb18-4"></a>    <span class="at">point_alpha =</span> <span class="fu">if_else</span>(entity <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"United States"</span>, <span class="st">"Costa Rica"</span>, <span class="st">"Japan"</span>, <span class="st">"Brazil"</span>), <span class="dv">1</span>, <span class="fl">0.1</span>)</span>
+<span id="cb18-5"><a href="#cb18-5"></a>  )</span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a>p2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> fruitdata_countries, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdppercapita, <span class="at">y =</span> fruitconsumption, <span class="at">color =</span> country_color, <span class="at">alpha =</span> point_alpha,</span>
+<span id="cb18-8"><a href="#cb18-8"></a>              <span class="at">text =</span> <span class="fu">paste0</span>(</span>
+<span id="cb18-9"><a href="#cb18-9"></a>                <span class="st">"&lt;b&gt;"</span>, entity, <span class="st">"&lt;/b&gt;&lt;br&gt;"</span>,</span>
+<span id="cb18-10"><a href="#cb18-10"></a>                <span class="st">"2023&lt;br&gt;"</span>,</span>
+<span id="cb18-11"><a href="#cb18-11"></a>                <span class="st">"GDP per capita: $"</span>, <span class="fu">format</span>(<span class="fu">round</span>(gdppercapita), <span class="at">big.mark =</span> <span class="st">","</span>), <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb18-12"><a href="#cb18-12"></a>                <span class="st">"Fruit supply: "</span>, <span class="fu">round</span>(fruitconsumption, <span class="dv">2</span>), <span class="st">" kg"</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a>              )</span>
+<span id="cb18-14"><a href="#cb18-14"></a>            )) <span class="sc">+</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(owid_colors, <span class="st">"Other"</span> <span class="ot">=</span> <span class="st">"gray"</span>)) <span class="sc">+</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a><span class="fu">scale_alpha_identity</span>() <span class="sc">+</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="fu">scale_x_log10</span>(</span>
+<span id="cb18-19"><a href="#cb18-19"></a>    <span class="at">labels =</span> <span class="fu">label_dollar</span>(<span class="at">accuracy =</span> <span class="dv">1</span>),</span>
+<span id="cb18-20"><a href="#cb18-20"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>, <span class="dv">20000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>),</span>
+<span id="cb18-21"><a href="#cb18-21"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">120000</span>)) <span class="sc">+</span></span>
+<span id="cb18-22"><a href="#cb18-22"></a><span class="fu">scale_y_continuous</span>(</span>
+<span id="cb18-23"><a href="#cb18-23"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">350</span>, <span class="at">by =</span> <span class="dv">50</span>),</span>
+<span id="cb18-24"><a href="#cb18-24"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">380</span>)) <span class="sc">+</span></span>
+<span id="cb18-25"><a href="#cb18-25"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)"</span>, <span class="at">y =</span> <span class="st">"Fruit supply per person (kilograms per year)"</span>, <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb18-26"><a href="#cb18-26"></a><span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb18-27"><a href="#cb18-27"></a>  <span class="fu">theme</span>(</span>
+<span id="cb18-28"><a href="#cb18-28"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray"</span>),</span>
+<span id="cb18-29"><a href="#cb18-29"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb18-30"><a href="#cb18-30"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>) </span>
+<span id="cb18-31"><a href="#cb18-31"></a></span>
+<span id="cb18-32"><a href="#cb18-32"></a>interactive_plot_countries <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(p2, <span class="at">tooltip =</span> <span class="st">"text"</span>)</span>
+<span id="cb18-33"><a href="#cb18-33"></a>interactive_plot_countries</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-30cec16537a86ab2d0ef" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-30cec16537a86ab2d0ef">{"x":{"data":[{"x":[4.4146329448739134,4.8701622251583627],"y":[77.120056000000005,169.19999999999999],"text":["<b>Costa Rica<\/b><br>2023<br>GDP per capita: $ 25,980<br>Fruit supply: 77.12 kg","<b>United States<\/b><br>2023<br>GDP per capita: $ 74,159<br>Fruit supply: 169.2 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(226,109,92,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(226,109,92,1)"}},"hoveron":"points","name":"North America","legendgroup":"North America","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3.2975006443152006,4.3113518997369509,4.1806798352264076,3.9439029464251423,4.4544491670554267,4.43505395714475,4.2878633326957312,4.7830810700150987,4.8098040425893691,4.3285984897788614,4.5468050115985497,4.762077381286308,3.91605358143712,4.3287601477731528,4.4437703538381879,4.7999977117197865,4.0924051228515514,4.1646590146929849,4.0650624731711771,4.2967748467403117,4.2772075067144382,4.5194843059549159,3.3955372499546677,3.8257695225314965,3.6879969800568735,4.7597995481221265,3.9651292812061669,4.4707584634081252,4.355778525902787,4.2644163399489559,3.5358511157343941,3.7904461539729315,3.81430747361915,4.6161624464768973,4.7114168379305452,4.6772273266075208,3.1929402624784928,4.8412294129519893,3.8136262635760354,4.367029425094338,3.6365960051716693,4.15664057371976,4.2224924266384054,4.0578427330497728,4.6158303360273374,4.0078119362183227,3.4405878371313734,4.1204029763635903,4.750129321026149,4.7347736191659484,4.2718746302409754,3.4718193809502909,4.3539264200914696,4.799611864270668,3.8330538401869316,4.5646720993650813,4.2328222562165498,4.092894187477329,3.5916014639364011,3.4303615760156863,4.6929557875737489,3.4721632836361254,3.8107619537480804,4.8091188672265339,4.6056632613638264,4.8332644384782952,3.968564943083106,4.1427014640693782,4.2315923173504197,4.1206503537300394,5.0713742669598298,4.6769417905677946,4.7232119718573715,4.0568596099715792,3.9722655472710859,4.5403699486499303,3.7552515388643397,3.4970103170047206,4.6792225303502297,3.8179469711672689,3.9228373120350164,4.5714493768918052,4.0542402208809438,3.4142761803438146,3.2086895267395552,4.0960961822021478,4.6642630434603474,null,5.0204242673562263,3.2120439437407304,3.2172993166597257,4.5166367371066309,4.3489479799012916,4.7811691841629855,3.8326120262436643,3.7977158033139999,4.4254528967856732,4.3407860218266441,3.581462689066166,4.2038614869533504,4.2101275274088721,4.4352631880181459,3.9501384948629963,3.1796311747791539,3.7294999421600927,4.005938278543927,4.0924581820652914,3.686746214060503,4.8463304924910995,4.6946777507592632,3.8748602427615131,3.2277746987306295,3.8945284217505889,4.3702413623859782,4.9546546040908188,4.5774184576214516,3.7339006776765089,4.5547670922054317,3.6238535421859779,4.1993735762662627,4.1854736482083243,3.9955708352830372,4.6402106986878957,4.6208463212307906,5.0665644049709666,4.603326878743121,4.6008350751205525,3.4861468550192556,4.4859566481921762,4.3692853389688713,4.2518387525030743,3.8682767250683034,3.7436118197790078,4.8094374485795042,3.6339491150836309,4.4105282227198446,4.456902571545224,3.4821509681919491,4.5967974076097864,4.6810369442574267,3.3691369719748985,4.1365739601010123,4.7326296945628927,4.6750685425706253,4.1147757313781703,4.2792303088545074,4.7970095611812456,4.915375032753567,3.6505332587234149,3.5588037569717157,4.3261607352973126,3.8469812089409179,4.494107320161616,4.102123551235664,4.5449254873332965,4.2520371501490892,3.764355449269543,3.4457685036191443,4.2018600703080278,4.8465835754458562,4.720925335039456,4.4921910203695425,4.0003336705256274,3.5071407744546161,4.1318089873186921,3.5650781644207092,3.717505947436639],"y":[39.920000000000002,185.68000000000001,107.13999,82.420000000000002,241.70150000000001,74.109989999999996,112.20968999999999,86.079980000000006,117.22995,91.320009999999996,309.86070000000001,125.13969,30.350000000000001,103.15745,62.400005,79.599990000000005,60.929703000000003,30.869765999999998,85.149994000000007,196.59988000000001,46.639960000000002,74.429950000000005,59.850006,17.719995000000001,93.299999999999997,112.22001,51.969504999999998,76.809989999999999,114.35999,153.69998000000001,97.109999999999999,41.700000000000003,62.409996,104.97992000000001,77.789940000000001,78.859984999999995,51.469996999999999,106.55011,39.489623999999999,379.63004000000001,16.419976999999999,80.41001,94.030000000000001,82.779883999999996,81.8703,75.620186000000004,10.969999,77.769999999999996,92.170079999999999,105.18998999999999,131.30000000000001,6.0700089999999998,47.759950000000003,86.679990000000004,164.99996999999999,121.56,160.17085,69.749989999999997,103.44001,46.429940000000002,345.89706000000001,87.349980000000002,57.749980000000001,75.069916000000006,81.259960000000007,130.14034000000001,65.640000000000001,85.379999999999995,123.37000999999999,47.586269999999999,106.93001599999999,117.789986,121.10999,144.07026999999999,40.849964,63.549970000000002,79.209990000000005,69.694739999999996,92.799980000000005,39.549984000000002,132.77982,62.470036,103.76993,15.599959,36.359966,89.940020000000004,58.039920000000002,135.90978999999999,66.159450000000007,36.699992999999999,175.94,59.990012999999998,168.50389999999999,83.489369999999994,25.40757,22.009989999999998,57.629955000000002,137.38,32.825336,124.0819,20.839950000000002,120.75942999999999,88.989959999999996,16.479997999999998,40.130000000000003,46.389811999999999,93.722210000000004,51.259990000000002,157.89993000000001,107.94006,59.439920000000001,21.440006,68.269999999999996,97.560000000000002,113.83006,141.18008,24.050000000000001,154.28005999999999,211.70003,78.180000000000007,135.55001999999999,98.200000000000003,66.879980000000003,136.22005999999999,71.219859999999997,112.87999000000001,73.099999999999994,99.309974999999994,198.17251999999999,115.03294,128.15608,176.51940999999999,192.13999999999999,105.31999999999999,19.669996000000001,147.60991999999999,84.502740000000003,30.749952,61.139919999999996,131.06036,32.379840000000002,26.409996,48.059998,113.82999,43.030006,62.979799999999997,86.969980000000007,96.339950000000002,29.709978,67.180000000000007,71.679990000000004,97.117930000000001,73.529610000000005,109.37996,167.77000000000001,51.550020000000004,111.736565,207.60999000000001,51.810009999999998,64.129943999999995,92.08999,98.559910000000002,106.83999,138.49481,99.609999999999999,4.2700009999999997,43.009974999999997],"text":["<b>Afghanistan<\/b><br>2023<br>GDP per capita: $  1,984<br>Fruit supply: 39.92 kg","<b>Albania<\/b><br>2023<br>GDP per capita: $ 20,481<br>Fruit supply: 185.68 kg","<b>Algeria<\/b><br>2023<br>GDP per capita: $ 15,159<br>Fruit supply: 107.14 kg","<b>Angola<\/b><br>2023<br>GDP per capita: $  8,788<br>Fruit supply: 82.42 kg","<b>Antigua and Barbuda<\/b><br>2023<br>GDP per capita: $ 28,474<br>Fruit supply: 241.7 kg","<b>Argentina<\/b><br>2023<br>GDP per capita: $ 27,230<br>Fruit supply: 74.11 kg","<b>Armenia<\/b><br>2023<br>GDP per capita: $ 19,403<br>Fruit supply: 112.21 kg","<b>Australia<\/b><br>2023<br>GDP per capita: $ 60,685<br>Fruit supply: 86.08 kg","<b>Austria<\/b><br>2023<br>GDP per capita: $ 64,536<br>Fruit supply: 117.23 kg","<b>Azerbaijan<\/b><br>2023<br>GDP per capita: $ 21,311<br>Fruit supply: 91.32 kg","<b>Bahamas<\/b><br>2023<br>GDP per capita: $ 35,221<br>Fruit supply: 309.86 kg","<b>Bahrain<\/b><br>2023<br>GDP per capita: $ 57,820<br>Fruit supply: 125.14 kg","<b>Bangladesh<\/b><br>2023<br>GDP per capita: $  8,242<br>Fruit supply: 30.35 kg","<b>Barbados<\/b><br>2023<br>GDP per capita: $ 21,319<br>Fruit supply: 103.16 kg","<b>Belarus<\/b><br>2023<br>GDP per capita: $ 27,782<br>Fruit supply: 62.4 kg","<b>Belgium<\/b><br>2023<br>GDP per capita: $ 63,095<br>Fruit supply: 79.6 kg","<b>Belize<\/b><br>2023<br>GDP per capita: $ 12,371<br>Fruit supply: 60.93 kg","<b>Bhutan<\/b><br>2023<br>GDP per capita: $ 14,610<br>Fruit supply: 30.87 kg","<b>Bolivia<\/b><br>2023<br>GDP per capita: $ 11,616<br>Fruit supply: 85.15 kg","<b>Bosnia and Herzegovina<\/b><br>2023<br>GDP per capita: $ 19,805<br>Fruit supply: 196.6 kg","<b>Botswana<\/b><br>2023<br>GDP per capita: $ 18,932<br>Fruit supply: 46.64 kg","<b>Bulgaria<\/b><br>2023<br>GDP per capita: $ 33,074<br>Fruit supply: 74.43 kg","<b>Burkina Faso<\/b><br>2023<br>GDP per capita: $  2,486<br>Fruit supply: 59.85 kg","<b>Cambodia<\/b><br>2023<br>GDP per capita: $  6,695<br>Fruit supply: 17.72 kg","<b>Cameroon<\/b><br>2023<br>GDP per capita: $  4,875<br>Fruit supply: 93.3 kg","<b>Canada<\/b><br>2023<br>GDP per capita: $ 57,517<br>Fruit supply: 112.22 kg","<b>Cape Verde<\/b><br>2023<br>GDP per capita: $  9,228<br>Fruit supply: 51.97 kg","<b>Chile<\/b><br>2023<br>GDP per capita: $ 29,564<br>Fruit supply: 76.81 kg","<b>China<\/b><br>2023<br>GDP per capita: $ 22,687<br>Fruit supply: 114.36 kg","<b>Colombia<\/b><br>2023<br>GDP per capita: $ 18,383<br>Fruit supply: 153.7 kg","<b>Comoros<\/b><br>2023<br>GDP per capita: $  3,434<br>Fruit supply: 97.11 kg","<b>Congo<\/b><br>2023<br>GDP per capita: $  6,172<br>Fruit supply: 41.7 kg","<b>Cote d'Ivoire<\/b><br>2023<br>GDP per capita: $  6,521<br>Fruit supply: 62.41 kg","<b>Croatia<\/b><br>2023<br>GDP per capita: $ 41,320<br>Fruit supply: 104.98 kg","<b>Cyprus<\/b><br>2023<br>GDP per capita: $ 51,454<br>Fruit supply: 77.79 kg","<b>Czechia<\/b><br>2023<br>GDP per capita: $ 47,558<br>Fruit supply: 78.86 kg","<b>Democratic Republic of Congo<\/b><br>2023<br>GDP per capita: $  1,559<br>Fruit supply: 51.47 kg","<b>Denmark<\/b><br>2023<br>GDP per capita: $ 69,379<br>Fruit supply: 106.55 kg","<b>Djibouti<\/b><br>2023<br>GDP per capita: $  6,511<br>Fruit supply: 39.49 kg","<b>Dominican Republic<\/b><br>2023<br>GDP per capita: $ 23,282<br>Fruit supply: 379.63 kg","<b>East Timor<\/b><br>2023<br>GDP per capita: $  4,331<br>Fruit supply: 16.42 kg","<b>Ecuador<\/b><br>2023<br>GDP per capita: $ 14,343<br>Fruit supply: 80.41 kg","<b>Egypt<\/b><br>2023<br>GDP per capita: $ 16,691<br>Fruit supply: 94.03 kg","<b>El Salvador<\/b><br>2023<br>GDP per capita: $ 11,425<br>Fruit supply: 82.78 kg","<b>Estonia<\/b><br>2023<br>GDP per capita: $ 41,289<br>Fruit supply: 81.87 kg","<b>Eswatini<\/b><br>2023<br>GDP per capita: $ 10,182<br>Fruit supply: 75.62 kg","<b>Ethiopia<\/b><br>2023<br>GDP per capita: $  2,758<br>Fruit supply: 10.97 kg","<b>Fiji<\/b><br>2023<br>GDP per capita: $ 13,195<br>Fruit supply: 77.77 kg","<b>Finland<\/b><br>2023<br>GDP per capita: $ 56,251<br>Fruit supply: 92.17 kg","<b>France<\/b><br>2023<br>GDP per capita: $ 54,297<br>Fruit supply: 105.19 kg","<b>Gabon<\/b><br>2023<br>GDP per capita: $ 18,701<br>Fruit supply: 131.3 kg","<b>Gambia<\/b><br>2023<br>GDP per capita: $  2,964<br>Fruit supply: 6.07 kg","<b>Georgia<\/b><br>2023<br>GDP per capita: $ 22,591<br>Fruit supply: 47.76 kg","<b>Germany<\/b><br>2023<br>GDP per capita: $ 63,039<br>Fruit supply: 86.68 kg","<b>Ghana<\/b><br>2023<br>GDP per capita: $  6,809<br>Fruit supply: 165 kg","<b>Greece<\/b><br>2023<br>GDP per capita: $ 36,701<br>Fruit supply: 121.56 kg","<b>Grenada<\/b><br>2023<br>GDP per capita: $ 17,093<br>Fruit supply: 160.17 kg","<b>Guatemala<\/b><br>2023<br>GDP per capita: $ 12,385<br>Fruit supply: 69.75 kg","<b>Guinea<\/b><br>2023<br>GDP per capita: $  3,905<br>Fruit supply: 103.44 kg","<b>Guinea-Bissau<\/b><br>2023<br>GDP per capita: $  2,694<br>Fruit supply: 46.43 kg","<b>Guyana<\/b><br>2023<br>GDP per capita: $ 49,312<br>Fruit supply: 345.9 kg","<b>Haiti<\/b><br>2023<br>GDP per capita: $  2,966<br>Fruit supply: 87.35 kg","<b>Honduras<\/b><br>2023<br>GDP per capita: $  6,468<br>Fruit supply: 57.75 kg","<b>Hong Kong<\/b><br>2023<br>GDP per capita: $ 64,435<br>Fruit supply: 75.07 kg","<b>Hungary<\/b><br>2023<br>GDP per capita: $ 40,333<br>Fruit supply: 81.26 kg","<b>Iceland<\/b><br>2023<br>GDP per capita: $ 68,118<br>Fruit supply: 130.14 kg","<b>India<\/b><br>2023<br>GDP per capita: $  9,302<br>Fruit supply: 65.64 kg","<b>Indonesia<\/b><br>2023<br>GDP per capita: $ 13,890<br>Fruit supply: 85.38 kg","<b>Iran<\/b><br>2023<br>GDP per capita: $ 17,045<br>Fruit supply: 123.37 kg","<b>Iraq<\/b><br>2023<br>GDP per capita: $ 13,202<br>Fruit supply: 47.59 kg","<b>Ireland<\/b><br>2023<br>GDP per capita: $117,862<br>Fruit supply: 106.93 kg","<b>Israel<\/b><br>2023<br>GDP per capita: $ 47,527<br>Fruit supply: 117.79 kg","<b>Italy<\/b><br>2023<br>GDP per capita: $ 52,870<br>Fruit supply: 121.11 kg","<b>Jamaica<\/b><br>2023<br>GDP per capita: $ 11,399<br>Fruit supply: 144.07 kg","<b>Jordan<\/b><br>2023<br>GDP per capita: $  9,381<br>Fruit supply: 40.85 kg","<b>Kazakhstan<\/b><br>2023<br>GDP per capita: $ 34,703<br>Fruit supply: 63.55 kg","<b>Kenya<\/b><br>2023<br>GDP per capita: $  5,692<br>Fruit supply: 79.21 kg","<b>Kiribati<\/b><br>2023<br>GDP per capita: $  3,141<br>Fruit supply: 69.69 kg","<b>Kuwait<\/b><br>2023<br>GDP per capita: $ 47,777<br>Fruit supply: 92.8 kg","<b>Kyrgyzstan<\/b><br>2023<br>GDP per capita: $  6,576<br>Fruit supply: 39.55 kg","<b>Laos<\/b><br>2023<br>GDP per capita: $  8,372<br>Fruit supply: 132.78 kg","<b>Latvia<\/b><br>2023<br>GDP per capita: $ 37,278<br>Fruit supply: 62.47 kg","<b>Lebanon<\/b><br>2023<br>GDP per capita: $ 11,330<br>Fruit supply: 103.77 kg","<b>Lesotho<\/b><br>2023<br>GDP per capita: $  2,596<br>Fruit supply: 15.6 kg","<b>Liberia<\/b><br>2023<br>GDP per capita: $  1,617<br>Fruit supply: 36.36 kg","<b>Libya<\/b><br>2023<br>GDP per capita: $ 12,477<br>Fruit supply: 89.94 kg","<b>Lithuania<\/b><br>2023<br>GDP per capita: $ 46,160<br>Fruit supply: 58.04 kg","<b>Luxembourg<\/b><br>2023<br>GDP per capita: $130,049<br>Fruit supply: 135.91 kg","<b>Macao<\/b><br>2023<br>GDP per capita: $104,815<br>Fruit supply: 66.16 kg","<b>Madagascar<\/b><br>2023<br>GDP per capita: $  1,629<br>Fruit supply: 36.7 kg","<b>Malawi<\/b><br>2023<br>GDP per capita: $  1,649<br>Fruit supply: 175.94 kg","<b>Malaysia<\/b><br>2023<br>GDP per capita: $ 32,858<br>Fruit supply: 59.99 kg","<b>Maldives<\/b><br>2023<br>GDP per capita: $ 22,333<br>Fruit supply: 168.5 kg","<b>Malta<\/b><br>2023<br>GDP per capita: $ 60,418<br>Fruit supply: 83.49 kg","<b>Marshall Islands<\/b><br>2023<br>GDP per capita: $  6,802<br>Fruit supply: 25.41 kg","<b>Mauritania<\/b><br>2023<br>GDP per capita: $  6,276<br>Fruit supply: 22.01 kg","<b>Mauritius<\/b><br>2023<br>GDP per capita: $ 26,635<br>Fruit supply: 57.63 kg","<b>Mexico<\/b><br>2023<br>GDP per capita: $ 21,917<br>Fruit supply: 137.38 kg","<b>Micronesia (country)<\/b><br>2023<br>GDP per capita: $  3,815<br>Fruit supply: 32.83 kg","<b>Moldova<\/b><br>2023<br>GDP per capita: $ 15,990<br>Fruit supply: 124.08 kg","<b>Mongolia<\/b><br>2023<br>GDP per capita: $ 16,223<br>Fruit supply: 20.84 kg","<b>Montenegro<\/b><br>2023<br>GDP per capita: $ 27,244<br>Fruit supply: 120.76 kg","<b>Morocco<\/b><br>2023<br>GDP per capita: $  8,915<br>Fruit supply: 88.99 kg","<b>Mozambique<\/b><br>2023<br>GDP per capita: $  1,512<br>Fruit supply: 16.48 kg","<b>Myanmar<\/b><br>2023<br>GDP per capita: $  5,364<br>Fruit supply: 40.13 kg","<b>Namibia<\/b><br>2023<br>GDP per capita: $ 10,138<br>Fruit supply: 46.39 kg","<b>Nauru<\/b><br>2023<br>GDP per capita: $ 12,373<br>Fruit supply: 93.72 kg","<b>Nepal<\/b><br>2023<br>GDP per capita: $  4,861<br>Fruit supply: 51.26 kg","<b>Netherlands<\/b><br>2023<br>GDP per capita: $ 70,199<br>Fruit supply: 157.9 kg","<b>New Zealand<\/b><br>2023<br>GDP per capita: $ 49,508<br>Fruit supply: 107.94 kg","<b>Nicaragua<\/b><br>2023<br>GDP per capita: $  7,497<br>Fruit supply: 59.44 kg","<b>Niger<\/b><br>2023<br>GDP per capita: $  1,690<br>Fruit supply: 21.44 kg","<b>Nigeria<\/b><br>2023<br>GDP per capita: $  7,844<br>Fruit supply: 68.27 kg","<b>North Macedonia<\/b><br>2023<br>GDP per capita: $ 23,455<br>Fruit supply: 97.56 kg","<b>Norway<\/b><br>2023<br>GDP per capita: $ 90,085<br>Fruit supply: 113.83 kg","<b>Oman<\/b><br>2023<br>GDP per capita: $ 37,794<br>Fruit supply: 141.18 kg","<b>Pakistan<\/b><br>2023<br>GDP per capita: $  5,419<br>Fruit supply: 24.05 kg","<b>Panama<\/b><br>2023<br>GDP per capita: $ 35,873<br>Fruit supply: 154.28 kg","<b>Papua New Guinea<\/b><br>2023<br>GDP per capita: $  4,206<br>Fruit supply: 211.7 kg","<b>Paraguay<\/b><br>2023<br>GDP per capita: $ 15,826<br>Fruit supply: 78.18 kg","<b>Peru<\/b><br>2023<br>GDP per capita: $ 15,328<br>Fruit supply: 135.55 kg","<b>Philippines<\/b><br>2023<br>GDP per capita: $  9,899<br>Fruit supply: 98.2 kg","<b>Poland<\/b><br>2023<br>GDP per capita: $ 43,673<br>Fruit supply: 66.88 kg","<b>Portugal<\/b><br>2023<br>GDP per capita: $ 41,768<br>Fruit supply: 136.22 kg","<b>Qatar<\/b><br>2023<br>GDP per capita: $116,564<br>Fruit supply: 71.22 kg","<b>Romania<\/b><br>2023<br>GDP per capita: $ 40,117<br>Fruit supply: 112.88 kg","<b>Russia<\/b><br>2023<br>GDP per capita: $ 39,887<br>Fruit supply: 73.1 kg","<b>Rwanda<\/b><br>2023<br>GDP per capita: $  3,063<br>Fruit supply: 99.31 kg","<b>Saint Kitts and Nevis<\/b><br>2023<br>GDP per capita: $ 30,617<br>Fruit supply: 198.17 kg","<b>Saint Lucia<\/b><br>2023<br>GDP per capita: $ 23,404<br>Fruit supply: 115.03 kg","<b>Saint Vincent and the Grenadines<\/b><br>2023<br>GDP per capita: $ 17,858<br>Fruit supply: 128.16 kg","<b>Samoa<\/b><br>2023<br>GDP per capita: $  7,384<br>Fruit supply: 176.52 kg","<b>Sao Tome and Principe<\/b><br>2023<br>GDP per capita: $  5,541<br>Fruit supply: 192.14 kg","<b>Saudi Arabia<\/b><br>2023<br>GDP per capita: $ 64,482<br>Fruit supply: 105.32 kg","<b>Senegal<\/b><br>2023<br>GDP per capita: $  4,305<br>Fruit supply: 19.67 kg","<b>Serbia<\/b><br>2023<br>GDP per capita: $ 25,735<br>Fruit supply: 147.61 kg","<b>Seychelles<\/b><br>2023<br>GDP per capita: $ 28,635<br>Fruit supply: 84.5 kg","<b>Sierra Leone<\/b><br>2023<br>GDP per capita: $  3,035<br>Fruit supply: 30.75 kg","<b>Slovakia<\/b><br>2023<br>GDP per capita: $ 39,518<br>Fruit supply: 61.14 kg","<b>Slovenia<\/b><br>2023<br>GDP per capita: $ 47,977<br>Fruit supply: 131.06 kg","<b>Solomon Islands<\/b><br>2023<br>GDP per capita: $  2,340<br>Fruit supply: 32.38 kg","<b>South Africa<\/b><br>2023<br>GDP per capita: $ 13,695<br>Fruit supply: 26.41 kg","<b>South Korea<\/b><br>2023<br>GDP per capita: $ 54,029<br>Fruit supply: 48.06 kg","<b>Spain<\/b><br>2023<br>GDP per capita: $ 47,323<br>Fruit supply: 113.83 kg","<b>Sri Lanka<\/b><br>2023<br>GDP per capita: $ 13,025<br>Fruit supply: 43.03 kg","<b>Suriname<\/b><br>2023<br>GDP per capita: $ 19,021<br>Fruit supply: 62.98 kg","<b>Sweden<\/b><br>2023<br>GDP per capita: $ 62,663<br>Fruit supply: 86.97 kg","<b>Switzerland<\/b><br>2023<br>GDP per capita: $ 82,295<br>Fruit supply: 96.34 kg","<b>Tajikistan<\/b><br>2023<br>GDP per capita: $  4,472<br>Fruit supply: 29.71 kg","<b>Tanzania<\/b><br>2023<br>GDP per capita: $  3,621<br>Fruit supply: 67.18 kg","<b>Thailand<\/b><br>2023<br>GDP per capita: $ 21,191<br>Fruit supply: 71.68 kg","<b>Tonga<\/b><br>2023<br>GDP per capita: $  7,030<br>Fruit supply: 97.12 kg","<b>Trinidad and Tobago<\/b><br>2023<br>GDP per capita: $ 31,197<br>Fruit supply: 73.53 kg","<b>Tunisia<\/b><br>2023<br>GDP per capita: $ 12,651<br>Fruit supply: 109.38 kg","<b>Turkey<\/b><br>2023<br>GDP per capita: $ 35,069<br>Fruit supply: 167.77 kg","<b>Turkmenistan<\/b><br>2023<br>GDP per capita: $ 17,866<br>Fruit supply: 51.55 kg","<b>Tuvalu<\/b><br>2023<br>GDP per capita: $  5,812<br>Fruit supply: 111.74 kg","<b>Uganda<\/b><br>2023<br>GDP per capita: $  2,791<br>Fruit supply: 207.61 kg","<b>Ukraine<\/b><br>2023<br>GDP per capita: $ 15,917<br>Fruit supply: 51.81 kg","<b>United Arab Emirates<\/b><br>2023<br>GDP per capita: $ 70,240<br>Fruit supply: 64.13 kg","<b>United Kingdom<\/b><br>2023<br>GDP per capita: $ 52,593<br>Fruit supply: 92.09 kg","<b>Uruguay<\/b><br>2023<br>GDP per capita: $ 31,059<br>Fruit supply: 98.56 kg","<b>Uzbekistan<\/b><br>2023<br>GDP per capita: $ 10,008<br>Fruit supply: 106.84 kg","<b>Vanuatu<\/b><br>2023<br>GDP per capita: $  3,215<br>Fruit supply: 138.49 kg","<b>Vietnam<\/b><br>2023<br>GDP per capita: $ 13,546<br>Fruit supply: 99.61 kg","<b>Zambia<\/b><br>2023<br>GDP per capita: $  3,673<br>Fruit supply: 4.27 kg","<b>Zimbabwe<\/b><br>2023<br>GDP per capita: $  5,218<br>Fruit supply: 43.01 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(190,190,190,1)","opacity":0.10000000000000001,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(190,190,190,1)"}},"hoveron":"points","name":"Other","legendgroup":"Other","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4.2805740911351178],"y":[106.77],"text":"<b>Brazil<\/b><br>2023<br>GDP per capita: $ 19,080<br>Fruit supply: 106.77 kg","type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(176,65,105,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(176,65,105,1)"}},"hoveron":"points","name":"South America","legendgroup":"South America","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":23.305936073059364,"r":7.3059360730593621,"b":37.260273972602747,"l":43.105022831050235},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[3.0809367597060842,5.1743357453972223],"tickmode":"array","ticktext":["$2,000","$5,000","$10,000","$20,000","$50,000","$100,000"],"tickvals":[3.3010299956639813,3.6989700043360187,4,4.3010299956639813,4.6989700043360187,5],"categoryorder":"array","categoryarray":["$2,000","$5,000","$10,000","$20,000","$50,000","$100,000"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(190,190,190,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-19,399],"tickmode":"array","ticktext":["0","50","100","150","200","250","300","350"],"tickvals":[0,50,100,150,200,250,300,350],"categoryorder":"array","categoryarray":["0","50","100","150","200","250","300","350"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(190,190,190,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Fruit supply per person (kilograms per year)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"fecb73389334":{"x":{},"y":{},"colour":{},"alpha":{},"text":{},"type":"scatter"}},"cur_data":"fecb73389334","visdat":{"fecb73389334":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>fruitdata_continent <span class="ot">&lt;-</span> fruitdata <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-3"><a href="#cb19-3"></a>    <span class="at">continent_color =</span> <span class="fu">if_else</span>(owidregion <span class="sc">==</span> <span class="st">"North America"</span>, owidregion, <span class="st">"Other"</span>),</span>
+<span id="cb19-4"><a href="#cb19-4"></a>    <span class="at">point_alpha =</span> <span class="fu">if_else</span>(owidregion <span class="sc">==</span> <span class="st">"North America"</span>, <span class="dv">1</span>, <span class="fl">0.1</span>)</span>
+<span id="cb19-5"><a href="#cb19-5"></a>  )</span>
+<span id="cb19-6"><a href="#cb19-6"></a></span>
+<span id="cb19-7"><a href="#cb19-7"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> fruitdata_continent, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdppercapita, <span class="at">y =</span> fruitconsumption, <span class="at">color =</span> continent_color, <span class="at">alpha =</span> point_alpha,</span>
+<span id="cb19-8"><a href="#cb19-8"></a>              <span class="at">text =</span> <span class="fu">paste0</span>(</span>
+<span id="cb19-9"><a href="#cb19-9"></a>                <span class="st">"&lt;b&gt;"</span>, entity, <span class="st">"&lt;/b&gt;&lt;br&gt;"</span>,</span>
+<span id="cb19-10"><a href="#cb19-10"></a>                <span class="st">"2023&lt;br&gt;"</span>,</span>
+<span id="cb19-11"><a href="#cb19-11"></a>                <span class="st">"GDP per capita: $"</span>, <span class="fu">format</span>(<span class="fu">round</span>(gdppercapita), <span class="at">big.mark =</span> <span class="st">","</span>), <span class="st">"&lt;br&gt;"</span>,</span>
+<span id="cb19-12"><a href="#cb19-12"></a>                <span class="st">"Fruit supply: "</span>, <span class="fu">round</span>(fruitconsumption, <span class="dv">2</span>), <span class="st">" kg"</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a>              )</span>
+<span id="cb19-14"><a href="#cb19-14"></a>            )) <span class="sc">+</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"North America"</span> <span class="ot">=</span> <span class="st">"#e26d5c"</span>, <span class="st">"Other"</span> <span class="ot">=</span> <span class="st">"gray"</span>)) <span class="sc">+</span></span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="fu">scale_alpha_identity</span>() <span class="sc">+</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a><span class="fu">scale_x_log10</span>(</span>
+<span id="cb19-19"><a href="#cb19-19"></a>    <span class="at">labels =</span> <span class="fu">label_dollar</span>(<span class="at">accuracy =</span> <span class="dv">1</span>),</span>
+<span id="cb19-20"><a href="#cb19-20"></a>    <span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">5000</span>, <span class="dv">10000</span>, <span class="dv">20000</span>, <span class="dv">50000</span>, <span class="dv">100000</span>),</span>
+<span id="cb19-21"><a href="#cb19-21"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">1500</span>, <span class="dv">120000</span>)) <span class="sc">+</span></span>
+<span id="cb19-22"><a href="#cb19-22"></a><span class="fu">scale_y_continuous</span>(</span>
+<span id="cb19-23"><a href="#cb19-23"></a>    <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">350</span>, <span class="at">by =</span> <span class="dv">50</span>),</span>
+<span id="cb19-24"><a href="#cb19-24"></a>    <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">380</span>)) <span class="sc">+</span></span>
+<span id="cb19-25"><a href="#cb19-25"></a><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)"</span>, <span class="at">y =</span> <span class="st">"Fruit supply per person (kilograms per year)"</span>, <span class="at">color =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb19-26"><a href="#cb19-26"></a><span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb19-27"><a href="#cb19-27"></a>  <span class="fu">theme</span>(</span>
+<span id="cb19-28"><a href="#cb19-28"></a>    <span class="at">panel.grid.major =</span> <span class="fu">element_line</span>(<span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"gray"</span>),</span>
+<span id="cb19-29"><a href="#cb19-29"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-30"><a href="#cb19-30"></a>    <span class="at">legend.position =</span> <span class="st">"none"</span>)</span>
+<span id="cb19-31"><a href="#cb19-31"></a></span>
+<span id="cb19-32"><a href="#cb19-32"></a>interactive_plot_continent <span class="ot">&lt;-</span> <span class="fu">ggplotly</span>(p3, <span class="at">tooltip =</span> <span class="st">"text"</span>)</span>
+<span id="cb19-33"><a href="#cb19-33"></a>interactive_plot_continent</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-24d0c58b75dd0e5c21a2" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-24d0c58b75dd0e5c21a2">{"x":{"data":[{"x":[4.4544491670554267,4.5468050115985497,4.3287601477731528,4.0924051228515514,4.7597995481221265,4.4146329448739134,4.367029425094338,4.0578427330497728,4.2328222562165498,4.092894187477329,3.4721632836361254,3.8107619537480804,4.0568596099715792,4.3407860218266441,3.8748602427615131,4.5547670922054317,4.4859566481921762,4.3692853389688713,4.2518387525030743,4.494107320161616,4.8701622251583627],"y":[241.70150000000001,309.86070000000001,103.15745,60.929703000000003,112.22001,77.120056000000005,379.63004000000001,82.779883999999996,160.17085,69.749989999999997,87.349980000000002,57.749980000000001,144.07026999999999,137.38,59.439920000000001,154.28005999999999,198.17251999999999,115.03294,128.15608,73.529610000000005,169.19999999999999],"text":["<b>Antigua and Barbuda<\/b><br>2023<br>GDP per capita: $ 28,474<br>Fruit supply: 241.7 kg","<b>Bahamas<\/b><br>2023<br>GDP per capita: $ 35,221<br>Fruit supply: 309.86 kg","<b>Barbados<\/b><br>2023<br>GDP per capita: $ 21,319<br>Fruit supply: 103.16 kg","<b>Belize<\/b><br>2023<br>GDP per capita: $ 12,371<br>Fruit supply: 60.93 kg","<b>Canada<\/b><br>2023<br>GDP per capita: $ 57,517<br>Fruit supply: 112.22 kg","<b>Costa Rica<\/b><br>2023<br>GDP per capita: $ 25,980<br>Fruit supply: 77.12 kg","<b>Dominican Republic<\/b><br>2023<br>GDP per capita: $ 23,282<br>Fruit supply: 379.63 kg","<b>El Salvador<\/b><br>2023<br>GDP per capita: $ 11,425<br>Fruit supply: 82.78 kg","<b>Grenada<\/b><br>2023<br>GDP per capita: $ 17,093<br>Fruit supply: 160.17 kg","<b>Guatemala<\/b><br>2023<br>GDP per capita: $ 12,385<br>Fruit supply: 69.75 kg","<b>Haiti<\/b><br>2023<br>GDP per capita: $  2,966<br>Fruit supply: 87.35 kg","<b>Honduras<\/b><br>2023<br>GDP per capita: $  6,468<br>Fruit supply: 57.75 kg","<b>Jamaica<\/b><br>2023<br>GDP per capita: $ 11,399<br>Fruit supply: 144.07 kg","<b>Mexico<\/b><br>2023<br>GDP per capita: $ 21,917<br>Fruit supply: 137.38 kg","<b>Nicaragua<\/b><br>2023<br>GDP per capita: $  7,497<br>Fruit supply: 59.44 kg","<b>Panama<\/b><br>2023<br>GDP per capita: $ 35,873<br>Fruit supply: 154.28 kg","<b>Saint Kitts and Nevis<\/b><br>2023<br>GDP per capita: $ 30,617<br>Fruit supply: 198.17 kg","<b>Saint Lucia<\/b><br>2023<br>GDP per capita: $ 23,404<br>Fruit supply: 115.03 kg","<b>Saint Vincent and the Grenadines<\/b><br>2023<br>GDP per capita: $ 17,858<br>Fruit supply: 128.16 kg","<b>Trinidad and Tobago<\/b><br>2023<br>GDP per capita: $ 31,197<br>Fruit supply: 73.53 kg","<b>United States<\/b><br>2023<br>GDP per capita: $ 74,159<br>Fruit supply: 169.2 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(226,109,92,1)","opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(226,109,92,1)"}},"hoveron":"points","name":"North America","legendgroup":"North America","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3.2975006443152006,4.3113518997369509,4.1806798352264076,3.9439029464251423,4.43505395714475,4.2878633326957312,4.7830810700150987,4.8098040425893691,4.3285984897788614,4.762077381286308,3.91605358143712,4.4437703538381879,4.7999977117197865,4.1646590146929849,4.0650624731711771,4.2967748467403117,4.2772075067144382,4.2805740911351178,4.5194843059549159,3.3955372499546677,3.8257695225314965,3.6879969800568735,3.9651292812061669,4.4707584634081252,4.355778525902787,4.2644163399489559,3.5358511157343941,3.7904461539729315,3.81430747361915,4.6161624464768973,4.7114168379305452,4.6772273266075208,3.1929402624784928,4.8412294129519893,3.8136262635760354,3.6365960051716693,4.15664057371976,4.2224924266384054,4.6158303360273374,4.0078119362183227,3.4405878371313734,4.1204029763635903,4.750129321026149,4.7347736191659484,4.2718746302409754,3.4718193809502909,4.3539264200914696,4.799611864270668,3.8330538401869316,4.5646720993650813,3.5916014639364011,3.4303615760156863,4.6929557875737489,4.8091188672265339,4.6056632613638264,4.8332644384782952,3.968564943083106,4.1427014640693782,4.2315923173504197,4.1206503537300394,5.0713742669598298,4.6769417905677946,4.7232119718573715,3.9722655472710859,4.5403699486499303,3.7552515388643397,3.4970103170047206,4.6792225303502297,3.8179469711672689,3.9228373120350164,4.5714493768918052,4.0542402208809438,3.4142761803438146,3.2086895267395552,4.0960961822021478,4.6642630434603474,null,5.0204242673562263,3.2120439437407304,3.2172993166597257,4.5166367371066309,4.3489479799012916,4.7811691841629855,3.8326120262436643,3.7977158033139999,4.4254528967856732,3.581462689066166,4.2038614869533504,4.2101275274088721,4.4352631880181459,3.9501384948629963,3.1796311747791539,3.7294999421600927,4.005938278543927,4.0924581820652914,3.686746214060503,4.8463304924910995,4.6946777507592632,3.2277746987306295,3.8945284217505889,4.3702413623859782,4.9546546040908188,4.5774184576214516,3.7339006776765089,3.6238535421859779,4.1993735762662627,4.1854736482083243,3.9955708352830372,4.6402106986878957,4.6208463212307906,5.0665644049709666,4.603326878743121,4.6008350751205525,3.4861468550192556,3.8682767250683034,3.7436118197790078,4.8094374485795042,3.6339491150836309,4.4105282227198446,4.456902571545224,3.4821509681919491,4.5967974076097864,4.6810369442574267,3.3691369719748985,4.1365739601010123,4.7326296945628927,4.6750685425706253,4.1147757313781703,4.2792303088545074,4.7970095611812456,4.915375032753567,3.6505332587234149,3.5588037569717157,4.3261607352973126,3.8469812089409179,4.102123551235664,4.5449254873332965,4.2520371501490892,3.764355449269543,3.4457685036191443,4.2018600703080278,4.8465835754458562,4.720925335039456,4.4921910203695425,4.0003336705256274,3.5071407744546161,4.1318089873186921,3.5650781644207092,3.717505947436639],"y":[39.920000000000002,185.68000000000001,107.13999,82.420000000000002,74.109989999999996,112.20968999999999,86.079980000000006,117.22995,91.320009999999996,125.13969,30.350000000000001,62.400005,79.599990000000005,30.869765999999998,85.149994000000007,196.59988000000001,46.639960000000002,106.77,74.429950000000005,59.850006,17.719995000000001,93.299999999999997,51.969504999999998,76.809989999999999,114.35999,153.69998000000001,97.109999999999999,41.700000000000003,62.409996,104.97992000000001,77.789940000000001,78.859984999999995,51.469996999999999,106.55011,39.489623999999999,16.419976999999999,80.41001,94.030000000000001,81.8703,75.620186000000004,10.969999,77.769999999999996,92.170079999999999,105.18998999999999,131.30000000000001,6.0700089999999998,47.759950000000003,86.679990000000004,164.99996999999999,121.56,103.44001,46.429940000000002,345.89706000000001,75.069916000000006,81.259960000000007,130.14034000000001,65.640000000000001,85.379999999999995,123.37000999999999,47.586269999999999,106.93001599999999,117.789986,121.10999,40.849964,63.549970000000002,79.209990000000005,69.694739999999996,92.799980000000005,39.549984000000002,132.77982,62.470036,103.76993,15.599959,36.359966,89.940020000000004,58.039920000000002,135.90978999999999,66.159450000000007,36.699992999999999,175.94,59.990012999999998,168.50389999999999,83.489369999999994,25.40757,22.009989999999998,57.629955000000002,32.825336,124.0819,20.839950000000002,120.75942999999999,88.989959999999996,16.479997999999998,40.130000000000003,46.389811999999999,93.722210000000004,51.259990000000002,157.89993000000001,107.94006,21.440006,68.269999999999996,97.560000000000002,113.83006,141.18008,24.050000000000001,211.70003,78.180000000000007,135.55001999999999,98.200000000000003,66.879980000000003,136.22005999999999,71.219859999999997,112.87999000000001,73.099999999999994,99.309974999999994,176.51940999999999,192.13999999999999,105.31999999999999,19.669996000000001,147.60991999999999,84.502740000000003,30.749952,61.139919999999996,131.06036,32.379840000000002,26.409996,48.059998,113.82999,43.030006,62.979799999999997,86.969980000000007,96.339950000000002,29.709978,67.180000000000007,71.679990000000004,97.117930000000001,109.37996,167.77000000000001,51.550020000000004,111.736565,207.60999000000001,51.810009999999998,64.129943999999995,92.08999,98.559910000000002,106.83999,138.49481,99.609999999999999,4.2700009999999997,43.009974999999997],"text":["<b>Afghanistan<\/b><br>2023<br>GDP per capita: $  1,984<br>Fruit supply: 39.92 kg","<b>Albania<\/b><br>2023<br>GDP per capita: $ 20,481<br>Fruit supply: 185.68 kg","<b>Algeria<\/b><br>2023<br>GDP per capita: $ 15,159<br>Fruit supply: 107.14 kg","<b>Angola<\/b><br>2023<br>GDP per capita: $  8,788<br>Fruit supply: 82.42 kg","<b>Argentina<\/b><br>2023<br>GDP per capita: $ 27,230<br>Fruit supply: 74.11 kg","<b>Armenia<\/b><br>2023<br>GDP per capita: $ 19,403<br>Fruit supply: 112.21 kg","<b>Australia<\/b><br>2023<br>GDP per capita: $ 60,685<br>Fruit supply: 86.08 kg","<b>Austria<\/b><br>2023<br>GDP per capita: $ 64,536<br>Fruit supply: 117.23 kg","<b>Azerbaijan<\/b><br>2023<br>GDP per capita: $ 21,311<br>Fruit supply: 91.32 kg","<b>Bahrain<\/b><br>2023<br>GDP per capita: $ 57,820<br>Fruit supply: 125.14 kg","<b>Bangladesh<\/b><br>2023<br>GDP per capita: $  8,242<br>Fruit supply: 30.35 kg","<b>Belarus<\/b><br>2023<br>GDP per capita: $ 27,782<br>Fruit supply: 62.4 kg","<b>Belgium<\/b><br>2023<br>GDP per capita: $ 63,095<br>Fruit supply: 79.6 kg","<b>Bhutan<\/b><br>2023<br>GDP per capita: $ 14,610<br>Fruit supply: 30.87 kg","<b>Bolivia<\/b><br>2023<br>GDP per capita: $ 11,616<br>Fruit supply: 85.15 kg","<b>Bosnia and Herzegovina<\/b><br>2023<br>GDP per capita: $ 19,805<br>Fruit supply: 196.6 kg","<b>Botswana<\/b><br>2023<br>GDP per capita: $ 18,932<br>Fruit supply: 46.64 kg","<b>Brazil<\/b><br>2023<br>GDP per capita: $ 19,080<br>Fruit supply: 106.77 kg","<b>Bulgaria<\/b><br>2023<br>GDP per capita: $ 33,074<br>Fruit supply: 74.43 kg","<b>Burkina Faso<\/b><br>2023<br>GDP per capita: $  2,486<br>Fruit supply: 59.85 kg","<b>Cambodia<\/b><br>2023<br>GDP per capita: $  6,695<br>Fruit supply: 17.72 kg","<b>Cameroon<\/b><br>2023<br>GDP per capita: $  4,875<br>Fruit supply: 93.3 kg","<b>Cape Verde<\/b><br>2023<br>GDP per capita: $  9,228<br>Fruit supply: 51.97 kg","<b>Chile<\/b><br>2023<br>GDP per capita: $ 29,564<br>Fruit supply: 76.81 kg","<b>China<\/b><br>2023<br>GDP per capita: $ 22,687<br>Fruit supply: 114.36 kg","<b>Colombia<\/b><br>2023<br>GDP per capita: $ 18,383<br>Fruit supply: 153.7 kg","<b>Comoros<\/b><br>2023<br>GDP per capita: $  3,434<br>Fruit supply: 97.11 kg","<b>Congo<\/b><br>2023<br>GDP per capita: $  6,172<br>Fruit supply: 41.7 kg","<b>Cote d'Ivoire<\/b><br>2023<br>GDP per capita: $  6,521<br>Fruit supply: 62.41 kg","<b>Croatia<\/b><br>2023<br>GDP per capita: $ 41,320<br>Fruit supply: 104.98 kg","<b>Cyprus<\/b><br>2023<br>GDP per capita: $ 51,454<br>Fruit supply: 77.79 kg","<b>Czechia<\/b><br>2023<br>GDP per capita: $ 47,558<br>Fruit supply: 78.86 kg","<b>Democratic Republic of Congo<\/b><br>2023<br>GDP per capita: $  1,559<br>Fruit supply: 51.47 kg","<b>Denmark<\/b><br>2023<br>GDP per capita: $ 69,379<br>Fruit supply: 106.55 kg","<b>Djibouti<\/b><br>2023<br>GDP per capita: $  6,511<br>Fruit supply: 39.49 kg","<b>East Timor<\/b><br>2023<br>GDP per capita: $  4,331<br>Fruit supply: 16.42 kg","<b>Ecuador<\/b><br>2023<br>GDP per capita: $ 14,343<br>Fruit supply: 80.41 kg","<b>Egypt<\/b><br>2023<br>GDP per capita: $ 16,691<br>Fruit supply: 94.03 kg","<b>Estonia<\/b><br>2023<br>GDP per capita: $ 41,289<br>Fruit supply: 81.87 kg","<b>Eswatini<\/b><br>2023<br>GDP per capita: $ 10,182<br>Fruit supply: 75.62 kg","<b>Ethiopia<\/b><br>2023<br>GDP per capita: $  2,758<br>Fruit supply: 10.97 kg","<b>Fiji<\/b><br>2023<br>GDP per capita: $ 13,195<br>Fruit supply: 77.77 kg","<b>Finland<\/b><br>2023<br>GDP per capita: $ 56,251<br>Fruit supply: 92.17 kg","<b>France<\/b><br>2023<br>GDP per capita: $ 54,297<br>Fruit supply: 105.19 kg","<b>Gabon<\/b><br>2023<br>GDP per capita: $ 18,701<br>Fruit supply: 131.3 kg","<b>Gambia<\/b><br>2023<br>GDP per capita: $  2,964<br>Fruit supply: 6.07 kg","<b>Georgia<\/b><br>2023<br>GDP per capita: $ 22,591<br>Fruit supply: 47.76 kg","<b>Germany<\/b><br>2023<br>GDP per capita: $ 63,039<br>Fruit supply: 86.68 kg","<b>Ghana<\/b><br>2023<br>GDP per capita: $  6,809<br>Fruit supply: 165 kg","<b>Greece<\/b><br>2023<br>GDP per capita: $ 36,701<br>Fruit supply: 121.56 kg","<b>Guinea<\/b><br>2023<br>GDP per capita: $  3,905<br>Fruit supply: 103.44 kg","<b>Guinea-Bissau<\/b><br>2023<br>GDP per capita: $  2,694<br>Fruit supply: 46.43 kg","<b>Guyana<\/b><br>2023<br>GDP per capita: $ 49,312<br>Fruit supply: 345.9 kg","<b>Hong Kong<\/b><br>2023<br>GDP per capita: $ 64,435<br>Fruit supply: 75.07 kg","<b>Hungary<\/b><br>2023<br>GDP per capita: $ 40,333<br>Fruit supply: 81.26 kg","<b>Iceland<\/b><br>2023<br>GDP per capita: $ 68,118<br>Fruit supply: 130.14 kg","<b>India<\/b><br>2023<br>GDP per capita: $  9,302<br>Fruit supply: 65.64 kg","<b>Indonesia<\/b><br>2023<br>GDP per capita: $ 13,890<br>Fruit supply: 85.38 kg","<b>Iran<\/b><br>2023<br>GDP per capita: $ 17,045<br>Fruit supply: 123.37 kg","<b>Iraq<\/b><br>2023<br>GDP per capita: $ 13,202<br>Fruit supply: 47.59 kg","<b>Ireland<\/b><br>2023<br>GDP per capita: $117,862<br>Fruit supply: 106.93 kg","<b>Israel<\/b><br>2023<br>GDP per capita: $ 47,527<br>Fruit supply: 117.79 kg","<b>Italy<\/b><br>2023<br>GDP per capita: $ 52,870<br>Fruit supply: 121.11 kg","<b>Jordan<\/b><br>2023<br>GDP per capita: $  9,381<br>Fruit supply: 40.85 kg","<b>Kazakhstan<\/b><br>2023<br>GDP per capita: $ 34,703<br>Fruit supply: 63.55 kg","<b>Kenya<\/b><br>2023<br>GDP per capita: $  5,692<br>Fruit supply: 79.21 kg","<b>Kiribati<\/b><br>2023<br>GDP per capita: $  3,141<br>Fruit supply: 69.69 kg","<b>Kuwait<\/b><br>2023<br>GDP per capita: $ 47,777<br>Fruit supply: 92.8 kg","<b>Kyrgyzstan<\/b><br>2023<br>GDP per capita: $  6,576<br>Fruit supply: 39.55 kg","<b>Laos<\/b><br>2023<br>GDP per capita: $  8,372<br>Fruit supply: 132.78 kg","<b>Latvia<\/b><br>2023<br>GDP per capita: $ 37,278<br>Fruit supply: 62.47 kg","<b>Lebanon<\/b><br>2023<br>GDP per capita: $ 11,330<br>Fruit supply: 103.77 kg","<b>Lesotho<\/b><br>2023<br>GDP per capita: $  2,596<br>Fruit supply: 15.6 kg","<b>Liberia<\/b><br>2023<br>GDP per capita: $  1,617<br>Fruit supply: 36.36 kg","<b>Libya<\/b><br>2023<br>GDP per capita: $ 12,477<br>Fruit supply: 89.94 kg","<b>Lithuania<\/b><br>2023<br>GDP per capita: $ 46,160<br>Fruit supply: 58.04 kg","<b>Luxembourg<\/b><br>2023<br>GDP per capita: $130,049<br>Fruit supply: 135.91 kg","<b>Macao<\/b><br>2023<br>GDP per capita: $104,815<br>Fruit supply: 66.16 kg","<b>Madagascar<\/b><br>2023<br>GDP per capita: $  1,629<br>Fruit supply: 36.7 kg","<b>Malawi<\/b><br>2023<br>GDP per capita: $  1,649<br>Fruit supply: 175.94 kg","<b>Malaysia<\/b><br>2023<br>GDP per capita: $ 32,858<br>Fruit supply: 59.99 kg","<b>Maldives<\/b><br>2023<br>GDP per capita: $ 22,333<br>Fruit supply: 168.5 kg","<b>Malta<\/b><br>2023<br>GDP per capita: $ 60,418<br>Fruit supply: 83.49 kg","<b>Marshall Islands<\/b><br>2023<br>GDP per capita: $  6,802<br>Fruit supply: 25.41 kg","<b>Mauritania<\/b><br>2023<br>GDP per capita: $  6,276<br>Fruit supply: 22.01 kg","<b>Mauritius<\/b><br>2023<br>GDP per capita: $ 26,635<br>Fruit supply: 57.63 kg","<b>Micronesia (country)<\/b><br>2023<br>GDP per capita: $  3,815<br>Fruit supply: 32.83 kg","<b>Moldova<\/b><br>2023<br>GDP per capita: $ 15,990<br>Fruit supply: 124.08 kg","<b>Mongolia<\/b><br>2023<br>GDP per capita: $ 16,223<br>Fruit supply: 20.84 kg","<b>Montenegro<\/b><br>2023<br>GDP per capita: $ 27,244<br>Fruit supply: 120.76 kg","<b>Morocco<\/b><br>2023<br>GDP per capita: $  8,915<br>Fruit supply: 88.99 kg","<b>Mozambique<\/b><br>2023<br>GDP per capita: $  1,512<br>Fruit supply: 16.48 kg","<b>Myanmar<\/b><br>2023<br>GDP per capita: $  5,364<br>Fruit supply: 40.13 kg","<b>Namibia<\/b><br>2023<br>GDP per capita: $ 10,138<br>Fruit supply: 46.39 kg","<b>Nauru<\/b><br>2023<br>GDP per capita: $ 12,373<br>Fruit supply: 93.72 kg","<b>Nepal<\/b><br>2023<br>GDP per capita: $  4,861<br>Fruit supply: 51.26 kg","<b>Netherlands<\/b><br>2023<br>GDP per capita: $ 70,199<br>Fruit supply: 157.9 kg","<b>New Zealand<\/b><br>2023<br>GDP per capita: $ 49,508<br>Fruit supply: 107.94 kg","<b>Niger<\/b><br>2023<br>GDP per capita: $  1,690<br>Fruit supply: 21.44 kg","<b>Nigeria<\/b><br>2023<br>GDP per capita: $  7,844<br>Fruit supply: 68.27 kg","<b>North Macedonia<\/b><br>2023<br>GDP per capita: $ 23,455<br>Fruit supply: 97.56 kg","<b>Norway<\/b><br>2023<br>GDP per capita: $ 90,085<br>Fruit supply: 113.83 kg","<b>Oman<\/b><br>2023<br>GDP per capita: $ 37,794<br>Fruit supply: 141.18 kg","<b>Pakistan<\/b><br>2023<br>GDP per capita: $  5,419<br>Fruit supply: 24.05 kg","<b>Papua New Guinea<\/b><br>2023<br>GDP per capita: $  4,206<br>Fruit supply: 211.7 kg","<b>Paraguay<\/b><br>2023<br>GDP per capita: $ 15,826<br>Fruit supply: 78.18 kg","<b>Peru<\/b><br>2023<br>GDP per capita: $ 15,328<br>Fruit supply: 135.55 kg","<b>Philippines<\/b><br>2023<br>GDP per capita: $  9,899<br>Fruit supply: 98.2 kg","<b>Poland<\/b><br>2023<br>GDP per capita: $ 43,673<br>Fruit supply: 66.88 kg","<b>Portugal<\/b><br>2023<br>GDP per capita: $ 41,768<br>Fruit supply: 136.22 kg","<b>Qatar<\/b><br>2023<br>GDP per capita: $116,564<br>Fruit supply: 71.22 kg","<b>Romania<\/b><br>2023<br>GDP per capita: $ 40,117<br>Fruit supply: 112.88 kg","<b>Russia<\/b><br>2023<br>GDP per capita: $ 39,887<br>Fruit supply: 73.1 kg","<b>Rwanda<\/b><br>2023<br>GDP per capita: $  3,063<br>Fruit supply: 99.31 kg","<b>Samoa<\/b><br>2023<br>GDP per capita: $  7,384<br>Fruit supply: 176.52 kg","<b>Sao Tome and Principe<\/b><br>2023<br>GDP per capita: $  5,541<br>Fruit supply: 192.14 kg","<b>Saudi Arabia<\/b><br>2023<br>GDP per capita: $ 64,482<br>Fruit supply: 105.32 kg","<b>Senegal<\/b><br>2023<br>GDP per capita: $  4,305<br>Fruit supply: 19.67 kg","<b>Serbia<\/b><br>2023<br>GDP per capita: $ 25,735<br>Fruit supply: 147.61 kg","<b>Seychelles<\/b><br>2023<br>GDP per capita: $ 28,635<br>Fruit supply: 84.5 kg","<b>Sierra Leone<\/b><br>2023<br>GDP per capita: $  3,035<br>Fruit supply: 30.75 kg","<b>Slovakia<\/b><br>2023<br>GDP per capita: $ 39,518<br>Fruit supply: 61.14 kg","<b>Slovenia<\/b><br>2023<br>GDP per capita: $ 47,977<br>Fruit supply: 131.06 kg","<b>Solomon Islands<\/b><br>2023<br>GDP per capita: $  2,340<br>Fruit supply: 32.38 kg","<b>South Africa<\/b><br>2023<br>GDP per capita: $ 13,695<br>Fruit supply: 26.41 kg","<b>South Korea<\/b><br>2023<br>GDP per capita: $ 54,029<br>Fruit supply: 48.06 kg","<b>Spain<\/b><br>2023<br>GDP per capita: $ 47,323<br>Fruit supply: 113.83 kg","<b>Sri Lanka<\/b><br>2023<br>GDP per capita: $ 13,025<br>Fruit supply: 43.03 kg","<b>Suriname<\/b><br>2023<br>GDP per capita: $ 19,021<br>Fruit supply: 62.98 kg","<b>Sweden<\/b><br>2023<br>GDP per capita: $ 62,663<br>Fruit supply: 86.97 kg","<b>Switzerland<\/b><br>2023<br>GDP per capita: $ 82,295<br>Fruit supply: 96.34 kg","<b>Tajikistan<\/b><br>2023<br>GDP per capita: $  4,472<br>Fruit supply: 29.71 kg","<b>Tanzania<\/b><br>2023<br>GDP per capita: $  3,621<br>Fruit supply: 67.18 kg","<b>Thailand<\/b><br>2023<br>GDP per capita: $ 21,191<br>Fruit supply: 71.68 kg","<b>Tonga<\/b><br>2023<br>GDP per capita: $  7,030<br>Fruit supply: 97.12 kg","<b>Tunisia<\/b><br>2023<br>GDP per capita: $ 12,651<br>Fruit supply: 109.38 kg","<b>Turkey<\/b><br>2023<br>GDP per capita: $ 35,069<br>Fruit supply: 167.77 kg","<b>Turkmenistan<\/b><br>2023<br>GDP per capita: $ 17,866<br>Fruit supply: 51.55 kg","<b>Tuvalu<\/b><br>2023<br>GDP per capita: $  5,812<br>Fruit supply: 111.74 kg","<b>Uganda<\/b><br>2023<br>GDP per capita: $  2,791<br>Fruit supply: 207.61 kg","<b>Ukraine<\/b><br>2023<br>GDP per capita: $ 15,917<br>Fruit supply: 51.81 kg","<b>United Arab Emirates<\/b><br>2023<br>GDP per capita: $ 70,240<br>Fruit supply: 64.13 kg","<b>United Kingdom<\/b><br>2023<br>GDP per capita: $ 52,593<br>Fruit supply: 92.09 kg","<b>Uruguay<\/b><br>2023<br>GDP per capita: $ 31,059<br>Fruit supply: 98.56 kg","<b>Uzbekistan<\/b><br>2023<br>GDP per capita: $ 10,008<br>Fruit supply: 106.84 kg","<b>Vanuatu<\/b><br>2023<br>GDP per capita: $  3,215<br>Fruit supply: 138.49 kg","<b>Vietnam<\/b><br>2023<br>GDP per capita: $ 13,546<br>Fruit supply: 99.61 kg","<b>Zambia<\/b><br>2023<br>GDP per capita: $  3,673<br>Fruit supply: 4.27 kg","<b>Zimbabwe<\/b><br>2023<br>GDP per capita: $  5,218<br>Fruit supply: 43.01 kg"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(190,190,190,1)","opacity":0.10000000000000001,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(190,190,190,1)"}},"hoveron":"points","name":"Other","legendgroup":"Other","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":23.305936073059364,"r":7.3059360730593621,"b":37.260273972602747,"l":43.105022831050235},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[3.0809367597060842,5.1743357453972223],"tickmode":"array","ticktext":["$2,000","$5,000","$10,000","$20,000","$50,000","$100,000"],"tickvals":[3.3010299956639813,3.6989700043360187,4,4.3010299956639813,4.6989700043360187,5],"categoryorder":"array","categoryarray":["$2,000","$5,000","$10,000","$20,000","$50,000","$100,000"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(190,190,190,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-19,399],"tickmode":"array","ticktext":["0","50","100","150","200","250","300","350"],"tickvals":[0,50,100,150,200,250,300,350],"categoryorder":"array","categoryarray":["0","50","100","150","200","250","300","350"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":3.6529680365296811,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(190,190,190,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"Fruit supply per person (kilograms per year)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"fecb2e4bbb74":{"x":{},"y":{},"colour":{},"alpha":{},"text":{},"type":"scatter"}},"cur_data":"fecb2e4bbb74","visdat":{"fecb2e4bbb74":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<section id="summary" class="level3">
+<h3 class="anchored" data-anchor-id="summary">Summary</h3>
+<p>In this analysis, I explored how dynamic highlighting transforms a dense dataset into an interactive narrative tool (in my case using tools like plotly). Rather than overwhelming the audience with a static global view or splitting the data across multiple redundant charts, you can just do interactive visualization that allows the user to see between different analytical perspectives. Manipulating opacity and color mapping across different frames, unselected data points are pushed to the background using gray, also, specific countries or continents are brought to the foreground. This technique maintains the macros level context of the global distribution while smoothly guiding the viewers focus to specific macros level comparisons, proving that effective data visualization is about building a clean user driven story out of raw information</p>
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Owen Morales © 2026</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/moralow">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/omora14">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:morales.owen@icloud.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

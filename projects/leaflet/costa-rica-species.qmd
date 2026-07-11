@@ -1,0 +1,87 @@
+---
+title: "Costa Rica Species Map"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## Libraries
+
+```{r message=FALSE, warning=FALSE}
+
+library(rnaturalearth)
+library(leaflet)
+library(dplyr)
+library(rgbif)
+
+```
+
+## Pull Data & Load Map
+
+```{r}
+
+crProvinces <- ne_states(country = "Costa Rica", returnclass = "sf")
+
+# live GBIF database for the 2000 most recent coordinates
+slothData <- occ_data(scientificName = "Bradypus variegatus", country = "CR", hasCoordinate = TRUE, limit = 2000)
+
+monkeyData <- occ_data(scientificName = "Cebus imitator", country = "CR", hasCoordinate = TRUE, limit = 2000)
+
+```
+
+## Data Wrangling
+
+```{r}
+
+sloths <- slothData$data %>%
+  select(decimalLongitude, decimalLatitude, eventDate, stateProvince) %>%
+  filter(!is.na(decimalLongitude), !is.na(decimalLatitude))
+
+monkeys <- monkeyData$data %>%
+  select(decimalLongitude, decimalLatitude, eventDate, stateProvince) %>%
+  filter(!is.na(decimalLongitude), !is.na(decimalLatitude))
+
+```
+
+## Graph w/ Leaflet
+
+```{r}
+
+leaflet() %>%
+  addProviderTiles(providers$Esri.WorldTopoMap) %>%
+  # map
+  addPolygons(data = crProvinces, color = "#2c3e50", weight = 2, fillOpacity = 0.1, label = ~name) %>%
+  # sloths
+  addCircleMarkers(data = sloths, lng = ~decimalLongitude, lat = ~decimalLatitude, radius = 4, color = "#27ae60", fillOpacity = 0.6, group = "Sloths",
+    popup = ~paste0(
+      "<strong>Sloth Spotted!</strong><br>",
+      "<strong>Date: </strong>", eventDate, "<br>",
+      "<strong>Province: </strong>", stateProvince)) %>%
+  # monkeys
+  addCircleMarkers(data = monkeys, lng = ~decimalLongitude, lat = ~decimalLatitude, radius = 4, color = "#e67e22", fillOpacity = 0.6, group = "Capuchin Monkeys",
+    popup = ~paste0(
+      "<strong>Monkey Spotted!</strong><br>",
+      "<strong>Date: </strong>", eventDate, "<br>",
+      "<strong>Province: </strong>", stateProvince)) %>%
+  # title
+    addControl(html = "<h3 style='margin:10px; padding:5px; background:white; border-radius:5px;'>Costa Rica Wildlife Sightings</h3>", position = "topright") %>%
+  # legend
+  addLegend(position = "bottomright", colors = c("#27ae60", "#e67e22"), labels = c("Brown-throated Sloth", "Capuchin Monkey"), title = "Species", opacity = 1) %>%
+  # toggles
+  addLayersControl(overlayGroups = c("Sloths", "Capuchin Monkeys"), options = layersControlOptions(collapsed = FALSE))
+
+```
+
+## Summary
+
+Since I am from Costa Rica I really wanted to map something related to my home country so I pulled live spatial data from the GBIF database to map 2000 recent sightings each for two famous animals: Brown-throated Sloths and White-faced Capuchin Monkeys. To build the map I just combined a polygon layer for the subtle provincial boundaries with a point layer (the circle markers) for the actual animal sightings. I chose a topographic basemap because it clearly shows the mountain ranges and coastlines, which naturally affect where these animals live. To make the map easy to read and interactive, I color-coded the sloths green and the monkeys orange, and added a layer control box in the top right corner so users can toggle the animals on and off to compare their habitats.
+
+Playing with the toggles shows some really interesting ecological patterns. The capuchin monkeys are basically everywhere, they have a super widespread distribution all along both coasts and cluster heavily around major national parks like Manuel Antonio, showing just how adaptable they are. The sloth data on the other hand, tells a different story. You can clearly see a massive concentration of sloths in the northern plains and along the humid Caribbean coast in Limón, but there is a huge empty spot in the northwest province of Guanacaste. Since Guanacaste is famous for its dry tropical forests it perfectly visualizes how sloths much prefer the wetter, more humid rainforests found in the rest of the country, kinda cool!
+
+###### AI USAGE
+
+Used AI to learn the syntax for adding the `addLayersControl`

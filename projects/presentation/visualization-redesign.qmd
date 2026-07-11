@@ -1,0 +1,53 @@
+---
+title: "Visualization Redesign"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+
+```{r}
+
+
+library(tidyverse)
+library(ggplot2)
+library(magick)
+library(grid)
+
+guns <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv")
+
+```
+
+```{r}
+
+uglyBg <- image_read("thumbbig-1193310.webp")
+bgRaster <- rasterGrob(as.raster(uglyBg), width = unit(1, "npc"), height = unit(1, "npc"))
+uglyPlot <- ggplot(guns, aes(x = race, y = age, color = intent, size = month)) +
+    annotation_custom(bgRaster, xmin = -Inf, xmax = Inf, ymin = -Inf, ymax = Inf) +
+    geom_line(aes(group = place), color = "magenta", linewidth = 2, alpha = 0.5) +
+    geom_jitter(shape = 8, color = "chartreuse", size = 10, width = 0.7) +
+  geom_point(color = "cyan", alpha = 0.4, size = 5) +
+  labs(title = "gunzzzz", subtitle = "something",x = "RACE (but rotated for neck pain)",y = "AGE", color = "") +
+  scale_y_reverse() +
+  theme(
+    plot.background = element_rect(fill = "yellow", color = "red", linewidth = 10),
+    panel.background = element_rect(fill = "transparent"),
+    text = element_text(family = "mono", color = "brown", size = 20, face = "bold.italic"),
+    axis.text.x = element_text(angle = 137, vjust = 0.5, color = "orange", size = 15),
+    axis.text.y = element_text(angle = 47, color = "pink", size = 15),
+    panel.grid.major = element_line(color = "blue", linewidth = 3, linetype = "dotdash"),
+    panel.grid.minor = element_line(color = "red", linewidth = 2, linetype = "twodash"),
+    legend.position = "top",
+    legend.background = element_rect(fill = "green", color = "purple", linewidth = 3),
+    legend.text = element_text(angle = 180, color = "white", size = 12),
+    legend.key = element_rect(fill = "orange")
+  )
+
+print(uglyPlot)
+
+```
+

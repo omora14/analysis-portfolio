@@ -1,0 +1,119 @@
+---
+title: "Gun Deaths: Seasonal Patterns"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## Setup
+
+I will create a new `season` variable based on the `month` column to address the client's request for seasonal commercials
+
+```{r setup}
+
+library(tidyverse)
+library(forcats)
+library(viridis)
+
+guns <- read_csv("https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv")
+
+gunsClean <- guns %>%
+  filter(!is.na(intent)) %>%
+  mutate(
+    month_num = as.numeric(month),
+    season = case_when(
+      month_num %in% c(12, 1, 2) ~ "Winter",
+      month_num %in% c(3, 4, 5) ~ "Spring",
+      month_num %in% c(6, 7, 8) ~ "Summer",
+      month_num %in% c(9, 10, 11) ~ "Fall"
+    ),
+    season = factor(season, levels = c("Winter", "Spring", "Summer", "Fall"))
+  )
+
+```
+
+The client needs to know which demographic groups to target based on the overall causes of gun deaths.
+
+```{r}
+
+gunsClean %>%
+  count(intent, race) %>%
+  mutate(intent = fct_reorder(intent, n, .fun = sum)) %>%
+  ggplot(aes(x = intent, y = n, fill = race)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.7) +
+  coord_flip() +
+  theme_minimal(base_size = 14) +
+  scale_fill_viridis_d(option = "plasma") + 
+  scale_y_continuous(labels = scales::comma) +
+  theme(panel.grid.major.y = element_blank(), legend.position = "top") +
+  labs(title = "Gun Deaths by Intent and Race (2012-2014)", x = NULL, # we save space because intent is obvious on the y-axis
+  y = "Total Deaths", fill = NULL)
+
+```
+
+This plot illustrates that the vast majority of gun deaths are driven by two primary intents: suicides and homicides. It highlights a stark demographic divide that the client must consider for targeting: suicides are overwhelmingly committed by White individuals, whereas homicides disproportionately affect Black individuals (though we should consider that the white population is bigger than any of the other demographics we have seen). Targeting these specific demographic groups based on the intent of the messaging is crucial for any overall intervention strategy
+
+# Seasonal Commercial Targeting
+
+The client wants to create commercials tailored to different seasons
+
+```{r}
+
+gunsClean %>%
+  count(season, intent) %>%
+  mutate(season = factor(season, levels = c("Spring", "Summer", "Fall", "Winter"))) %>%
+  ggplot(aes(x = season, y = n, group = intent, color = intent)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 2) +
+  facet_wrap(~ intent, scales = "free_y") +
+  theme_minimal() +
+  scale_color_viridis_d(option = "turbo", guide = "none") +
+  scale_y_continuous(labels = scales::comma) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), strip.text = element_text(face = "bold", size = 12)) +
+  labs(title = "Seasonal Trends in Gun Deaths by Intent", subtitle = "Note: Y-axis scales differ between panels to highlight trends", x = NULL, y = "Total Deaths")
+
+```
+
+This visualization tracks the primary intents of gun deaths across the four seasons to guide the timing of different ad campaigns. It reveals that homicides experience a noticeable spike during the summer months, while suicides peak slightly in the spring and summer before declining in the winter. This suggests that anti-homicide campaigns should be heavily funded and broadcast just before and during the summer season
+
+```{r}
+
+gunsClean %>%
+  filter(intent == "Homicide", season == "Summer") %>%
+  ggplot(aes(x = age, fill = sex, color = sex)) +
+  geom_density(alpha = 0.4, linewidth = 1) + 
+  theme_minimal(base_size = 14) +
+  scale_fill_manual(values = c("F" = "#E69F00", "M" = "#56B4E9")) +
+  scale_color_manual(values = c("F" = "#E69F00", "M" = "#56B4E9")) +
+  theme(legend.position = "top") +
+  labs(title = "Age Profile of Summer Homicides by Sex", subtitle = "Comparing the shape of the age curves, independent of total counts", x = "Age", y = "Relative Density", fill = "Sex", color = "Sex")
+
+```
+
+Focusing specifically on the summer surge in homicides, this density chart shows the distribution of victims by age and sex. Young males, primarily between the ages of 18 and 30, constitute the absolute largest demographic group of victims during this high-risk season. Summer commercials aimed at reducing community violence should feature messaging, actors, and channels heavily tailored toward young men
+
+```{r}
+
+library(ggplot2)
+library(dplyr)
+
+gunsClean %>%
+  filter(intent == "Suicide") %>%
+  mutate(season = factor(season, levels = c("Spring", "Summer", "Fall", "Winter"))) %>%
+  ggplot(aes(x = age, y = after_stat(count), fill = sex, color = sex)) +
+  geom_density(alpha = 0.5, linewidth = 0.8) +
+  facet_wrap(~ season) +
+  theme_minimal(base_size = 14) +
+  scale_fill_manual(values = c("F" = "#E69F00", "M" = "#56B4E9")) +
+  scale_color_manual(values = c("F" = "#E69F00", "M" = "#56B4E9")) +
+  theme(legend.position = "top", panel.grid.minor = element_blank(), strip.text = element_text(face = "bold", size = 12)) +
+  labs(title = "Volume of Suicides by Age, Sex, and Season", subtitle = "Height of the curve represents the actual number of victims", x = "Age", y = "Count of Victims", fill = "Sex", color = "Sex")
+
+```
+
+This density plot breaks down the age distribution of suicides by season. It reveals that while suicides occur across all age groups, there is a noticeable concentration among middle-aged individuals (ages 40-60) in the spring and summer months.
+

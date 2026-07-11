@@ -1,0 +1,89 @@
+---
+title: "Idaho Dams and Water Systems"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## Prep
+
+```{r message=FALSE, warning=FALSE}
+
+library(sf)
+library(tidyverse)
+
+idahoCrs <- 4267
+
+dams <- st_read("Idaho_Dams/Dam_Safety.shp")
+shp <- st_read("shp/County-AK-HI-Moved-USA-Map.shp")
+water <- st_read("water/hyd250.shp")
+wells <- st_read("Wells/Wells.shp")
+
+```
+
+## Filter
+
+```{r message=FALSE, warning=FALSE}
+
+idahoShape <- shp %>% 
+  filter(StateName == "Idaho") %>% 
+  st_transform(crs = idahoCrs)
+
+wellsFiltered <- wells %>% 
+  filter(Production > 5000) %>% 
+  st_transform(crs = idahoCrs)
+
+damsFiltered <- dams %>% 
+  filter(SurfaceAre > 50) %>% 
+  st_transform(crs = idahoCrs)
+
+riversFiltered <- water %>% 
+  filter(FEAT_NAME %in% c("Snake River", "Henrys Fork")) %>% 
+  st_transform(crs = idahoCrs)
+
+```
+
+## Create Map
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+#| warning: false
+#| message: false
+
+idahoMap <- ggplot() +
+  geom_sf(data = idahoShape, fill = "gray95", color = "gray60", size = 0.5) +
+  geom_sf(data = riversFiltered, aes(color = FEAT_NAME), size = 1) +
+  geom_sf(data = wellsFiltered, aes(color = "Wells"), alpha = 0.7, size = 1.2) +
+  geom_sf(data = damsFiltered, aes(color = "Dams"), shape = 17, size = 1.8) +
+  scale_color_manual(
+    name = "Water Systems",
+    values = c("Henrys Fork" = "deepskyblue", "Snake River" = "mediumblue", "Wells" = "seagreen", "Dams" = "firebrick")) +
+  coord_sf(crs = idahoCrs, datum = NA) +
+  labs(title = "Idaho Water Systems Overview", subtitle = "Featuring Major Rivers, High-Production Wells (>5000 gal), and Large Dams (>50 acres)", x = "", y = "") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", size = 14), legend.position = "bottom", panel.grid.major = element_blank())
+
+print(idahoMap)
+
+```
+
+## Save Map
+
+```{r}
+
+ggsave(
+  filename = "idahoWaterSystems.png", 
+  plot = idahoMap, 
+  width = 8, 
+  height = 10, 
+  dpi = 300, 
+  bg = "white"
+)
+
+```
+

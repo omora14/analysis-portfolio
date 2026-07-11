@@ -1,0 +1,83 @@
+---
+title: "Sales Data Cleaning"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+# Prep & Cleaning
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(lubridate)
+library(janitor) # for clean_names()
+library(scales)
+
+url <- "https://byuistats.github.io/M335/data/sales.csv"
+salesRaw <- read_csv(url) |> clean_names()
+
+sales <- salesRaw |>
+  # UTC to Mountain Time
+  mutate(time = with_tz(time, tzone = "America/Denver")) |>
+  mutate(
+    day = floor_date(time, "day"),
+    week = floor_date(time, "week"),
+    month = floor_date(time, "month"),
+    hour = hour(time)
+  ) |>
+  filter(!is.na(name), !is.na(time), amount > 0)
+
+```
+
+# Revenue Over Time
+
+```{r}
+
+revenueWeekly <- sales |>
+  group_by(name, week) |>
+  summarize(grossRevenue = sum(amount, na.rm = TRUE), .groups = "drop")
+
+ggplot(revenueWeekly, aes(x = week, y = grossRevenue, color = name)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_y_continuous(labels = label_dollar()) +
+  labs(title = "Gross Revenue Over Time (Weekly)", x = "Week", y = "Gross Revenue", color = "Company") +
+  theme_minimal()
+
+```
+
+# Customer Trafic
+
+```{r}
+
+trafficWeekly <- sales |>
+  group_by(name, week) |>
+  summarize(transactions = n(), .groups = "drop")
+
+ggplot(trafficWeekly, aes(x = week, y = transactions, color = name)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  labs(title = "Customer Traffic Over Time (Weekly)", x = "Week", y = "Number of Transactions", color = "Company") +
+  theme_minimal()
+
+```
+
+# Hours of Operation
+
+```{r}
+
+ggplot(sales, aes(x = hour, fill = name)) +
+  geom_bar(color = "white") +
+  facet_wrap(~name, scales = "free_y") + # y-scale free to see shapes clearly for v differenrces
+  labs(title = "Customer Traffic by Hour of Day", subtitle = "Reveals approximate hours of operation for each company", x = "Hour of Day (24hr)", y = "Total Transactions", fill = "Company") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+Based on the three month analysis, HotDiggity performed the best overall though Tacontento is a very strong option too. HotDiggity dominated in customer foot traffic, regularly seeing 500 to 1,000 transactions per week, and maintained one of the highest weekly gross revenues throughout the quarter (consistently hovering between 2,000 and 3,000 dollars). Their hours of operation reveal an amazing lunch rush peaking between 11:00 AM and 2:00 PM, indicating highly efficient mid day operations that drive the bulk of their sales. Companies like LeBelle had a single massive revenue spike in mid July, HotDiggity's sustained high transaction volume and strong baseline revenue make them the most reliable and consistently performing business in the dataset

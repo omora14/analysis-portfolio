@@ -1,0 +1,74 @@
+---
+title: "Parsing Nested Visit Data"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+
+get_visits_tibble <- function(pop_string) {
+  clean_string <- str_remove_all(pop_string, '[{}""“”]')
+  day_pairs <- str_split(clean_string, ",")[[1]]
+  result_tibble <- tibble(raw = day_pairs) |> 
+  separate(raw, into = c("day", "visits"), sep = ":", convert = TRUE)
+  
+  return(result_tibble)
+}
+
+```
+
+```{r message=FALSE, warning=FALSE}
+
+get_busiest_day <- function(pop_string) {
+  visits_df <- get_visits_tibble(pop_string)
+  max_visits <- max(visits_df$visits)
+    busiest_days <- visits_df |> 
+    filter(visits == max_visits) |> 
+    pull(day) |> 
+    paste(collapse = ", ")
+  
+  return(busiest_days)
+}
+
+```
+
+```{r message=FALSE, warning=FALSE}
+
+string1 <- '{"Monday":94,"Tuesday":76,"Wednesday":89,"Thursday":106,"Friday":130,"Saturday":128,"Sunday":58}'
+
+print("Test Case 1 Tibble:")
+get_visits_tibble(string1)
+# Friday at 130
+
+print("Test Case 1 Busiest Day:")
+get_busiest_day(string1)
+#"Friday"
+
+string2 <- '{"Monday":18,"Tuesday":16,"Wednesday":14,"Thursday":27,"Friday":26,"Saturday":36,"Sunday":20}'
+
+print("Test Case 2 Tibble:")
+get_visits_tibble(string2)
+# Saturday at 36
+
+print("Test Case 2 Busiest Day:")
+get_busiest_day(string2)
+#"Saturday"
+
+string3 <- '{"Monday":0,"Tuesday":0,"Wednesday":1,"Thursday":0,"Friday":0,"Saturday":1,"Sunday":0}'
+
+print("Test Case 3 Tibble:")
+get_visits_tibble(string3)
+# Wednesday and Saturday tied at 1
+
+print("Test Case 3 Busiest Day:")
+get_busiest_day(string3)
+#"Wednesday, Saturday"
+
+```

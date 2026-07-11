@@ -1,3 +1,16 @@
-/.quarto/
-/_site/
+.quarto/
+_site/
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+**/*.quarto_ipynb
+.DS_Store
+
+# Large GIS data (not shipped with this portfolio)
+projects/maps/Wells/
+projects/maps/water/
+projects/maps/shp/
+projects/maps/Idaho_Dams/
+
+/.quarto/

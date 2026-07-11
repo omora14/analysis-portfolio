@@ -1,0 +1,156 @@
+---
+title: "Fruit Consumption vs GDP"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+
+```{r}
+
+library(tidyverse)
+library(jsonlite) # found this one on the download section od OWID, it's to read the metadata
+
+fruit <- read_csv("https://ourworldindata.org/grapher/fruit-consumption-vs-gdp-per-capita.csv?v=1&csvType=full&useColumnShortNames=true")
+view(fruit)
+
+```
+
+```{r}
+
+library(tidyverse)
+library(scales)
+library(plotly)
+
+fruitdata <- fruit |>
+  rename(
+    fruitconsumption = fruit__00002919__food_available_for_consumption__0645pc__kilograms_per_year_per_capita,
+    gdppercapita = ny_gdp_pcap_pp_kd,
+    owidregion = owid_region) |>
+  filter(year == 2023) |>
+  drop_na(fruitconsumption, gdppercapita, owidregion)
+owid_colors <- c(
+  "Africa" = "#9e66ab",         # Purple
+  "Asia" = "#2a939b",           # Teal
+  "Europe" = "#4c70a4",         # Blue
+  "North America" = "#e26d5c",  # Red/Orange
+  "South America" = "#b04169",  # Pink
+  "Oceania" = "#60c0e7"         # Light Blue
+) # Gemini helped me get these exact colors by analyzing the original OWID plot and extracting the hex codes for each region
+
+p <- ggplot(data = fruitdata, mapping = aes(x = gdppercapita, y = fruitconsumption, color = owidregion,
+              # Gemini helped me create this "text" aesthetic creates the custom HTML tooltip for plotly
+              text = paste0(
+                "<b>", entity, "</b><br>",
+                "2023<br>",
+                "GDP per capita: $", format(round(gdppercapita), big.mark = ","), "<br>",
+                "Fruit supply: ", round(fruitconsumption, 2), " kg"
+              )
+            )) +
+geom_point(alpha = 0.8, size = 2) +
+scale_color_manual(values = owid_colors) +
+scale_x_log10(
+    labels = label_dollar(accuracy = 1),
+    breaks = c(2000, 5000, 10000, 20000, 50000, 100000),
+    limits = c(1500, 120000)) +
+scale_y_continuous(
+    breaks = seq(0, 350, by = 50),
+    limits = c(0, 380)) +
+labs(x = "GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)", y = "Fruit supply per person (kilograms per year)", color = NULL) +
+theme_minimal() +
+  theme(
+    panel.grid.major = element_line(linetype = "dashed", color = "gray"),
+    panel.grid.minor = element_blank(), # got this code snippet from the professor on his class
+    legend.position = "right")
+interactive_plot <- ggplotly(p, tooltip = "text") |>
+layout(legend = list(title = list(text = "")))
+
+interactive_plot
+
+```
+
+```{r}
+
+fruitdata_countries <- fruitdata |>
+  mutate(
+    country_color = if_else(entity %in% c("United States", "Costa Rica", "Japan", "Brazil"), owidregion, "Other"),
+    point_alpha = if_else(entity %in% c("United States", "Costa Rica", "Japan", "Brazil"), 1, 0.1)
+  )
+
+p2 <- ggplot(data = fruitdata_countries, mapping = aes(x = gdppercapita, y = fruitconsumption, color = country_color, alpha = point_alpha,
+              text = paste0(
+                "<b>", entity, "</b><br>",
+                "2023<br>",
+                "GDP per capita: $", format(round(gdppercapita), big.mark = ","), "<br>",
+                "Fruit supply: ", round(fruitconsumption, 2), " kg"
+              )
+            )) +
+geom_point(size = 2) +
+scale_color_manual(values = c(owid_colors, "Other" = "gray")) +
+scale_alpha_identity() +
+scale_x_log10(
+    labels = label_dollar(accuracy = 1),
+    breaks = c(2000, 5000, 10000, 20000, 50000, 100000),
+    limits = c(1500, 120000)) +
+scale_y_continuous(
+    breaks = seq(0, 350, by = 50),
+    limits = c(0, 380)) +
+labs(x = "GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)", y = "Fruit supply per person (kilograms per year)", color = NULL) +
+theme_minimal() +
+  theme(
+    panel.grid.major = element_line(linetype = "dashed", color = "gray"),
+    panel.grid.minor = element_blank(),
+    legend.position = "none") 
+
+interactive_plot_countries <- ggplotly(p2, tooltip = "text")
+interactive_plot_countries
+
+```
+
+```{r}
+
+fruitdata_continent <- fruitdata |>
+  mutate(
+    continent_color = if_else(owidregion == "North America", owidregion, "Other"),
+    point_alpha = if_else(owidregion == "North America", 1, 0.1)
+  )
+
+p3 <- ggplot(data = fruitdata_continent, mapping = aes(x = gdppercapita, y = fruitconsumption, color = continent_color, alpha = point_alpha,
+              text = paste0(
+                "<b>", entity, "</b><br>",
+                "2023<br>",
+                "GDP per capita: $", format(round(gdppercapita), big.mark = ","), "<br>",
+                "Fruit supply: ", round(fruitconsumption, 2), " kg"
+              )
+            )) +
+geom_point(size = 2) +
+scale_color_manual(values = c("North America" = "#e26d5c", "Other" = "gray")) +
+scale_alpha_identity() +
+scale_x_log10(
+    labels = label_dollar(accuracy = 1),
+    breaks = c(2000, 5000, 10000, 20000, 50000, 100000),
+    limits = c(1500, 120000)) +
+scale_y_continuous(
+    breaks = seq(0, 350, by = 50),
+    limits = c(0, 380)) +
+labs(x = "GDP per capita (international-$ in 2021 prices; plotted on a logarithmic axis)", y = "Fruit supply per person (kilograms per year)", color = NULL) +
+theme_minimal() +
+  theme(
+    panel.grid.major = element_line(linetype = "dashed", color = "gray"),
+    panel.grid.minor = element_blank(),
+    legend.position = "none")
+
+interactive_plot_continent <- ggplotly(p3, tooltip = "text")
+interactive_plot_continent
+
+```
+
+
+### Summary
+
+In this analysis, I explored how dynamic highlighting transforms a dense dataset into an interactive narrative tool (in my case using tools like plotly). Rather than overwhelming the audience with a static global view or splitting the data across multiple redundant charts, you can just do interactive visualization that allows the user to see between different analytical perspectives. Manipulating opacity and color mapping across different frames, unselected data points are pushed to the background using gray, also, specific countries or continents are brought to the foreground. This technique maintains the macros level context of the global distribution while smoothly guiding the viewers focus to specific macros level comparisons, proving that effective data visualization is about building a clean user driven story out of raw information
+

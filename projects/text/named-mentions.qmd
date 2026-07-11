@@ -1,0 +1,95 @@
+---
+title: "Named Mentions in Text"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+## 1
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+
+scriptures <- read_csv("https://github.com/beandog/lds-scriptures/raw/master/csv/lds-scriptures.csv")
+savior <-read_rds("https://byuistats.github.io/M335/data/BoM_SaviorNames.rds")
+
+```
+
+## 2
+
+```{r message=FALSE, warning=FALSE}
+
+savior_regex <- savior |>
+  arrange(desc(nchar)) |>
+  pull(name) |> # to extract just the column name as a vector
+  unique() |>
+  str_c(collapse = "|")
+
+savior_regex <- paste0("\\b(", savior_regex, ")\\b")
+
+savior_regex
+
+```
+
+## 3
+
+```{r message=FALSE, warning=FALSE}
+
+bom_text <- scriptures |>
+  filter(volume_title == "Book of Mormon") |>
+  pull(scripture_text) |>
+  str_c(collapse = " ")
+
+# bom_text # you can uncomment this line if want to see it work
+
+```
+
+You can't see it here, if not it would take years to run since it's the whole BOM
+
+## 4
+
+```{r message=FALSE, warning=FALSE}
+
+split_text <- str_split(bom_text, pattern = savior_regex) |>
+  unlist()
+
+chunks_between <- split_text[-c(1, length(split_text))]
+word_counts <- str_count(chunks_between, "\\S+")
+df_word_count <- tibble(words_between = word_counts)
+
+df_word_count
+
+```
+
+## 5
+
+```{r message=FALSE, warning=FALSE}
+
+average_count <- mean(df_word_count$words_between)
+print(average_count)
+
+```
+
+```{r message=FALSE, warning=FALSE}
+
+ggplot(df_word_count, aes(x = words_between)) +
+  geom_histogram(binwidth = 10, fill = "#2c3e50", color = "white") +
+  geom_vline(xintercept = average_count, color = "#e74c3c", linetype = "dashed", linewidth = 1) +
+  theme_minimal() +
+  coord_cartesian(xlim = c(0, 300)) + # zoom or it looks ugly
+  labs(
+    title = "Distance Between Savior Names in the Book of Mormon", subtitle = paste("On average, the Savior is mentioned every", round(average_count, 1), "words."),
+    x = "Number of Words Between References",
+    y = "Frequency (Count)",
+    caption = "Red dashed line represents the mean distance. Plot zoomed to show 0-300 words.")
+
+```
+
+## Summary
+
+As the histogram shows the distribution is heavily skewed to the right. While the mathematical average is roughly 65.4 words between mentions, the massive spike on the far left tells me something else. Most of the time when a name of the Savior is mentioned, another name follows almost immediately, often within 10 to 50 words. The average is pulled higher by a few long narrative or war chapters where specific names aren't used for a longer period, but it's cool to read about wars anyways.

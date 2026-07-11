@@ -1,0 +1,111 @@
+---
+title: "Chipotle Order Analysis"
+author: "Owen Morales"
+format:
+  html:
+    code-fold: true
+    code-line-numbers: true
+execute:
+  error: true
+---
+
+# 1
+
+```{r message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(jsonlite)
+library(scales)
+
+url <- "https://byuistats.github.io/M335/data/chipotle_reduced.csv"
+chipotle_raw <- read_csv(url)
+
+# parse the JSON dictionary string into a tibble
+extract_visits <- function(json_str) {
+  if (is.na(json_str) || json_str == "") return(tibble(day = character(), visits = numeric()))
+  
+  parsed <- fromJSON(json_str)
+  tibble(
+    day = names(parsed),
+    visits = as.numeric(parsed)
+  )
+}
+
+# each row using map to create a nested list column
+chipotle_nested <- chipotle_raw |>
+  mutate(daily_visits = map(popularity_by_day, extract_visits))
+
+```
+
+# 2
+
+```{r message=FALSE, warning=FALSE}
+
+chipotle_unnested <- chipotle_nested |>
+  unnest(daily_visits) |>
+  # chronologically 
+  mutate(day = factor(day, levels = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")))
+
+total_visits_df <- chipotle_unnested |>
+  group_by(day) |>
+  summarize(total_visits = sum(visits, na.rm = TRUE))
+
+ggplot(total_visits_df, aes(x = day, y = total_visits)) +
+  geom_col(fill = "#8C1515") + 
+  theme_minimal() +
+  scale_y_continuous(labels = comma) +
+  labs(title = "Total Chipotle Visits by Day of the Week", x = NULL, y = "Total Number of Visits") +
+  theme(plot.title = element_text(face = "bold", size = 16))
+
+```
+
+In this newly created chipotle_unnested dataset a single observation represents the total number of visits for one specific day of the week at one specific Chipotle location.
+
+# 3
+
+```{r message=FALSE, warning=FALSE}
+
+busiest_day_df <- chipotle_unnested |>
+  group_by(placekey) |>
+  slice_max(order_by = visits, n = 1, with_ties = FALSE) |>
+  ungroup()
+
+peak_store_counts <- busiest_day_df |>
+  count(day, name = "store_count") |>
+  # all days are represented even if count is 0
+  complete(day, fill = list(store_count = 0))
+
+ggplot(peak_store_counts, aes(x = day, y = store_count)) +
+  geom_col(fill = "#E7711B") + 
+  theme_minimal() +
+  geom_text(aes(label = store_count), vjust = -0.5, fontface = "bold", color = "gray30") +
+  labs(title = "Most Common Busiest Days for Chipotle Locations", x = NULL, y = "Number of Restaurants") +
+  theme(plot.title = element_text(face = "bold", size = 16))
+
+```
+
+In the busiest_day_df dataset an observation represents a single Chipotle restaurant and the specific day of the week that it experiences its highest visitor count.
+
+# Recommendations
+
+I definitely recommend running this big promotion on a Friday. If leadership is leaning toward a two-day event, a Thursday-Friday combination is absolutely the way to go.
+
+While both visualizations point to the end of the workweek as the peak time, the graph showing the Most Common Busiest Days for Chipotle Locations (the store count) was by far the most influential in making this call. Looking at total visits alone can be a bit deceiving because a handful of massive, high volume flagship stores or locations near big events can heavily skew those aggregate numbers. By looking at the count of individual restaurants instead, we get a much clearer picture of what the typical, average location is actually experiencing. For 965 distinct locations, Friday is their absolute busiest day, and Thursday is a solid runner-up with 704 locations peaking. This metric ensures the promotion actually aligns with the peak operational rush for the vast majority of our teams on the ground, rather than just catering to the chain's heaviest hitters.
+
+A couple of other interesting insights stood out in the data, too:
+
+- The "Taco Tuesday" Effect: There is a noticeable, distinct spike in traffic on Tuesdays compared to both Mondays and Wednesdays. It looks like that cultural mindset brings a small but reliable mid-week boost to the stores.
+
+- The Sunday Slump: Sunday is universally the slowest day across the board—only 25 locations consider it their peak day. While the current goal is to run the promo when it's busiest, if leadership ever pivots and wants to use a promotion to drive traffic and balance labor on dead days, Sunday would be the obvious target.
+
+# Saved Data
+
+```{r message=FALSE, warning=FALSE}
+
+write_rds(chipotle_nested, "chipotle_nested_data.rds")
+
+```
+
+##### AI USAGE
+
+Shoutout to Copilot to help me with the "recommendations" section to talk clearly and correct my grammar. It was based on my notes and it ONLY helped me to make my thoughts clearly.
