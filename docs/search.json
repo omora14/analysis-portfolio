@@ -484,7 +484,7 @@
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "Selected analyses grouped by theme. Open any project below, or use the sidebar while browsing.\n\nVisualization\n\nData Visualization Critique\nVisualizing Large Distributions\nFruit Consumption vs GDP\nVisualization Redesign\n\n\n\nExploratory Analysis\n\nGun Deaths Analysis\nGun Deaths: Seasonal Patterns\nFlight Delays by Origin\nAircraft Age and Flight Delays\nUtah Baseball Programs\n\n\n\nData Wrangling\n\nStock Market Predictions\nCountry Heights\nCombining Height Datasets\nSales Data Cleaning\nStock Portfolio Comparison\nChipotle Order Analysis\nParsing Nested Visit Data\n\n\n\nSpatial & Maps\n\nUS Lower 48 Map\nIdaho Dams and Water Systems\nBuilding Footprints by State\nCosta Rica Species Map\nOpen Data Source Evaluation\n\n\n\nText Analysis\n\nScripture Text Patterns\nNamed Mentions in Text\nNested Text Analysis\n\n\n\n\n\n Back to top",
+    "text": "Selected analyses grouped by theme. Open any project below, or use the sidebar while browsing.\n\nVisualization\n\nData Visualization Critique\nVisualizing Large Distributions\nFruit Consumption vs GDP\nVisualization Redesign\n\n\n\nExploratory Analysis\n\nGun Deaths Analysis\nGun Deaths: Seasonal Patterns\nFlight Delays by Origin\nAircraft Age and Flight Delays\nUtah Baseball Programs\n\n\n\nData Wrangling\n\nStock Market Predictions\nCountry Heights\nCombining Height Datasets\nSales Data Cleaning\nStock Portfolio Comparison\nChipotle Order Analysis\nParsing Nested Visit Data\n\n\n\nSpatial & Maps\n\nUS Lower 48 Map\nIdaho Dams and Water Systems\nBuilding Footprints by State\nCosta Rica Species Map\nOpen Data Source Evaluation\n\n\n\nText Analysis\n\nScripture Text Patterns\nNamed Mentions in Text\nNested Text Analysis\nAI Privacy Redaction Audit\n\n\n\n\n\n Back to top",
     "crumbs": [
       "Projects",
       "Overview"
@@ -493,30 +493,30 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Owen Morales",
+    "title": "Projects",
     "section": "",
     "text": "A selection of data analysis and visualization projects. Browse Projects or use the sidebar to explore by theme."
   },
   {
     "objectID": "index.html#whats-here",
     "href": "index.html#whats-here",
-    "title": "Owen Morales",
+    "title": "Projects",
     "section": "",
     "text": "A selection of data analysis and visualization projects. Browse Projects or use the sidebar to explore by theme."
   },
   {
     "objectID": "index.html#quick-links",
     "href": "index.html#quick-links",
-    "title": "Owen Morales",
+    "title": "Projects",
     "section": "Quick links",
     "text": "Quick links\n\nView my resume (PDF)\nBrowse projects\nLinkedIn\nGitHub\nEmail"
   },
   {
     "objectID": "index.html#featured-projects",
     "href": "index.html#featured-projects",
-    "title": "Owen Morales",
+    "title": "Projects",
     "section": "Featured projects",
-    "text": "Featured projects\n\n\n\nProject\nFocus\n\n\n\n\nVisualizing Large Distributions\nOutliers & gapminder trends\n\n\nGun Deaths Analysis\nSeasonal patterns in public data\n\n\nFlight Delays by Origin\nNYC flights exploratory analysis\n\n\nStock Market Predictions\nExpert forecast evaluation\n\n\nCountry Heights\nMulti-source data joining\n\n\nCosta Rica Species Map\nInteractive geospatial mapping\n\n\nChipotle Order Analysis\nNested / JSON-style order data"
+    "text": "Featured projects\n\n\n\nProject\nFocus\n\n\n\n\nVisualizing Large Distributions\nOutliers & gapminder trends\n\n\nGun Deaths Analysis\nSeasonal patterns in public data\n\n\nFlight Delays by Origin\nNYC flights exploratory analysis\n\n\nStock Market Predictions\nExpert forecast evaluation\n\n\nCountry Heights\nMulti-source data joining\n\n\nCosta Rica Species Map\nInteractive geospatial mapping\n\n\nChipotle Order Analysis\nNested / JSON-style order data\n\n\nAI Privacy Redaction Audit\nCFPB narrative scrub intensity\n\n\n\n\n\nSelected analyses grouped by theme. Open any project below, or use the sidebar while browsing.\n\nVisualization\n\nData Visualization Critique\nVisualizing Large Distributions\nFruit Consumption vs GDP\nVisualization Redesign\n\n\n\nExploratory Analysis\n\nGun Deaths Analysis\nGun Deaths: Seasonal Patterns\nFlight Delays by Origin\nAircraft Age and Flight Delays\nUtah Baseball Programs\n\n\n\nData Wrangling\n\nStock Market Predictions\nCountry Heights\nCombining Height Datasets\nSales Data Cleaning\nStock Portfolio Comparison\nChipotle Order Analysis\nParsing Nested Visit Data\n\n\n\nSpatial & Maps\n\nUS Lower 48 Map\nIdaho Dams and Water Systems\nBuilding Footprints by State\nCosta Rica Species Map\nOpen Data Source Evaluation\n\n\n\nText Analysis\n\nScripture Text Patterns\nNamed Mentions in Text\nNested Text Analysis\nAI Privacy Redaction Audit"
   },
   {
     "objectID": "projects/critique/visualization-critique.html",
@@ -1020,6 +1020,174 @@
       "Projects",
       "Data Wrangling",
       "Chipotle Order Analysis"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html",
+    "href": "projects/text/privacy-redaction-audit.html",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "",
+    "text": "The CFPB publishes real consumer complaints online, but they scrub out personal info first. Names, account numbers, and stuff like that get replaced with XXXX. That is good for privacy, but it also cuts out details you might want if you are analyzing the text or training a model on it.\nI wanted to see how far that scrubbing actually goes, so I looked at:\n\nhow long the remaining text is (complaintLength)\nhow many XXXX tokens show up (redactionCount)\nwhich products and states get scrubbed the most",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#motivation",
+    "href": "projects/text/privacy-redaction-audit.html#motivation",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "",
+    "text": "The CFPB publishes real consumer complaints online, but they scrub out personal info first. Names, account numbers, and stuff like that get replaced with XXXX. That is good for privacy, but it also cuts out details you might want if you are analyzing the text or training a model on it.\nI wanted to see how far that scrubbing actually goes, so I looked at:\n\nhow long the remaining text is (complaintLength)\nhow many XXXX tokens show up (redactionCount)\nwhich products and states get scrubbed the most",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#setup",
+    "href": "projects/text/privacy-redaction-audit.html#setup",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Setup",
+    "text": "Setup\n\n\nCode\nlibrary(tidyverse)\nlibrary(stringr)\nlibrary(scales)\nlibrary(sf)\nlibrary(USAboundaries)\nlibrary(plotly)",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#import-real-primary-data-cfpb",
+    "href": "projects/text/privacy-redaction-audit.html#import-real-primary-data-cfpb",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Import real primary data (CFPB)",
+    "text": "Import real primary data (CFPB)\nPull recent complaint rows that include a published narrative from the live CFPB search API. If the API is unavailable, fall back to the official bulk CSV zip.\n\n\nCode\n# Abort remote reads that hang longer than two minutes\noptions(timeout = 120)\n\n# Live CFPB search export: only rows with published narratives\ncfpbUrl &lt;- paste0(\n  \"https://www.consumerfinance.gov/data-research/consumer-complaints/search/api/v1/\",\n  \"?has_narrative=true&format=csv&no_aggs=true\",\n  \"&date_received_min=2024-01-01\"\n)\n\n# Official bulk zip used only if the streaming API fails\ncfpbZipUrl &lt;- \"https://files.consumerfinance.gov/ccdb/complaints.csv.zip\"\n\n# Cap rows with n_max so Quarto renders stay tractable (API size= is unreliable for CSV)\nrawComplaints &lt;- tryCatch(\n  {\n    read_csv(cfpbUrl, n_max = 10000, show_col_types = FALSE)\n  },\n  error = function(e) {\n    message(\"API unavailable; falling back to official complaints.zip\")\n    tempZip &lt;- tempfile(fileext = \".zip\")\n    download.file(cfpbZipUrl, tempZip, mode = \"wb\", quiet = TRUE)\n    tempDir &lt;- tempdir()\n    unzip(tempZip, exdir = tempDir)\n    csvPath &lt;- list.files(tempDir, pattern = \"complaints\\\\.csv$\", full.names = TRUE)[1]\n    read_csv(csvPath, n_max = 50000, show_col_types = FALSE) %&gt;%\n      filter(!is.na(`Consumer complaint narrative`))\n  }\n)\n\n# Rename to strict camelCase and keep only analysis columns\nrawTextData &lt;- rawComplaints %&gt;%\n  rename(\n    dateReceived = `Date received`,\n    product = Product,\n    subProduct = `Sub-product`,\n    issue = Issue,\n    subIssue = `Sub-issue`,\n    consumerComplaintNarrative = `Consumer complaint narrative`,\n    companyPublicResponse = `Company public response`,\n    company = Company,\n    state = State,\n    zipCode = `ZIP code`,\n    tags = Tags,\n    submittedVia = `Submitted via`,\n    dateSentToCompany = `Date sent to company`,\n    companyResponseToConsumer = `Company response to consumer`,\n    timelyResponse = `Timely response?`,\n    complaintId = `Complaint ID`\n  ) %&gt;%\n  select(\n    complaintId, dateReceived, product, subProduct, issue,\n    consumerComplaintNarrative, company, state\n  )\n\n# Confirm we actually loaded narrative text\nglimpse(rawTextData)\n\n\nRows: 10,000\nColumns: 8\n$ complaintId                &lt;dbl&gt; 8101342, 8095596, 8101341, 8085809, 8085678…\n$ dateReceived               &lt;dttm&gt; 2024-01-04 04:24:52, 2024-01-02 16:59:42, …\n$ product                    &lt;chr&gt; \"Credit reporting or other personal consume…\n$ subProduct                 &lt;chr&gt; \"Credit reporting\", \"Credit reporting\", \"Ch…\n$ issue                      &lt;chr&gt; \"Problem with a company's investigation int…\n$ consumerComplaintNarrative &lt;chr&gt; \"I hope this letter finds you well. I am wr…\n$ company                    &lt;chr&gt; \"EQUIFAX, INC.\", \"DISCOVER BANK\", \"NAVY FED…\n$ state                      &lt;chr&gt; \"FL\", \"FL\", \"VA\", \"IL\", \"TX\", \"TX\", \"NY\", \"…",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#import-real-secondary-data-census-regions",
+    "href": "projects/text/privacy-redaction-audit.html#import-real-secondary-data-census-regions",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Import real secondary data (Census regions)",
+    "text": "Import real secondary data (Census regions)\nJoin state abbreviations to Census Bureau region labels so redaction intensity can be compared geographically.\n\n\nCode\n# Live CSV mapping state names/codes to Census regions and divisions\nstateMeta &lt;- read_csv(\n  \"https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv\",\n  show_col_types = FALSE\n) %&gt;%\n  # Enforce camelCase on the metadata table\n  rename(\n    stateName = State,\n    stateCode = `State Code`,\n    region = Region,\n    division = Division\n  )\n\nglimpse(stateMeta)\n\n\nRows: 51\nColumns: 4\n$ stateName &lt;chr&gt; \"Alaska\", \"Alabama\", \"Arkansas\", \"Arizona\", \"California\", \"C…\n$ stateCode &lt;chr&gt; \"AK\", \"AL\", \"AR\", \"AZ\", \"CA\", \"CO\", \"CT\", \"DC\", \"DE\", \"FL\", …\n$ region    &lt;chr&gt; \"West\", \"South\", \"South\", \"West\", \"West\", \"West\", \"Northeast…\n$ division  &lt;chr&gt; \"Pacific\", \"East South Central\", \"West South Central\", \"Moun…",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#data-wrangling-length-redactions-and-edge-cases",
+    "href": "projects/text/privacy-redaction-audit.html#data-wrangling-length-redactions-and-edge-cases",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Data wrangling: length, redactions, and edge cases",
+    "text": "Data wrangling: length, redactions, and edge cases\nCalculate character length and count each XXXX scrub token. Isolate high-redaction narratives, then join Census metadata.\n\n\nCode\n# Build privacy metrics on every published narrative\ncomplaintMetrics &lt;- rawTextData %&gt;%\n  filter(!is.na(consumerComplaintNarrative), consumerComplaintNarrative != \"\") %&gt;%\n  mutate(\n    # Remaining readable text after scrubbing\n    complaintLength = nchar(consumerComplaintNarrative),\n    # Number of PII placeholders inserted by CFPB scrubbing\n    redactionCount = str_count(consumerComplaintNarrative, \"XXXX\"),\n    # Redactions per character as a simple density proxy\n    redactionDensity = redactionCount / pmax(complaintLength, 1)\n  )\n\n# Threshold for unusually heavy scrubbing (75th percentile of redaction counts)\nredactionCutoff &lt;- quantile(complaintMetrics$redactionCount, 0.75, na.rm = TRUE)\n\n# Edge cases: narratives with high redaction volume\nhighRedactionCases &lt;- complaintMetrics %&gt;%\n  filter(redactionCount &gt;= redactionCutoff)\n\n# Attach Census region / division via state abbreviation\ncomplaintWithRegion &lt;- complaintMetrics %&gt;%\n  left_join(stateMeta, by = c(\"state\" = \"stateCode\"))\n\n# Product-level summary of length and redaction intensity\nproductSummary &lt;- complaintWithRegion %&gt;%\n  filter(!is.na(product)) %&gt;%\n  group_by(product) %&gt;%\n  summarize(\n    complaintCount = n(),\n    avgComplaintLength = mean(complaintLength, na.rm = TRUE),\n    avgRedactionCount = mean(redactionCount, na.rm = TRUE),\n    avgRedactionDensity = mean(redactionDensity, na.rm = TRUE),\n    .groups = \"drop\"\n  ) %&gt;%\n  arrange(desc(complaintCount))\n\n# Region-level summary after the join\nregionSummary &lt;- complaintWithRegion %&gt;%\n  filter(!is.na(region)) %&gt;%\n  group_by(region) %&gt;%\n  summarize(\n    complaintCount = n(),\n    avgComplaintLength = mean(complaintLength, na.rm = TRUE),\n    avgRedactionCount = mean(redactionCount, na.rm = TRUE),\n    avgRedactionDensity = mean(redactionDensity, na.rm = TRUE),\n    .groups = \"drop\"\n  ) %&gt;%\n  arrange(desc(avgRedactionCount))\n\nproductSummary\n\n\n# A tibble: 11 × 5\n   product                   complaintCount avgComplaintLength avgRedactionCount\n   &lt;chr&gt;                              &lt;int&gt;              &lt;dbl&gt;             &lt;dbl&gt;\n 1 Credit reporting or othe…           6828              1020.             17.9 \n 2 Debt collection                      913              1062.             10.2 \n 3 Credit card                          700              1177.              9.56\n 4 Checking or savings acco…            544              1163.              9.43\n 5 Student loan                         250              1220.              9.63\n 6 Mortgage                             208              1582.             15.4 \n 7 Money transfer, virtual …            187              1280.             11.3 \n 8 Vehicle loan or lease                141              1503.             13.4 \n 9 Prepaid card                         111               873.              7.56\n10 Payday loan, title loan,…             99               888.              7.41\n11 Debt or credit management             19               890              10.8 \n# ℹ 1 more variable: avgRedactionDensity &lt;dbl&gt;\n\n\nCode\nregionSummary\n\n\n# A tibble: 4 × 5\n  region complaintCount avgComplaintLength avgRedactionCount avgRedactionDensity\n  &lt;chr&gt;           &lt;int&gt;              &lt;dbl&gt;             &lt;dbl&gt;               &lt;dbl&gt;\n1 West             1672              1219.              19.2              0.0153\n2 North…           1692              1102.              16.8              0.0159\n3 South            5068               986.              14.8              0.0157\n4 Midwe…           1521              1142.              12.0              0.0108\n\n\n\nHigh-redaction edge cases\n\n\nCode\n# Show how common heavy scrubbing is relative to the full sample\ntibble(\n  totalNarratives = nrow(complaintMetrics),\n  highRedactionNarratives = nrow(highRedactionCases),\n  redactionCutoffAt75thPct = as.numeric(redactionCutoff),\n  shareHighRedaction = nrow(highRedactionCases) / nrow(complaintMetrics)\n)\n\n\n# A tibble: 1 × 4\n  totalNarratives highRedactionNarratives redactionCutoffAt75thPct\n            &lt;int&gt;                   &lt;int&gt;                    &lt;dbl&gt;\n1           10000                    2562                       15\n# ℹ 1 more variable: shareHighRedaction &lt;dbl&gt;",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#combined-interactive-audit-widget",
+    "href": "projects/text/privacy-redaction-audit.html#combined-interactive-audit-widget",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Combined interactive audit widget",
+    "text": "Combined interactive audit widget\nOne dark-mode bar chart of average redaction volume by product, faceted by Census region, wrapped in plotly for hover inspection. Only the highest-volume products are kept so the widget stays readable.\n\n\nCode\n# Keep the most common products so facets are not overcrowded\ntopProducts &lt;- productSummary %&gt;%\n  slice_max(order_by = complaintCount, n = 6) %&gt;%\n  pull(product)\n\n# Aggregate mean redaction count and length by product × region\nauditPlotData &lt;- complaintWithRegion %&gt;%\n  filter(\n    product %in% topProducts,\n    !is.na(region),\n    !is.na(product)\n  ) %&gt;%\n  group_by(product, region) %&gt;%\n  summarize(\n    complaintCount = n(),\n    avgRedactionCount = mean(redactionCount, na.rm = TRUE),\n    avgComplaintLength = mean(complaintLength, na.rm = TRUE),\n    .groups = \"drop\"\n  )\n\n# Single ggplot combining product and region insights\nprivacyAuditPlot &lt;- ggplot(\n  auditPlotData,\n  aes(\n    x = reorder(product, avgRedactionCount),\n    y = avgRedactionCount,\n    fill = region,\n    text = paste0(\n      \"Product: \", product, \"\\n\",\n      \"Region: \", region, \"\\n\",\n      \"Avg redactions: \", round(avgRedactionCount, 2), \"\\n\",\n      \"Avg length: \", comma(round(avgComplaintLength)), \" chars\\n\",\n      \"Complaints: \", comma(complaintCount)\n    )\n  )\n) +\n  geom_col(position = \"dodge\", width = 0.75) +\n  coord_flip() +\n  scale_fill_brewer(palette = \"Set2\") +\n  labs(\n    title = \"Privacy scrub intensity by product and Census region\",\n    subtitle = \"Mean XXXX redaction count in published CFPB narratives\",\n    x = NULL,\n    y = \"Average redaction count (XXXX tokens)\",\n    fill = \"Region\",\n    caption = \"Source: CFPB Consumer Complaint Database + Census region crosswalk\"\n  ) +\n  theme_minimal(base_size = 12) +\n  theme(\n    plot.background = element_rect(fill = \"#1e1e1e\", color = NA),\n    panel.background = element_rect(fill = \"#1e1e1e\", color = NA),\n    panel.grid.major = element_line(color = \"#3a3a3a\"),\n    panel.grid.minor = element_blank(),\n    text = element_text(color = \"#f0f0f0\"),\n    axis.text = element_text(color = \"#d0d0d0\"),\n    axis.title = element_text(color = \"#f0f0f0\"),\n    legend.background = element_rect(fill = \"#1e1e1e\", color = NA),\n    legend.key = element_rect(fill = \"#1e1e1e\", color = NA),\n    plot.title = element_text(face = \"bold\", color = \"#ffffff\"),\n    plot.subtitle = element_text(color = \"#c8c8c8\"),\n    plot.caption = element_text(color = \"#9a9a9a\")\n  )\n\n# One interactive widget (not separate static charts)\nggplotly(privacyAuditPlot, tooltip = \"text\") %&gt;%\n  layout(\n    paper_bgcolor = \"#1e1e1e\",\n    plot_bgcolor = \"#1e1e1e\",\n    font = list(color = \"#f0f0f0\"),\n    legend = list(bgcolor = \"#1e1e1e\")\n  )",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#interpretation",
+    "href": "projects/text/privacy-redaction-audit.html#interpretation",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Interpretation",
+    "text": "Interpretation\nA few things jumped out:\n\nProduct matters more than geography. The map is interesting, but the product chart tells a clearer story. Categories where people write about accounts, dates, and personal timelines end up with a lot more XXXX.\nLonger stories get scrubbed more. That makes sense for privacy, but it is annoying for text analysis because names and dates are often the useful parts.\nThe extreme cases are worth checking. If I were testing a redaction tool, I would sample the top quartile first. Those are the ones where you can tell if it is scrubbing too little or wiping out the whole story.\n\nOverall, keeping text readable helps with analysis, and heavy redaction helps with privacy. Tracking length, redaction count, and density together is a simple way to see when the scrubbing starts to hurt the data.\n\n\nAI USAGE\nThis analysis was supported by Copilot to summarize the finding and suggest visualizations. I wrote the code and interpreted the results, but Copilot helped me with some of the text and charting ideas.",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#data",
+    "href": "projects/text/privacy-redaction-audit.html#data",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Data",
+    "text": "Data\nI pulled the complaint narratives straight from the CFPB site and joined in a simple state-to-region table so I could map the results.\nThe full database is massive, so I capped it at 10,000 rows with n_max = 10000. That was plenty to see the patterns, and running the whole thing would have taken forever.\n\n\nCode\noptions(timeout = 120)\n\ncfpbUrl &lt;- paste0(\n  \"https://www.consumerfinance.gov/data-research/consumer-complaints/search/api/v1/\",\n  \"?has_narrative=true&format=csv&no_aggs=true\",\n  \"&date_received_min=2024-01-01\")\n\ncfpbZipUrl &lt;- \"https://files.consumerfinance.gov/ccdb/complaints.csv.zip\"\n\nrawComplaints &lt;- tryCatch(\n  {\n    read_csv(cfpbUrl, n_max = 10000, show_col_types = FALSE)\n  },\n  error = function(e) {\n    tempZip &lt;- tempfile(fileext = \".zip\")\n    download.file(cfpbZipUrl, tempZip, mode = \"wb\", quiet = TRUE)\n    tempDir &lt;- tempdir()\n    unzip(tempZip, exdir = tempDir)\n    csvPath &lt;- list.files(tempDir, pattern = \"complaints\\\\.csv$\", full.names = TRUE)[1]\n    read_csv(csvPath, n_max = 50000, show_col_types = FALSE) %&gt;%\n      filter(!is.na(`Consumer complaint narrative`))\n  }\n)\n\nrawTextData &lt;- rawComplaints %&gt;%\n  rename(\n    dateReceived = `Date received`,\n    product = Product,\n    subProduct = `Sub-product`,\n    issue = Issue,\n    subIssue = `Sub-issue`,\n    consumerComplaintNarrative = `Consumer complaint narrative`,\n    companyPublicResponse = `Company public response`,\n    company = Company,\n    state = State,\n    zipCode = `ZIP code`,\n    tags = Tags,\n    submittedVia = `Submitted via`,\n    dateSentToCompany = `Date sent to company`,\n    companyResponseToConsumer = `Company response to consumer`,\n    timelyResponse = `Timely response?`,\n    complaintId = `Complaint ID`) %&gt;%\n  select(complaintId, dateReceived, product, subProduct, issue,\n    consumerComplaintNarrative, company, state)\n\n\n\n\nCode\nstateMeta &lt;- read_csv(\n  \"https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv\",\n  show_col_types = FALSE) %&gt;%\n  rename(\n    stateName = State,\n    stateCode = `State Code`,\n    region = Region,\n    division = Division)",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#privacy-metrics",
+    "href": "projects/text/privacy-redaction-audit.html#privacy-metrics",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Privacy metrics",
+    "text": "Privacy metrics\n\n\nCode\ncomplaintMetrics &lt;- rawTextData %&gt;%\n  filter(!is.na(consumerComplaintNarrative), consumerComplaintNarrative != \"\") %&gt;%\n  mutate(\n    complaintLength = nchar(consumerComplaintNarrative),\n    redactionCount = str_count(consumerComplaintNarrative, \"XXXX\"),\n    redactionDensity = redactionCount / pmax(complaintLength, 1))\n\nredactionCutoff &lt;- quantile(complaintMetrics$redactionCount, 0.75, na.rm = TRUE)\n\nhighRedactionCases &lt;- complaintMetrics %&gt;%\n  filter(redactionCount &gt;= redactionCutoff)\n\ncomplaintWithRegion &lt;- complaintMetrics %&gt;%\n  left_join(stateMeta, by = c(\"state\" = \"stateCode\"))\n\nproductSummary &lt;- complaintWithRegion %&gt;%\n  filter(!is.na(product)) %&gt;%\n  group_by(product) %&gt;%\n  summarize(\n    complaintCount = n(),\n    avgComplaintLength = mean(complaintLength, na.rm = TRUE),\n    avgRedactionCount = mean(redactionCount, na.rm = TRUE),\n    avgRedactionDensity = mean(redactionDensity, na.rm = TRUE),\n    .groups = \"drop\") %&gt;%\n  arrange(desc(complaintCount))\n\nstateSummary &lt;- complaintWithRegion %&gt;%\n  filter(!is.na(state), nchar(state) == 2) %&gt;%\n  group_by(state, stateName, region) %&gt;%\n  summarize(\n    complaintCount = n(),\n    avgComplaintLength = mean(complaintLength, na.rm = TRUE),\n    avgRedactionCount = mean(redactionCount, na.rm = TRUE),\n    .groups = \"drop\")",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#where-is-scrubbing-heaviest",
+    "href": "projects/text/privacy-redaction-audit.html#where-is-scrubbing-heaviest",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Where is scrubbing heaviest?",
+    "text": "Where is scrubbing heaviest?\nI started with a US map. Darker states have more XXXX tokens on average.\n\n\nCode\nlower48 &lt;- state.name[!state.name %in% c(\"Alaska\", \"Hawaii\")]\n\nstatesMap &lt;- us_states() %&gt;%\n  filter(name %in% lower48) %&gt;%\n  left_join(stateSummary, by = c(\"state_abbr\" = \"state\"))\n\nredactionMap &lt;- ggplot(statesMap) +\n  geom_sf(aes(fill = avgRedactionCount), color = \"white\", linewidth = 0.3) +\n  scale_fill_gradient(\n    low = \"#deebf7\",\n    high = \"#08519c\",\n    na.value = \"#f0f0f0\",\n    name = \"Avg XXXX\\nredactions\"\n  ) +\n  labs(title = \"Average privacy redactions by state\", subtitle = \"Mean number of XXXX tokens in published CFPB complaint narratives\", caption = \"Source: CFPB Consumer Complaint Database. Lower 48 shown.\") +\n  theme_void(base_size = 13) +\n  theme(\n    plot.title = element_text(face = \"bold\", color = \"#222222\"),\n    plot.subtitle = element_text(color = \"#555555\", margin = margin(b = 10)),\n    plot.caption = element_text(color = \"#777777\", hjust = 0),\n    legend.title = element_text(size = 10),\n    legend.text = element_text(size = 9),\n    plot.background = element_rect(fill = \"white\", color = NA),\n    panel.background = element_rect(fill = \"white\", color = NA))\n\nredactionMap\n\n\n\n\n\n\n\n\n\nIf a state is darker, people there were probably writing more personal details into their complaints, so CFPB had to blank more of it out. Lighter does not mean “more private.” It just means those stories did not need as many placeholders. Looking at this, the state differences are real, but they are not as big as what you see when you break it down by product.",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#which-products-need-the-most-scrubbing",
+    "href": "projects/text/privacy-redaction-audit.html#which-products-need-the-most-scrubbing",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Which products need the most scrubbing?",
+    "text": "Which products need the most scrubbing?\nProduct type matters way more than location. Here are the most common categories ranked by average XXXX count.\n\n\nCode\ntopProductBars &lt;- productSummary %&gt;%\n  slice_max(order_by = complaintCount, n = 8) %&gt;%\n  mutate(productShort = str_wrap(product, width = 28))\n\nproductPlot &lt;- ggplot(\n  topProductBars,\n  aes(\n    x = reorder(productShort, avgRedactionCount),\n    y = avgRedactionCount,\n    text = paste0(\n      product, \"\\n\",\n      \"Avg redactions: \", round(avgRedactionCount, 1), \"\\n\",\n      \"Avg length: \", comma(round(avgComplaintLength)), \" characters\\n\",\n      \"Narratives: \", comma(complaintCount)))) +\n  geom_col(fill = \"#2171b5\", width = 0.72) +\n  coord_flip() +\n  labs(title = \"Products with the heaviest privacy scrubbing\", subtitle = \"Average XXXX redactions among the most common complaint categories\", x = NULL, y = \"Average number of XXXX redactions per narrative\", caption = \"Source: CFPB Consumer Complaint Database\") +\n  theme_minimal(base_size = 13) +\n  theme(\n    plot.title = element_text(face = \"bold\", color = \"#222222\"),\n    plot.subtitle = element_text(color = \"#555555\"),\n    plot.caption = element_text(color = \"#777777\", hjust = 0),\n    panel.grid.major.y = element_blank(),\n    panel.grid.minor = element_blank(),\n    axis.text = element_text(color = \"#333333\"),\n    plot.background = element_rect(fill = \"white\", color = NA),\n    panel.background = element_rect(fill = \"white\", color = NA))\n\nggplotly(productPlot, tooltip = \"text\") %&gt;%\n  layout(\n    paper_bgcolor = \"white\",\n    plot_bgcolor = \"white\",\n    font = list(color = \"#222222\"),\n    margin = list(l = 10, r = 20, t = 60, b = 40)\n  )",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#do-longer-stories-get-scrubbed-more",
+    "href": "projects/text/privacy-redaction-audit.html#do-longer-stories-get-scrubbed-more",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "Do longer stories get scrubbed more?",
+    "text": "Do longer stories get scrubbed more?\nI figured longer complaints would get scrubbed more, since there is just more text to find personal info in. This plot checks that for the main products.\n\n\nCode\nscatterData &lt;- productSummary %&gt;%\n  slice_max(order_by = complaintCount, n = 10)\n\nlengthPlot &lt;- ggplot(\n  scatterData,\n  aes(\n    x = avgComplaintLength,\n    y = avgRedactionCount,\n    size = complaintCount,\n    text = paste0(\n      product, \"\\n\",\n      \"Avg length: \", comma(round(avgComplaintLength)), \"\\n\",\n      \"Avg redactions: \", round(avgRedactionCount, 1), \"\\n\",\n      \"Narratives: \", comma(complaintCount)))) +\n  geom_point(color = \"#08519c\", alpha = 0.85) +\n  scale_size_continuous(range = c(4, 14), labels = comma, name = \"Narratives\") +\n  scale_x_continuous(labels = comma) +\n  labs(title = \"Longer narratives usually carry more redactions\", subtitle = \"Each point is a product category. Bubble size is complaint volume.\", x = \"Average narrative length (characters)\", y = \"Average XXXX redactions\", caption = \"Source: CFPB Consumer Complaint Database\") +\n  theme_minimal(base_size = 13) +\n  theme(\n    plot.title = element_text(face = \"bold\", color = \"#222222\"),\n    plot.subtitle = element_text(color = \"#555555\"),\n    plot.caption = element_text(color = \"#777777\", hjust = 0),\n    panel.grid.minor = element_blank(),\n    axis.text = element_text(color = \"#333333\"),\n    plot.background = element_rect(fill = \"white\", color = NA),\n    panel.background = element_rect(fill = \"white\", color = NA),\n    legend.position = \"right\")\n\nggplotly(lengthPlot, tooltip = \"text\") %&gt;%\n  layout(\n    paper_bgcolor = \"white\",\n    plot_bgcolor = \"white\",\n    font = list(color = \"#222222\"))",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
+    ]
+  },
+  {
+    "objectID": "projects/text/privacy-redaction-audit.html#high-redaction-edge-cases",
+    "href": "projects/text/privacy-redaction-audit.html#high-redaction-edge-cases",
+    "title": "AI Privacy & Text Sanitization Audit",
+    "section": "High-redaction edge cases",
+    "text": "High-redaction edge cases\nI also looked at the high end. Anything at or above the 75th percentile of XXXX counts is where scrubbing hits hardest, and the leftover text is the least useful.\n\n\nCode\nedgeCaseSummary &lt;- tibble(\n  totalNarratives = nrow(complaintMetrics),\n  highRedactionNarratives = nrow(highRedactionCases),\n  redactionCutoff = as.numeric(redactionCutoff),\n  shareHighRedaction = highRedactionNarratives / totalNarratives\n)\n\nedgeCaseSummary\n\n\n# A tibble: 1 × 4\n  totalNarratives highRedactionNarratives redactionCutoff shareHighRedaction\n            &lt;int&gt;                   &lt;int&gt;           &lt;dbl&gt;              &lt;dbl&gt;\n1           10000                    2562              15              0.256",
+    "crumbs": [
+      "Projects",
+      "Text Analysis",
+      "AI Privacy Redaction Audit"
     ]
   }
 ]

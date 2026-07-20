@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Owen Morales">
+
+<title>AI Privacy &amp; Text Sanitization Audit – Owen Morales</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../Images/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-707d8167ce6003fca903bfe2be84ab7f.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-ca3a3156dfa06696f18c39bad94c63ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-44ce5e1fdf16f4d88befeca03b83ba44.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-ca3a3156dfa06696f18c39bad94c63ad.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="../../site_libs/plotly-binding-4.12.0/plotly.js"></script>
+<script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+<script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="../../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+<link href="../../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../../index.html" class="navbar-brand navbar-brand-logo">
+    </a>
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Owen Morales</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../resume.pdf"> 
+<span class="menu-text">Resume</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/text/scripture-patterns.html">Text Analysis</a></li><li class="breadcrumb-item"><a href="../../projects/text/privacy-redaction-audit.html">AI Privacy Redaction Audit</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../../index.html" class="sidebar-logo-link">
+      </a>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Overview</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Visualization</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/critique/visualization-critique.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data Visualization Critique</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/distributions/large-distributions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualizing Large Distributions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/presentation/fruit-gdp.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Fruit Consumption vs GDP</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/presentation/visualization-redesign.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Visualization Redesign</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Exploratory Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/exploratory/gun-deaths.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gun Deaths Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/presentation/gun-deaths-seasonal.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Gun Deaths: Seasonal Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/exploratory/flight-delays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Flight Delays by Origin</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/flights/aircraft-age-delays.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Aircraft Age and Flight Delays</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/flights/utah-baseball.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Utah Baseball Programs</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Data Wrangling</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/wrangling/stock-predictions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stock Market Predictions</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/wrangling/country-heights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Country Heights</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/wrangling/combining-heights.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Combining Height Datasets</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/markets/sales-cleaning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sales Data Cleaning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/markets/stock-portfolio.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Stock Portfolio Comparison</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/nested/chipotle-orders.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Chipotle Order Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/parsing/nested-visits.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Parsing Nested Visit Data</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Spatial &amp; Maps</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/maps/us-lower-48.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">US Lower 48 Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/maps/idaho-dams.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Idaho Dams and Water Systems</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/maps/building-footprints.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Building Footprints by State</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/leaflet/costa-rica-species.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Costa Rica Species Map</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/leaflet/open-data-sources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Open Data Source Evaluation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Text Analysis</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/text/scripture-patterns.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Scripture Text Patterns</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/text/named-mentions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Named Mentions in Text</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/nested/nested-text.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Nested Text Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../projects/text/privacy-redaction-audit.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">AI Privacy Redaction Audit</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#motivation" id="toc-motivation" class="nav-link active" data-scroll-target="#motivation">Motivation</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+  <li><a href="#privacy-metrics" id="toc-privacy-metrics" class="nav-link" data-scroll-target="#privacy-metrics">Privacy metrics</a></li>
+  <li><a href="#where-is-scrubbing-heaviest" id="toc-where-is-scrubbing-heaviest" class="nav-link" data-scroll-target="#where-is-scrubbing-heaviest">Where is scrubbing heaviest?</a></li>
+  <li><a href="#which-products-need-the-most-scrubbing" id="toc-which-products-need-the-most-scrubbing" class="nav-link" data-scroll-target="#which-products-need-the-most-scrubbing">Which products need the most scrubbing?</a></li>
+  <li><a href="#do-longer-stories-get-scrubbed-more" id="toc-do-longer-stories-get-scrubbed-more" class="nav-link" data-scroll-target="#do-longer-stories-get-scrubbed-more">Do longer stories get scrubbed more?</a></li>
+  <li><a href="#high-redaction-edge-cases" id="toc-high-redaction-edge-cases" class="nav-link" data-scroll-target="#high-redaction-edge-cases">High-redaction edge cases</a></li>
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation">Interpretation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../projects/text/scripture-patterns.html">Text Analysis</a></li><li class="breadcrumb-item"><a href="../../projects/text/privacy-redaction-audit.html">AI Privacy Redaction Audit</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">AI Privacy &amp; Text Sanitization Audit</h1>
+<p class="subtitle lead">Redaction patterns in CFPB consumer complaint narratives</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Owen Morales </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="motivation" class="level2">
+<h2 class="anchored" data-anchor-id="motivation">Motivation</h2>
+<p>The CFPB publishes real consumer complaints online, but they scrub out personal info first. Names, account numbers, and stuff like that get replaced with <code>XXXX</code>. That is good for privacy, but it also cuts out details you might want if you are analyzing the text or training a model on it.</p>
+<p>I wanted to see how far that scrubbing actually goes, so I looked at:</p>
+<ul>
+<li>how long the remaining text is (<code>complaintLength</code>)</li>
+<li>how many <code>XXXX</code> tokens show up (<code>redactionCount</code>)</li>
+<li>which products and states get scrubbed the most</li>
+</ul>
+</section>
+<section id="setup" class="level2">
+<h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">library</span>(scales)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="fu">library</span>(USAboundaries)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">library</span>(plotly)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="data" class="level2">
+<h2 class="anchored" data-anchor-id="data">Data</h2>
+<p>I pulled the complaint narratives straight from the CFPB site and joined in a simple state-to-region table so I could map the results.</p>
+<p>The full database is massive, so I capped it at <strong>10,000</strong> rows with <code>n_max = 10000</code>. That was plenty to see the patterns, and running the whole thing would have taken forever.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">options</span>(<span class="at">timeout =</span> <span class="dv">120</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a>cfpbUrl <span class="ot">&lt;-</span> <span class="fu">paste0</span>(</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  <span class="st">"https://www.consumerfinance.gov/data-research/consumer-complaints/search/api/v1/"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  <span class="st">"?has_narrative=true&amp;format=csv&amp;no_aggs=true"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6"></a>  <span class="st">"&amp;date_received_min=2024-01-01"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7"></a></span>
+<span id="cb2-8"><a href="#cb2-8"></a>cfpbZipUrl <span class="ot">&lt;-</span> <span class="st">"https://files.consumerfinance.gov/ccdb/complaints.csv.zip"</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a></span>
+<span id="cb2-10"><a href="#cb2-10"></a>rawComplaints <span class="ot">&lt;-</span> <span class="fu">tryCatch</span>(</span>
+<span id="cb2-11"><a href="#cb2-11"></a>  {</span>
+<span id="cb2-12"><a href="#cb2-12"></a>    <span class="fu">read_csv</span>(cfpbUrl, <span class="at">n_max =</span> <span class="dv">10000</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-13"><a href="#cb2-13"></a>  },</span>
+<span id="cb2-14"><a href="#cb2-14"></a>  <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb2-15"><a href="#cb2-15"></a>    tempZip <span class="ot">&lt;-</span> <span class="fu">tempfile</span>(<span class="at">fileext =</span> <span class="st">".zip"</span>)</span>
+<span id="cb2-16"><a href="#cb2-16"></a>    <span class="fu">download.file</span>(cfpbZipUrl, tempZip, <span class="at">mode =</span> <span class="st">"wb"</span>, <span class="at">quiet =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-17"><a href="#cb2-17"></a>    tempDir <span class="ot">&lt;-</span> <span class="fu">tempdir</span>()</span>
+<span id="cb2-18"><a href="#cb2-18"></a>    <span class="fu">unzip</span>(tempZip, <span class="at">exdir =</span> tempDir)</span>
+<span id="cb2-19"><a href="#cb2-19"></a>    csvPath <span class="ot">&lt;-</span> <span class="fu">list.files</span>(tempDir, <span class="at">pattern =</span> <span class="st">"complaints</span><span class="sc">\\</span><span class="st">.csv$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)[<span class="dv">1</span>]</span>
+<span id="cb2-20"><a href="#cb2-20"></a>    <span class="fu">read_csv</span>(csvPath, <span class="at">n_max =</span> <span class="dv">50000</span>, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a>      <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(<span class="st">`</span><span class="at">Consumer complaint narrative</span><span class="st">`</span>))</span>
+<span id="cb2-22"><a href="#cb2-22"></a>  }</span>
+<span id="cb2-23"><a href="#cb2-23"></a>)</span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a>rawTextData <span class="ot">&lt;-</span> rawComplaints <span class="sc">%&gt;%</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a>  <span class="fu">rename</span>(</span>
+<span id="cb2-27"><a href="#cb2-27"></a>    <span class="at">dateReceived =</span> <span class="st">`</span><span class="at">Date received</span><span class="st">`</span>,</span>
+<span id="cb2-28"><a href="#cb2-28"></a>    <span class="at">product =</span> Product,</span>
+<span id="cb2-29"><a href="#cb2-29"></a>    <span class="at">subProduct =</span> <span class="st">`</span><span class="at">Sub-product</span><span class="st">`</span>,</span>
+<span id="cb2-30"><a href="#cb2-30"></a>    <span class="at">issue =</span> Issue,</span>
+<span id="cb2-31"><a href="#cb2-31"></a>    <span class="at">subIssue =</span> <span class="st">`</span><span class="at">Sub-issue</span><span class="st">`</span>,</span>
+<span id="cb2-32"><a href="#cb2-32"></a>    <span class="at">consumerComplaintNarrative =</span> <span class="st">`</span><span class="at">Consumer complaint narrative</span><span class="st">`</span>,</span>
+<span id="cb2-33"><a href="#cb2-33"></a>    <span class="at">companyPublicResponse =</span> <span class="st">`</span><span class="at">Company public response</span><span class="st">`</span>,</span>
+<span id="cb2-34"><a href="#cb2-34"></a>    <span class="at">company =</span> Company,</span>
+<span id="cb2-35"><a href="#cb2-35"></a>    <span class="at">state =</span> State,</span>
+<span id="cb2-36"><a href="#cb2-36"></a>    <span class="at">zipCode =</span> <span class="st">`</span><span class="at">ZIP code</span><span class="st">`</span>,</span>
+<span id="cb2-37"><a href="#cb2-37"></a>    <span class="at">tags =</span> Tags,</span>
+<span id="cb2-38"><a href="#cb2-38"></a>    <span class="at">submittedVia =</span> <span class="st">`</span><span class="at">Submitted via</span><span class="st">`</span>,</span>
+<span id="cb2-39"><a href="#cb2-39"></a>    <span class="at">dateSentToCompany =</span> <span class="st">`</span><span class="at">Date sent to company</span><span class="st">`</span>,</span>
+<span id="cb2-40"><a href="#cb2-40"></a>    <span class="at">companyResponseToConsumer =</span> <span class="st">`</span><span class="at">Company response to consumer</span><span class="st">`</span>,</span>
+<span id="cb2-41"><a href="#cb2-41"></a>    <span class="at">timelyResponse =</span> <span class="st">`</span><span class="at">Timely response?</span><span class="st">`</span>,</span>
+<span id="cb2-42"><a href="#cb2-42"></a>    <span class="at">complaintId =</span> <span class="st">`</span><span class="at">Complaint ID</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a>  <span class="fu">select</span>(complaintId, dateReceived, product, subProduct, issue,</span>
+<span id="cb2-44"><a href="#cb2-44"></a>    consumerComplaintNarrative, company, state)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>stateMeta <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="st">"https://raw.githubusercontent.com/cphalpert/census-regions/master/us%20census%20bureau%20regions%20and%20divisions.csv"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3"></a>  <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">rename</span>(</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="at">stateName =</span> State,</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="at">stateCode =</span> <span class="st">`</span><span class="at">State Code</span><span class="st">`</span>,</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="at">region =</span> Region,</span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="at">division =</span> Division)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="privacy-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="privacy-metrics">Privacy metrics</h2>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>complaintMetrics <span class="ot">&lt;-</span> rawTextData <span class="sc">%&gt;%</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(consumerComplaintNarrative), consumerComplaintNarrative <span class="sc">!=</span> <span class="st">""</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="at">complaintLength =</span> <span class="fu">nchar</span>(consumerComplaintNarrative),</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">redactionCount =</span> <span class="fu">str_count</span>(consumerComplaintNarrative, <span class="st">"XXXX"</span>),</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="at">redactionDensity =</span> redactionCount <span class="sc">/</span> <span class="fu">pmax</span>(complaintLength, <span class="dv">1</span>))</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a>redactionCutoff <span class="ot">&lt;-</span> <span class="fu">quantile</span>(complaintMetrics<span class="sc">$</span>redactionCount, <span class="fl">0.75</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-9"><a href="#cb4-9"></a></span>
+<span id="cb4-10"><a href="#cb4-10"></a>highRedactionCases <span class="ot">&lt;-</span> complaintMetrics <span class="sc">%&gt;%</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>  <span class="fu">filter</span>(redactionCount <span class="sc">&gt;=</span> redactionCutoff)</span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a>complaintWithRegion <span class="ot">&lt;-</span> complaintMetrics <span class="sc">%&gt;%</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>  <span class="fu">left_join</span>(stateMeta, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"state"</span> <span class="ot">=</span> <span class="st">"stateCode"</span>))</span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a>productSummary <span class="ot">&lt;-</span> complaintWithRegion <span class="sc">%&gt;%</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(product)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a>  <span class="fu">group_by</span>(product) <span class="sc">%&gt;%</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb4-20"><a href="#cb4-20"></a>    <span class="at">complaintCount =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-21"><a href="#cb4-21"></a>    <span class="at">avgComplaintLength =</span> <span class="fu">mean</span>(complaintLength, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-22"><a href="#cb4-22"></a>    <span class="at">avgRedactionCount =</span> <span class="fu">mean</span>(redactionCount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-23"><a href="#cb4-23"></a>    <span class="at">avgRedactionDensity =</span> <span class="fu">mean</span>(redactionDensity, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-24"><a href="#cb4-24"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(complaintCount))</span>
+<span id="cb4-26"><a href="#cb4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27"></a>stateSummary <span class="ot">&lt;-</span> complaintWithRegion <span class="sc">%&gt;%</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(state), <span class="fu">nchar</span>(state) <span class="sc">==</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a>  <span class="fu">group_by</span>(state, stateName, region) <span class="sc">%&gt;%</span></span>
+<span id="cb4-30"><a href="#cb4-30"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb4-31"><a href="#cb4-31"></a>    <span class="at">complaintCount =</span> <span class="fu">n</span>(),</span>
+<span id="cb4-32"><a href="#cb4-32"></a>    <span class="at">avgComplaintLength =</span> <span class="fu">mean</span>(complaintLength, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-33"><a href="#cb4-33"></a>    <span class="at">avgRedactionCount =</span> <span class="fu">mean</span>(redactionCount, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb4-34"><a href="#cb4-34"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+<section id="where-is-scrubbing-heaviest" class="level2">
+<h2 class="anchored" data-anchor-id="where-is-scrubbing-heaviest">Where is scrubbing heaviest?</h2>
+<p>I started with a US map. Darker states have more <code>XXXX</code> tokens on average.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>lower48 <span class="ot">&lt;-</span> state.name[<span class="sc">!</span>state.name <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Alaska"</span>, <span class="st">"Hawaii"</span>)]</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>statesMap <span class="ot">&lt;-</span> <span class="fu">us_states</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>  <span class="fu">filter</span>(name <span class="sc">%in%</span> lower48) <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>  <span class="fu">left_join</span>(stateSummary, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"state_abbr"</span> <span class="ot">=</span> <span class="st">"state"</span>))</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a>redactionMap <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(statesMap) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>  <span class="fu">geom_sf</span>(<span class="fu">aes</span>(<span class="at">fill =</span> avgRedactionCount), <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>  <span class="fu">scale_fill_gradient</span>(</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    <span class="at">low =</span> <span class="st">"#deebf7"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="at">high =</span> <span class="st">"#08519c"</span>,</span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="at">na.value =</span> <span class="st">"#f0f0f0"</span>,</span>
+<span id="cb5-13"><a href="#cb5-13"></a>    <span class="at">name =</span> <span class="st">"Avg XXXX</span><span class="sc">\n</span><span class="st">redactions"</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Average privacy redactions by state"</span>, <span class="at">subtitle =</span> <span class="st">"Mean number of XXXX tokens in published CFPB complaint narratives"</span>, <span class="at">caption =</span> <span class="st">"Source: CFPB Consumer Complaint Database. Lower 48 shown."</span>) <span class="sc">+</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a>  <span class="fu">theme_void</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a>  <span class="fu">theme</span>(</span>
+<span id="cb5-18"><a href="#cb5-18"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">color =</span> <span class="st">"#222222"</span>),</span>
+<span id="cb5-19"><a href="#cb5-19"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#555555"</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">b =</span> <span class="dv">10</span>)),</span>
+<span id="cb5-20"><a href="#cb5-20"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#777777"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb5-21"><a href="#cb5-21"></a>    <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">10</span>),</span>
+<span id="cb5-22"><a href="#cb5-22"></a>    <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">9</span>),</span>
+<span id="cb5-23"><a href="#cb5-23"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb5-24"><a href="#cb5-24"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>))</span>
+<span id="cb5-25"><a href="#cb5-25"></a></span>
+<span id="cb5-26"><a href="#cb5-26"></a>redactionMap</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="privacy-redaction-audit_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="1056"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If a state is darker, people there were probably writing more personal details into their complaints, so CFPB had to blank more of it out. Lighter does not mean “more private.” It just means those stories did not need as many placeholders. Looking at this, the state differences are real, but they are not as big as what you see when you break it down by product.</p>
+</section>
+<section id="which-products-need-the-most-scrubbing" class="level2">
+<h2 class="anchored" data-anchor-id="which-products-need-the-most-scrubbing">Which products need the most scrubbing?</h2>
+<p>Product type matters way more than location. Here are the most common categories ranked by average <code>XXXX</code> count.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>topProductBars <span class="ot">&lt;-</span> productSummary <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> complaintCount, <span class="at">n =</span> <span class="dv">8</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>  <span class="fu">mutate</span>(<span class="at">productShort =</span> <span class="fu">str_wrap</span>(product, <span class="at">width =</span> <span class="dv">28</span>))</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>productPlot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb6-6"><a href="#cb6-6"></a>  topProductBars,</span>
+<span id="cb6-7"><a href="#cb6-7"></a>  <span class="fu">aes</span>(</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="at">x =</span> <span class="fu">reorder</span>(productShort, avgRedactionCount),</span>
+<span id="cb6-9"><a href="#cb6-9"></a>    <span class="at">y =</span> avgRedactionCount,</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="at">text =</span> <span class="fu">paste0</span>(</span>
+<span id="cb6-11"><a href="#cb6-11"></a>      product, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-12"><a href="#cb6-12"></a>      <span class="st">"Avg redactions: "</span>, <span class="fu">round</span>(avgRedactionCount, <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-13"><a href="#cb6-13"></a>      <span class="st">"Avg length: "</span>, <span class="fu">comma</span>(<span class="fu">round</span>(avgComplaintLength)), <span class="st">" characters</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-14"><a href="#cb6-14"></a>      <span class="st">"Narratives: "</span>, <span class="fu">comma</span>(complaintCount)))) <span class="sc">+</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"#2171b5"</span>, <span class="at">width =</span> <span class="fl">0.72</span>) <span class="sc">+</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Products with the heaviest privacy scrubbing"</span>, <span class="at">subtitle =</span> <span class="st">"Average XXXX redactions among the most common complaint categories"</span>, <span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"Average number of XXXX redactions per narrative"</span>, <span class="at">caption =</span> <span class="st">"Source: CFPB Consumer Complaint Database"</span>) <span class="sc">+</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-20"><a href="#cb6-20"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">color =</span> <span class="st">"#222222"</span>),</span>
+<span id="cb6-21"><a href="#cb6-21"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#555555"</span>),</span>
+<span id="cb6-22"><a href="#cb6-22"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#777777"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb6-23"><a href="#cb6-23"></a>    <span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-24"><a href="#cb6-24"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-25"><a href="#cb6-25"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#333333"</span>),</span>
+<span id="cb6-26"><a href="#cb6-26"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb6-27"><a href="#cb6-27"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>))</span>
+<span id="cb6-28"><a href="#cb6-28"></a></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="fu">ggplotly</span>(productPlot, <span class="at">tooltip =</span> <span class="st">"text"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a>  <span class="fu">layout</span>(</span>
+<span id="cb6-31"><a href="#cb6-31"></a>    <span class="at">paper_bgcolor =</span> <span class="st">"white"</span>,</span>
+<span id="cb6-32"><a href="#cb6-32"></a>    <span class="at">plot_bgcolor =</span> <span class="st">"white"</span>,</span>
+<span id="cb6-33"><a href="#cb6-33"></a>    <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"#222222"</span>),</span>
+<span id="cb6-34"><a href="#cb6-34"></a>    <span class="at">margin =</span> <span class="fu">list</span>(<span class="at">l =</span> <span class="dv">10</span>, <span class="at">r =</span> <span class="dv">20</span>, <span class="at">t =</span> <span class="dv">60</span>, <span class="at">b =</span> <span class="dv">40</span>)</span>
+<span id="cb6-35"><a href="#cb6-35"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-175e193400735d34466f" style="width:100%;height:390px;"></div>
+<script type="application/json" data-for="htmlwidget-175e193400735d34466f">{"x":{"data":[{"orientation":"h","width":[0.71999999999999975,0.7200000000000002,0.71999999999999975,0.71999999999999986,0.71999999999999975,0.72000000000000064,0.72000000000000064,0.72000000000000064],"base":[0,0,0,0,0,0,0,0],"x":[17.893380199179848,10.24315443592552,9.5585714285714278,9.430147058823529,9.6319999999999997,15.39423076923077,11.304812834224599,13.361702127659575],"y":[8,4,2,1,3,7,5,6],"text":["Credit reporting or other personal consumer reports<br />Avg redactions: 17.9<br />Avg length: 1,020 characters<br />Narratives: 6,828","Debt collection<br />Avg redactions: 10.2<br />Avg length: 1,062 characters<br />Narratives: 913","Credit card<br />Avg redactions: 9.6<br />Avg length: 1,177 characters<br />Narratives: 700","Checking or savings account<br />Avg redactions: 9.4<br />Avg length: 1,163 characters<br />Narratives: 544","Student loan<br />Avg redactions: 9.6<br />Avg length: 1,220 characters<br />Narratives: 250","Mortgage<br />Avg redactions: 15.4<br />Avg length: 1,582 characters<br />Narratives: 208","Money transfer, virtual currency, or money service<br />Avg redactions: 11.3<br />Avg length: 1,280 characters<br />Narratives: 187","Vehicle loan or lease<br />Avg redactions: 13.4<br />Avg length: 1,503 characters<br />Narratives: 141"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(33,113,181,1)","line":{"width":1.8897637795275593,"color":"transparent"}},"showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":60,"r":20,"b":40,"l":10},"plot_bgcolor":"white","paper_bgcolor":"white","font":{"color":"#222222","family":"","size":17.268576172685766},"title":{"text":"<b> Products with the heaviest privacy scrubbing <\/b>","font":{"color":"rgba(34,34,34,1)","family":"","size":20.722291407222919},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.89466900995899246,18.78804920913884],"tickmode":"array","ticktext":["0","5","10","15"],"tickvals":[0,5,10,15.000000000000002],"categoryorder":"array","categoryarray":["0","5","10","15"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.3171440431714414,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(51,51,51,1)","family":"","size":13.814860938148611},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.78493528057662576,"zeroline":false,"anchor":"y","title":{"text":"Average number of XXXX redactions per narrative","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.40000000000000002,8.5999999999999996],"tickmode":"array","ticktext":["Checking or savings account","Credit card","Student loan","Debt collection","Money transfer, virtual<br />currency, or money service","Vehicle loan or lease","Mortgage","Credit reporting or other<br />personal consumer reports"],"tickvals":[1,2,3,4,5,6,7,8],"categoryorder":"array","categoryarray":["Checking or savings account","Credit card","Student loan","Debt collection","Money transfer, virtual<br />currency, or money service","Vehicle loan or lease","Mortgage","Credit reporting or other<br />personal consumer reports"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.3171440431714405,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(51,51,51,1)","family":"","size":13.814860938148611},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.814860938148611}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"160a834e68423":{"x":{},"y":{},"text":{},"type":"bar"}},"cur_data":"160a834e68423","visdat":{"160a834e68423":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="do-longer-stories-get-scrubbed-more" class="level2">
+<h2 class="anchored" data-anchor-id="do-longer-stories-get-scrubbed-more">Do longer stories get scrubbed more?</h2>
+<p>I figured longer complaints would get scrubbed more, since there is just more text to find personal info in. This plot checks that for the main products.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>scatterData <span class="ot">&lt;-</span> productSummary <span class="sc">%&gt;%</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">slice_max</span>(<span class="at">order_by =</span> complaintCount, <span class="at">n =</span> <span class="dv">10</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>lengthPlot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(</span>
+<span id="cb7-5"><a href="#cb7-5"></a>  scatterData,</span>
+<span id="cb7-6"><a href="#cb7-6"></a>  <span class="fu">aes</span>(</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="at">x =</span> avgComplaintLength,</span>
+<span id="cb7-8"><a href="#cb7-8"></a>    <span class="at">y =</span> avgRedactionCount,</span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="at">size =</span> complaintCount,</span>
+<span id="cb7-10"><a href="#cb7-10"></a>    <span class="at">text =</span> <span class="fu">paste0</span>(</span>
+<span id="cb7-11"><a href="#cb7-11"></a>      product, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12"></a>      <span class="st">"Avg length: "</span>, <span class="fu">comma</span>(<span class="fu">round</span>(avgComplaintLength)), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-13"><a href="#cb7-13"></a>      <span class="st">"Avg redactions: "</span>, <span class="fu">round</span>(avgRedactionCount, <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb7-14"><a href="#cb7-14"></a>      <span class="st">"Narratives: "</span>, <span class="fu">comma</span>(complaintCount)))) <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#08519c"</span>, <span class="at">alpha =</span> <span class="fl">0.85</span>) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">14</span>), <span class="at">labels =</span> comma, <span class="at">name =</span> <span class="st">"Narratives"</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">labels =</span> comma) <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Longer narratives usually carry more redactions"</span>, <span class="at">subtitle =</span> <span class="st">"Each point is a product category. Bubble size is complaint volume."</span>, <span class="at">x =</span> <span class="st">"Average narrative length (characters)"</span>, <span class="at">y =</span> <span class="st">"Average XXXX redactions"</span>, <span class="at">caption =</span> <span class="st">"Source: CFPB Consumer Complaint Database"</span>) <span class="sc">+</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a>  <span class="fu">theme</span>(</span>
+<span id="cb7-21"><a href="#cb7-21"></a>    <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>, <span class="at">color =</span> <span class="st">"#222222"</span>),</span>
+<span id="cb7-22"><a href="#cb7-22"></a>    <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#555555"</span>),</span>
+<span id="cb7-23"><a href="#cb7-23"></a>    <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#777777"</span>, <span class="at">hjust =</span> <span class="dv">0</span>),</span>
+<span id="cb7-24"><a href="#cb7-24"></a>    <span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb7-25"><a href="#cb7-25"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">color =</span> <span class="st">"#333333"</span>),</span>
+<span id="cb7-26"><a href="#cb7-26"></a>    <span class="at">plot.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb7-27"><a href="#cb7-27"></a>    <span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"white"</span>, <span class="at">color =</span> <span class="cn">NA</span>),</span>
+<span id="cb7-28"><a href="#cb7-28"></a>    <span class="at">legend.position =</span> <span class="st">"right"</span>)</span>
+<span id="cb7-29"><a href="#cb7-29"></a></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="fu">ggplotly</span>(lengthPlot, <span class="at">tooltip =</span> <span class="st">"text"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a>  <span class="fu">layout</span>(</span>
+<span id="cb7-32"><a href="#cb7-32"></a>    <span class="at">paper_bgcolor =</span> <span class="st">"white"</span>,</span>
+<span id="cb7-33"><a href="#cb7-33"></a>    <span class="at">plot_bgcolor =</span> <span class="st">"white"</span>,</span>
+<span id="cb7-34"><a href="#cb7-34"></a>    <span class="at">font =</span> <span class="fu">list</span>(<span class="at">color =</span> <span class="st">"#222222"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-752ef82f18bf858ee052" style="width:100%;height:433px;"></div>
+<script type="application/json" data-for="htmlwidget-752ef82f18bf858ee052">{"x":{"data":[{"x":[1020.4071470415935,1061.8762322015334,1176.7557142857142,1163.2610294117646,1220.1199999999999,1581.5336538461538,1279.5989304812833,1502.6170212765958,873.07207207207205,887.91919191919192],"y":[17.893380199179848,10.24315443592552,9.5585714285714278,9.430147058823529,9.6319999999999997,15.39423076923077,11.304812834224599,13.361702127659575,7.5585585585585582,7.4141414141414144],"text":["Credit reporting or other personal consumer reports<br />Avg length: 1,020<br />Avg redactions: 17.9<br />Narratives: 6,828","Debt collection<br />Avg length: 1,062<br />Avg redactions: 10.2<br />Narratives: 913","Credit card<br />Avg length: 1,177<br />Avg redactions: 9.6<br />Narratives: 700","Checking or savings account<br />Avg length: 1,163<br />Avg redactions: 9.4<br />Narratives: 544","Student loan<br />Avg length: 1,220<br />Avg redactions: 9.6<br />Narratives: 250","Mortgage<br />Avg length: 1,582<br />Avg redactions: 15.4<br />Narratives: 208","Money transfer, virtual currency, or money service<br />Avg length: 1,280<br />Avg redactions: 11.3<br />Narratives: 187","Vehicle loan or lease<br />Avg length: 1,503<br />Avg redactions: 13.4<br />Narratives: 141","Prepaid card<br />Avg length: 873<br />Avg redactions: 7.6<br />Narratives: 111","Payday loan, title loan, personal loan, or advance loan<br />Avg length: 888<br />Avg redactions: 7.4<br />Narratives: 99"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(8,81,156,1)","opacity":0.84999999999999998,"size":[52.913385826771659,28.26352987946435,26.413454921855561,24.837572943603909,20.779860720554829,19.928447216615105,19.440297590326963,18.104090256566916,16.714183693347429,15.118110236220474],"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(8,81,156,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":45.356579493565803,"r":8.6342880863428828,"b":44.034869240348698,"l":57.84973017849731},"plot_bgcolor":"white","paper_bgcolor":"white","font":{"color":"#222222","family":"","size":17.268576172685766},"title":{"text":"<b> Longer narratives usually carry more redactions <\/b>","font":{"color":"rgba(34,34,34,1)","family":"","size":20.722291407222919},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[837.64899298336798,1616.9567329348579],"tickmode":"array","ticktext":["1,000","1,200","1,400","1,600"],"tickvals":[1000,1200,1400,1600],"categoryorder":"array","categoryarray":["1,000","1,200","1,400","1,600"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.3171440431714414,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(51,51,51,1)","family":"","size":13.814860938148611},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.78493528057662576,"zeroline":false,"anchor":"y","title":{"text":"Average narrative length (characters)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[6.8901794748894929,18.417342138431771],"tickmode":"array","ticktext":["7.5","10.0","12.5","15.0","17.5"],"tickvals":[7.5,10,12.5,15,17.5],"categoryorder":"array","categoryarray":["7.5","10.0","12.5","15.0","17.5"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.3171440431714414,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(51,51,51,1)","family":"","size":13.814860938148611},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.78493528057662576,"zeroline":false,"anchor":"x","title":{"text":"Average XXXX redactions","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.814860938148611},"title":{"text":"Narratives","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"160a85866210e":{"x":{},"y":{},"size":{},"text":{},"type":"scatter"}},"cur_data":"160a85866210e","visdat":{"160a85866210e":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+<section id="high-redaction-edge-cases" class="level2">
+<h2 class="anchored" data-anchor-id="high-redaction-edge-cases">High-redaction edge cases</h2>
+<p>I also looked at the high end. Anything at or above the 75th percentile of <code>XXXX</code> counts is where scrubbing hits hardest, and the leftover text is the least useful.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>edgeCaseSummary <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb8-2"><a href="#cb8-2"></a>  <span class="at">totalNarratives =</span> <span class="fu">nrow</span>(complaintMetrics),</span>
+<span id="cb8-3"><a href="#cb8-3"></a>  <span class="at">highRedactionNarratives =</span> <span class="fu">nrow</span>(highRedactionCases),</span>
+<span id="cb8-4"><a href="#cb8-4"></a>  <span class="at">redactionCutoff =</span> <span class="fu">as.numeric</span>(redactionCutoff),</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  <span class="at">shareHighRedaction =</span> highRedactionNarratives <span class="sc">/</span> totalNarratives</span>
+<span id="cb8-6"><a href="#cb8-6"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a>edgeCaseSummary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  totalNarratives highRedactionNarratives redactionCutoff shareHighRedaction
+            &lt;int&gt;                   &lt;int&gt;           &lt;dbl&gt;              &lt;dbl&gt;
+1           10000                    2562              15              0.256</code></pre>
+</div>
+</div>
+</section>
+<section id="interpretation" class="level2">
+<h2 class="anchored" data-anchor-id="interpretation">Interpretation</h2>
+<p>A few things jumped out:</p>
+<ol type="1">
+<li><p><strong>Product matters more than geography.</strong> The map is interesting, but the product chart tells a clearer story. Categories where people write about accounts, dates, and personal timelines end up with a lot more <code>XXXX</code>.</p></li>
+<li><p><strong>Longer stories get scrubbed more.</strong> That makes sense for privacy, but it is annoying for text analysis because names and dates are often the useful parts.</p></li>
+<li><p><strong>The extreme cases are worth checking.</strong> If I were testing a redaction tool, I would sample the top quartile first. Those are the ones where you can tell if it is scrubbing too little or wiping out the whole story.</p></li>
+</ol>
+<p>Overall, keeping text readable helps with analysis, and heavy redaction helps with privacy. Tracking length, redaction count, and density together is a simple way to see when the scrubbing starts to hurt the data.</p>
+<hr>
+<section id="ai-usage" class="level4">
+<h4 class="anchored" data-anchor-id="ai-usage">AI USAGE</h4>
+<p>This analysis was supported by Copilot to summarize the finding and suggest visualizations. I wrote the code and interpreted the results, but Copilot helped me with some of the text and charting ideas.</p>
+
+
+</section>
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Owen Morales © 2026</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/moralow">
+      <i class="bi bi-linkedin" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/omora14">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:morales.owen@icloud.com">
+      <i class="bi bi-envelope" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

@@ -28,6 +28,7 @@ project:
     - projects/leaflet/open-data-sources.qmd
     - projects/text/scripture-patterns.qmd
     - projects/text/named-mentions.qmd
+    - projects/text/privacy-redaction-audit.qmd
     - projects/parsing/nested-visits.qmd
     - projects/nested/chipotle-orders.qmd
     - projects/nested/nested-text.qmd
@@ -127,6 +128,8 @@ website:
               file: projects/text/named-mentions.qmd
             - text: "Nested Text Analysis"
               file: projects/nested/nested-text.qmd
+            - text: "AI Privacy Redaction Audit"
+              file: projects/text/privacy-redaction-audit.qmd
 
 format:
   html:

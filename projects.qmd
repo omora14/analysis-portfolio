@@ -38,3 +38,4 @@ Selected analyses grouped by theme. Open any project below, or use the sidebar w
 - [Scripture Text Patterns](projects/text/scripture-patterns.qmd)
 - [Named Mentions in Text](projects/text/named-mentions.qmd)
 - [Nested Text Analysis](projects/nested/nested-text.qmd)
+- [AI Privacy Redaction Audit](projects/text/privacy-redaction-audit.qmd)
